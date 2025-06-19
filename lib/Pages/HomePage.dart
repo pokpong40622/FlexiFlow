@@ -24,6 +24,7 @@ class _HomePageState extends State<HomePage> {
     ];
 
     return Scaffold(
+      backgroundColor: Color(0xFFF8F8F8),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
@@ -65,13 +66,16 @@ class _HomePageState extends State<HomePage> {
             ),
             items: slideImages.map((slideImage) {
               return Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 10), //control the space between each image in the slide
-                child: Container(                   
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 10,
+                ), //control the space between each image in the slide
+                child: Container(
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12),
                     child: Image.asset(
                       slideImage,
-                      fit: BoxFit.cover, //make the image fit but not stretched i think (not sure)
+                      fit: BoxFit
+                          .cover, //make the image fit but not stretched i think (not sure)
                       width: double.infinity,
                     ),
                   ),
@@ -90,12 +94,59 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w700,
                     fontSize: screenWidth * 0.0555,
                   ),
-                )
+                ),
               ],
             ),
-          )
+          ),
+          SizedBox(height: screenHeight * 0.010),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              
+            ],
+          ),
         ],
       ),
     );
+  }
+
+  Widget _buildServicesButton({required IconData icon, required String label}) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
+    return Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Container(
+                    width: screenWidth * 0.185,
+                    height: screenWidth * 0.185,
+                    child: Icon(
+                      Icons.travel_explore,
+                      size: MediaQuery.of(context).size.width * 0.078,
+                      color: Colors.black,
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(300),
+                      color: Color(0xFFFFFFFF),
+                    ),
+                  ),
+                  SizedBox(height: screenHeight * 0.005),
+                  Center(
+                    child: Container(
+                      width: screenWidth * 0.185,
+                      child: Text(
+                        'Discover Posture',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w600,
+                          fontSize: screenWidth * 0.0305, 
+                          height: 1.03
+                        )
+                      ),
+                    ),
+                  )
+                ],
+              );
   }
 }
