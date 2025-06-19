@@ -1,3 +1,4 @@
+import 'package:flexiflow/Others/NavigationBar.dart';
 import 'package:flexiflow/Pages/HomePage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -19,7 +20,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: HomePage(),
+      home: NavigationBarSet(),
     );
   }
 }
