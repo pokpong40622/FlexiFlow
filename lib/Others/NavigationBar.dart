@@ -35,7 +35,7 @@ class _HomepageState extends State<NavigationBarSet> {
     return Scaffold(
       body: _pages[myIndex],
       bottomNavigationBar: Container(
-        height: 86,
+        height: 82,
         decoration: BoxDecoration(
           color: Color(0xFFFFFFFF),
         ),
@@ -91,15 +91,15 @@ class _HomepageState extends State<NavigationBarSet> {
           ),
           SizedBox(height: 2),
           
-          if (isSelected)
-            Text(
-              label,
-              style: GoogleFonts.inter(
-                fontSize: 10,
-                fontWeight: FontWeight.bold, 
-                color: Color(0xFF0397FD),
-              ),
-            ),
+          // if (isSelected)
+          //   Text(
+          //     label,
+          //     style: GoogleFonts.inter(
+          //       fontSize: 10,
+          //       fontWeight: FontWeight.bold, 
+          //       color: Color(0xFF0397FD),
+          //     ),
+          //   ),
         ],
       ),
     );

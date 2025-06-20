@@ -29,7 +29,7 @@ class _HomePageState extends State<HomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: screenHeight * 0.018),
+          SizedBox(height: screenHeight * 0.025),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
             child: Row(
@@ -83,70 +83,199 @@ class _HomePageState extends State<HomePage> {
               );
             }).toList(),
           ),
-          SizedBox(height: screenHeight * 0.012),
+          SizedBox(height: screenHeight * 0.0134),
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
-            child: Row(
+            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.043),
+            child: Column(
               children: [
-                Text(
-                  'Services',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700,
-                    fontSize: screenWidth * 0.0555,
-                  ),
+                Row(
+                  children: [
+                    Text(
+                      'Services',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w700,
+                        fontSize: screenWidth * 0.054,
+                      ),
+                    ),
+                  ],
                 ),
+                SizedBox(height: screenHeight * 0.0098),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    _buildServicesButton(
+                      icon: Icons.travel_explore,
+                      label: "Discover Posture",
+                    ),
+                    _buildServicesButton(
+                      icon: Icons.checklist,
+                      label: "Check Posture",
+                    ),
+                    _buildServicesButton(
+                      icon: Icons.support_agent,
+                      label: "Chatbot",
+                    ),
+                    _buildServicesButton(
+                      icon: Icons.shopping_cart_outlined,
+                      label: "Shop",
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.019),
+                Row(
+                  children: [
+                    Text(
+                      'Others',
+                      style: GoogleFonts.inter(
+                        fontWeight: FontWeight.w700,
+                        fontSize: screenWidth * 0.054,
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.0098),
+                _FeedbackSummary(),
               ],
             ),
-          ),
-          SizedBox(height: screenHeight * 0.010),
-          Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              
-            ],
           ),
         ],
       ),
     );
   }
 
+  //Widget section
+
   Widget _buildServicesButton({required IconData icon, required String label}) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Container(
-                    width: screenWidth * 0.185,
-                    height: screenWidth * 0.185,
-                    child: Icon(
-                      Icons.travel_explore,
-                      size: MediaQuery.of(context).size.width * 0.078,
-                      color: Colors.black,
-                    ),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(300),
-                      color: Color(0xFFFFFFFF),
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.005),
-                  Center(
-                    child: Container(
-                      width: screenWidth * 0.185,
-                      child: Text(
-                        'Discover Posture',
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w600,
-                          fontSize: screenWidth * 0.0305, 
-                          height: 1.03
-                        )
-                      ),
-                    ),
-                  )
-                ],
-              );
+      crossAxisAlignment: CrossAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
+        Container(
+          width: screenWidth * 0.178,
+          height: screenWidth * 0.178,
+          child: Icon(
+            icon,
+            size: MediaQuery.of(context).size.width * 0.072,
+            color: Colors.black,
+          ),
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(300),
+            color: Color(0xFFFFFFFF),
+          ),
+        ),
+        SizedBox(height: screenHeight * 0.008),
+        Center(
+          child: Container(
+            width: screenWidth * 0.178,
+            child: Text(
+              label,
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w600,
+                fontSize: screenWidth * 0.0286,
+                height: 1.04,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
   }
+
+  Widget _FeedbackSummary() {
+  double screenHeight = MediaQuery.of(context).size.height;
+  double screenWidth = MediaQuery.of(context).size.width;
+  return Container(
+    child: Stack(
+      children: [
+        Container(
+          width: screenWidth * 0.93333,
+          margin: EdgeInsets.only(top: 22),
+          padding: EdgeInsets.only(top: 28, left: 18, right: 18, bottom: 16),
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.08),
+                spreadRadius: 0,
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Row(
+            children: [
+              Container(
+                width: screenWidth * 0.142,
+                height: screenWidth * 0.142,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                  shape: BoxShape.circle,
+                ),
+                child: Center(
+                  child: Image.asset(
+                    'assets/FlexiFlowLogoWhite.png',
+                    width: screenWidth * 0.066,
+                    height: screenHeight * 0.066,
+                  ),
+                ),
+              ),
+              SizedBox(width: 15),
+              Expanded(
+                child: Text(
+                  'Your brain power has increased by 6% over the last 3 days',
+                  style: GoogleFonts.inter(
+                    color: Color(0xFF2C2C2C),
+                    fontSize: 14,
+                    fontWeight: FontWeight.w600,
+                    height: 1.16,
+                  ),
+                  softWrap: true,
+                  overflow: TextOverflow.visible,
+                ),
+              ),
+            ],
+          ),
+        ),
+        // Blue overlapping container
+        Container(
+          padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+              begin: Alignment.centerLeft,
+              end: Alignment.centerRight,
+            ),
+            borderRadius: BorderRadius.circular(12),
+            boxShadow: [
+              BoxShadow(
+                color: Color(0xFF1E88E5).withOpacity(0.3),
+                spreadRadius: 0,
+                blurRadius: 8,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: Text(
+            'Feedback Summary',
+            style: GoogleFonts.inter(
+              color: Colors.white,
+              fontSize: 13,
+              fontWeight: FontWeight.w600,
+              letterSpacing: 0.3,
+            ),
+          ),
+        ),
+      ],
+    ),
+  );
+}
 }
