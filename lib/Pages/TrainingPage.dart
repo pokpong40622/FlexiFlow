@@ -139,7 +139,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.026),
+            SizedBox(height: screenHeight * 0.022),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0445),
               child: Row(
@@ -216,7 +216,7 @@ class _TrainingPageState extends State<TrainingPage> {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      SizedBox(height: 16),
+                      SizedBox(height: screenHeight * 0.014),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: displayDates.map((date) {
@@ -225,7 +225,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: screenHeight * 0.02),
+                  SizedBox(height: screenHeight * 0.028),
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -267,7 +267,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       ),
                     ],
                   ),
-                  SizedBox(height: 12),
+                  SizedBox(height: screenHeight * 0.014),
                   Container(
                     height: screenHeight * 0.35, // Adjust this height as needed
                     child: SingleChildScrollView(
@@ -318,7 +318,7 @@ class _TrainingPageState extends State<TrainingPage> {
       },
       child: Container(
         width: MediaQuery.of(context).size.width * 0.206,
-        padding: EdgeInsets.only(bottom: 20),
+        padding: EdgeInsets.only(bottom: 24),
         decoration: BoxDecoration(
           color: Colors.white,
           borderRadius: BorderRadius.circular(6),
