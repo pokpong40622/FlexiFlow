@@ -47,35 +47,36 @@ class _TrainingPageState extends State<TrainingPage> {
   }
 
   int clickedDay = 7;
-  final Map<int, List<Map<String, String>>> schedules = {
+  final Map<int, List<Map<String, dynamic>>> schedules = {
     6: [
-      {'time': '07:00', 'event': 'Morning Exercise'},
-      {'time': '09:00', 'event': 'Office Work'},
-      {'time': '12:30', 'event': 'Lunch at Cafe'},
-      {'time': '15:00', 'event': 'Grocery Shopping'},
-      {'time': '19:00', 'event': 'Watch a Movie'},
+      {'time': '07:00', 'event': 'Morning Exercise', 'completed': false},
+      {'time': '09:00', 'event': 'Office Work', 'completed': true},
+      {'time': '12:30', 'event': 'Lunch at Cafe', 'completed': false},
+      {'time': '15:00', 'event': 'Grocery Shopping', 'completed': false},
+      {'time': '19:00', 'event': 'Watch a Movie', 'completed': true},
     ],
     7: [
-      {'time': '07:00', 'event': 'Wake-Up & Morning Routine'},
-      {'time': '08:30', 'event': 'Leave Home for Work'},
-      {'time': '09:00', 'event': 'Company Meeting'},
-      {'time': '12:00', 'event': 'Lunch break'},
-      {'time': '16:00', 'event': 'Leave Office'},
-      {'time': '17:30', 'event': 'Physical Activity'},
-      {'time': '18:30', 'event': 'Dinner with Family'},
+      {'time': '07:30', 'event': 'Wake up and brush your teeth', 'completed': true},
+      {'time': '07:30', 'event': 'Wake up and brush your teeth', 'completed': true},
+      {'time': '08:30', 'event': 'Leave Home for Work', 'completed': false},
+      {'time': '09:00', 'event': 'Company Meeting', 'completed': false},
+      {'time': '12:00', 'event': 'Lunch break', 'completed': false},
+      {'time': '16:00', 'event': 'Leave Office', 'completed': false},
+      {'time': '17:30', 'event': 'Physical Activity', 'completed': false},
+      {'time': '18:30', 'event': 'Dinner with Family', 'completed': false},
     ],
     8: [
-      {'time': '09:00', 'event': 'Brunch with Friends'},
-      {'time': '11:00', 'event': 'Go to the Gym'},
-      {'time': '14:00', 'event': 'Shopping at Mall'},
-      {'time': '17:00', 'event': 'Family Gathering'},
-      {'time': '20:00', 'event': 'Relax at Home'},
+      {'time': '09:00', 'event': 'Brunch with Friends', 'completed': false},
+      {'time': '11:00', 'event': 'Go to the Gym', 'completed': true},
+      {'time': '14:00', 'event': 'Shopping at Mall', 'completed': false},
+      {'time': '17:00', 'event': 'Family Gathering', 'completed': false},
+      {'time': '20:00', 'event': 'Relax at Home', 'completed': true},
     ],
     9: [
-      {'time': '08:00', 'event': 'Go to Church'},
-      {'time': '10:30', 'event': 'Brunch with Family'},
-      {'time': '14:00', 'event': 'Relax and Read a Book'},
-      {'time': '18:00', 'event': 'Dinner with Friends'},
+      {'time': '08:00', 'event': 'Go to Church', 'completed': false},
+      {'time': '10:30', 'event': 'Brunch with Family', 'completed': false},
+      {'time': '14:00', 'event': 'Relax and Read a Book', 'completed': true},
+      {'time': '18:00', 'event': 'Dinner with Friends', 'completed': false},
     ],
   };
 
@@ -96,248 +97,191 @@ class _TrainingPageState extends State<TrainingPage> {
       Container(color: Colors.white),
     ];
 
-    int clickedDay = 7; // Default to Friday (7)
-
-    final Map<int, List<Map<String, String>>> schedules = {
-      6: [
-        {'time': '07:00', 'event': 'Morning Exercise'},
-        {'time': '09:00', 'event': 'Office Work'},
-        {'time': '12:30', 'event': 'Lunch at Cafe'},
-        {'time': '15:00', 'event': 'Grocery Shopping'},
-        {'time': '19:00', 'event': 'Watch a Movie'},
-      ],
-      7: [
-        {'time': '07:00', 'event': 'Wake-Up & Morning Routine'},
-        {'time': '08:30', 'event': 'Leave Home for Work'},
-        {'time': '09:00', 'event': 'Company Meeting'},
-        {'time': '12:00', 'event': 'Lunch break'},
-        {'time': '16:00', 'event': 'Leave Office'},
-        {'time': '17:30', 'event': 'Physical Activity'},
-        {'time': '18:30', 'event': 'Dinner with Family'},
-      ],
-      8: [
-        {'time': '09:00', 'event': 'Brunch with Friends'},
-        {'time': '11:00', 'event': 'Go to the Gym'},
-        {'time': '14:00', 'event': 'Shopping at Mall'},
-        {'time': '17:00', 'event': 'Family Gathering'},
-        {'time': '20:00', 'event': 'Relax at Home'},
-      ],
-      9: [
-        {'time': '08:00', 'event': 'Go to Church'},
-        {'time': '10:30', 'event': 'Brunch with Family'},
-        {'time': '14:00', 'event': 'Relax and Read a Book'},
-        {'time': '18:00', 'event': 'Dinner with Friends'},
-      ],
-    };
-
     return Scaffold(
       backgroundColor: Color(0xFFFAFAFA),
-      body: Column(
-        children: [
-          SizedBox(height: screenHeight * 0.025),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Image.asset(
-                  'assets/FlexiFlowLogoColor.png',
-                  width: screenWidth * 0.13333,
-                ),
-                SizedBox(width: screenWidth * 0.2),
-                Text(
-                  'Training',
-                  style: GoogleFonts.inter(
-                    fontSize: screenWidth * 0.062,
-                    fontWeight: FontWeight.w800,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: screenHeight * 0.025),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Image.asset(
+                    'assets/FlexiFlowLogoColor.png',
+                    width: screenWidth * 0.13333,
                   ),
-                ),
-                SizedBox(width: screenWidth * 0.29),
-              ],
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.026),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0445),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.start,
-              children: [
-                Text(
-                  'Games',
-                  style: GoogleFonts.inter(
-                    fontWeight: FontWeight.w700,
-                    fontSize: screenWidth * 0.054,
-                  ),
-                ),
-              ],
-            ),
-          ),
-          SizedBox(height: screenHeight * 0.014),
-          CarouselSlider(
-            options: CarouselOptions(
-              height: screenHeight * 0.26,
-              viewportFraction: 0.45462963,
-              enableInfiniteScroll: true,
-              autoPlay: true,
-              enlargeCenterPage: false,
-              onPageChanged: (index, reason) => setState(() {
-                activeIndex = index;
-              }),
-            ),
-            items: slideItems.map((widget) {
-              return Padding(
-                padding: EdgeInsets.symmetric(horizontal: 6),
-                child: Container(
-                  margin: EdgeInsets.only(bottom: 8), // extra bottom space
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(10),
-                    boxShadow: [
-                      BoxShadow(
-                        color: Colors.black12,
-                        blurRadius: 4,
-                        offset: Offset(0, 4),
-                      ),
-                    ],
-                  ),
-                  child: ClipRRect(
-                    borderRadius: BorderRadius.circular(12),
-                    child: widget is Image
-                        ? Padding(
-                            padding: const EdgeInsets.all(8.0),
-                            child: widget,
-                          )
-                        : widget,
-                  ),
-                ),
-              );
-            }).toList(),
-          ),
-          SizedBox(height: screenHeight * 0.012),
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0445),
-            child: Column(
-              children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'Days',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w700,
-                        fontSize: screenWidth * 0.054,
-                      ),
+                  SizedBox(width: screenWidth * 0.2),
+                  Text(
+                    'Training',
+                    style: GoogleFonts.inter(
+                      fontSize: screenWidth * 0.062,
+                      fontWeight: FontWeight.w800,
                     ),
-                  ],
-                ),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(height: 16),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        _buildCalendarDay('6', 'Thu', 6),
-                        _buildCalendarDay('7', 'Fri', 7, isActive: true),
-                        _buildCalendarDay('8', 'Sat', 8),
-                        _buildCalendarDay('9', 'Sun', 9),
+                  ),
+                  SizedBox(width: screenWidth * 0.29),
+                ],
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.026),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0445),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    'Games',
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w700,
+                      fontSize: screenWidth * 0.054,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(height: screenHeight * 0.014),
+            CarouselSlider(
+              options: CarouselOptions(
+                height: screenHeight * 0.26,
+                viewportFraction: 0.45462963,
+                enableInfiniteScroll: true,
+                autoPlay: true,
+                enlargeCenterPage: false,
+                onPageChanged: (index, reason) => setState(() {
+                  activeIndex = index;
+                }),
+              ),
+              items: slideItems.map((widget) {
+                return Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 6),
+                  child: Container(
+                    margin: EdgeInsets.only(bottom: 8), // extra bottom space
+                    decoration: BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.circular(10),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black12,
+                          blurRadius: 4,
+                          offset: Offset(0, 4),
+                        ),
                       ],
                     ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.02,),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    Text(
-                      'List',
-                      style: GoogleFonts.inter(
-                        fontWeight: FontWeight.w700,
-                        fontSize: screenWidth * 0.054,
-                      ),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12),
+                      child: widget is Image
+                          ? Padding(
+                              padding: const EdgeInsets.all(8.0),
+                              child: widget,
+                            )
+                          : widget,
                     ),
-                  ],
-                ),
-                SingleChildScrollView(
-                  child: Column(
+                  ),
+                );
+              }).toList(),
+            ),
+            SizedBox(height: screenHeight * 0.012),
+            Padding(
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0445),
+              child: Column(
+                children: [
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: [
-                      
+                      Text(
+                        'Days',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontSize: screenWidth * 0.054,
+                        ),
+                      ),
                     ],
                   ),
-                )
-                // Time Schedule Section
-                // Container(
-                //   width: MediaQuery.of(context).size.width * 0.905555556,
-                //   decoration: BoxDecoration(
-                //     borderRadius: BorderRadius.circular(15),
-                //     color: Color(0xFFF4F4F4),
-                //   ),
-                //   child: Column(
-                //     crossAxisAlignment: CrossAxisAlignment.start,
-                //     children: [
-                //       Container(
-                //         width: double.infinity,
-                //         decoration: BoxDecoration(
-                //           color: Color(0xFF307B7B),
-                //           borderRadius: BorderRadius.only(
-                //             topLeft: Radius.circular(15),
-                //             topRight: Radius.circular(15),
-                //           ),
-                //         ),
-                //         padding: EdgeInsets.symmetric(
-                //           horizontal: 16,
-                //           vertical: 12,
-                //         ),
-                //         child: Row(
-                //           children: [
-                //             Icon(
-                //               Icons.schedule,
-                //               color: Colors.white,
-                //               size: 24,
-                //             ),
-                //             SizedBox(width: 8),
-                //             Text(
-                //               'Time Schedule',
-                //               style: GoogleFonts.inter(
-                //                 color: Colors.white,
-                //                 fontSize: 17,
-                //                 fontWeight: FontWeight.w700,
-                //               ),
-                //             ),
-                //           ],
-                //         ),
-                //       ),
-                //       SizedBox(height: 16),
-                //       Padding(
-                //         padding: const EdgeInsets.symmetric(
-                //           horizontal: 16.0,
-                //         ),
-                //         child: Column(
-                //           children: schedules[clickedDay]!
-                //               .map(
-                //                 (event) => _buildScheduleItem(
-                //                   event['time']!,
-                //                   event['event']!,
-                //                 ),
-                //               )
-                //               .toList(),
-                //         ),
-                //       ),
-                //       SizedBox(height: 16),
-                //     ],
-                //   ),
-                // ),
-              ],
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          _buildCalendarDay('6', 'Thu', 6),
+                          _buildCalendarDay('7', 'Fri', 7, isActive: true),
+                          _buildCalendarDay('8', 'Sat', 8),
+                          _buildCalendarDay('9', 'Sun', 9),
+                        ],
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: screenHeight * 0.02),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Text(
+                        'List',
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w700,
+                          fontSize: screenWidth * 0.054,
+                        ),
+                      ),
+                      GestureDetector(
+                        onTap: () => _showAddEventDialog(context),
+                        child: Container(
+                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Color(0xFF0397FD),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              Icon(
+                                Icons.add,
+                                color: Colors.white,
+                                size: 16,
+                              ),
+                              SizedBox(width: 4),
+                              Text(
+                                'Add',
+                                style: GoogleFonts.inter(
+                                  color: Colors.white,
+                                  fontSize: 12,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: 12),
+                  Container(
+                    height: screenHeight * 0.3,
+                    child: SingleChildScrollView(
+                      child: Column(
+                        children: schedules[clickedDay]!
+                            .map((schedule) => _buildScheduleItem(
+                                  schedule['time']!,
+                                  schedule['event']!,
+                                  schedule['completed']!,
+                                  schedules[clickedDay]!.indexOf(schedule),
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
 
-  
-  //ปุ่มเลือกวัน
+  // Builds clickable calendar day buttons with blue headers
   Widget _buildCalendarDay(
     String day,
     String weekday,
@@ -374,7 +318,7 @@ class _TrainingPageState extends State<TrainingPage> {
               width: double.infinity,
               height: 18,
               decoration: BoxDecoration(
-                color: isActive ? Color(0xFF0262A4) : Color(0xFF0397FD),
+                color: isSelected ? Color(0xFF0262A4) : Color(0xFF0397FD),
                 borderRadius: BorderRadius.only(
                   topLeft: Radius.circular(6),
                   topRight: Radius.circular(6),
@@ -403,33 +347,83 @@ class _TrainingPageState extends State<TrainingPage> {
       ),
     );
   }
-  //ปุ่มเลือกวัน
 
+  // Creates individual schedule items with gradient background and checkboxes
+  Widget _buildScheduleItem(String time, String event, bool completed, int index) {
+    return Container(
+      margin: EdgeInsets.only(bottom: 12), // Increased spacing between items
+      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18), // More padding for bigger look
+      decoration: BoxDecoration(
+        // Gradient background - light blue to darker blue
+        gradient: LinearGradient(
+          colors: completed 
+              ? [Color(0xFF0262A4), Color(0xFF0397FD)] // Darker gradient for completed
+              : [Color(0xFF0397FD), Color(0xFF1BA3FD)], // Lighter gradient for pending
+          begin: Alignment.centerLeft,
+          end: Alignment.centerRight,
+        ),
+        borderRadius: BorderRadius.circular(16), // More rounded corners
+        boxShadow: [
+          BoxShadow(
+            color: Color(0xFF0397FD).withOpacity(0.3), // Blue shadow
+            blurRadius: 8,
+            offset: Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          // Time with bigger font and semi-bold weight
+          Text(
+            time,
+            style: GoogleFonts.inter(
+              fontSize: 18, // Increased font size
+              fontWeight: FontWeight.w700, // Semi-bold
+              color: Colors.white,
+            ),
+          ),
+          SizedBox(width: 20), // More spacing
+          // Event text expanded to fill remaining space
+          Expanded(
+            child: Text(
+              event,
+              style: GoogleFonts.inter(
+                fontSize: 15, // Slightly bigger
+                fontWeight: FontWeight.w600, // Semi-bold
+                color: Colors.white,
+              ),
+            ),
+          ),
+          // Completion checkbox with rounded corners
+          GestureDetector(
+            onTap: () {
+              setState(() {
+                schedules[clickedDay]![index]['completed'] = !completed;
+              });
+            },
+            child: Container(
+              width: 28, // Bigger checkbox
+              height: 28,
+              decoration: BoxDecoration(
+                color: completed ? Colors.white : Colors.transparent,
+                border: Border.all(color: Colors.white, width: 2.5), // Thicker border
+                borderRadius: BorderRadius.circular(8), // More rounded
+              ),
+              child: completed
+                  ? Icon(
+                      Icons.check,
+                      color: Color(0xFF0397FD),
+                      size: 18, // Bigger check icon
+                    )
+                  : null,
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
-  //น่าจะเอาไว้ใช้กับทที่แสดง schedule listของvia
-  // Widget _buildScheduleItem(String time, String event) {
-  //   return Padding(
-  //     padding: const EdgeInsets.symmetric(vertical: 8.0),
-  //     child: Row(
-  //       children: [
-  //         Text(
-  //           time,
-  //           style: GoogleFonts.inter(fontSize: 16, fontWeight: FontWeight.w700),
-  //         ),
-  //         Spacer(),
-  //         Text(
-  //           event,
-  //           style: GoogleFonts.inter(
-  //             fontSize: 16,
-  //             fontWeight: FontWeight.w500,
-  //             color: Color(0xFF888888),
-  //           ),
-  //         ),
-  //       ],
-  //     ),
-  //   );
-  // }
-
+  // Shows dialog for adding new events to selected day
   void _showAddEventDialog(BuildContext context) {
     showDialog(
       context: context,
@@ -449,14 +443,13 @@ class _TrainingPageState extends State<TrainingPage> {
             children: [
               TextField(
                 controller: timeController,
-                decoration: InputDecoration(labelText: 'Time'),
+                decoration: InputDecoration(labelText: 'Time (HH:MM)'),
                 keyboardType:
                     TextInputType.number, // Ensure only numbers are allowed
                 inputFormatters: [
                   TimeInputFormatter(),
                 ], // Apply the custom formatter
               ),
-
               TextField(
                 controller: eventController,
                 decoration: InputDecoration(labelText: 'Event'),
@@ -466,21 +459,25 @@ class _TrainingPageState extends State<TrainingPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop();
+                Navigator.of(context).pop(); // Close dialog without saving
               },
               child: Text('Cancel'),
             ),
             TextButton(
               onPressed: () {
-                setState(() {
-                  schedules[clickedDay]!.add({
-                    'time': timeController.text,
-                    'event': eventController.text,
+                if (timeController.text.isNotEmpty && eventController.text.isNotEmpty) {
+                  setState(() {
+                    // Add new event to selected day's schedule
+                    schedules[clickedDay]!.add({
+                      'time': timeController.text,
+                      'event': eventController.text,
+                      'completed': false,
+                    });
                   });
-                });
-                timeController.clear();
-                eventController.clear();
-                Navigator.of(context).pop();
+                  timeController.clear(); // Clear input fields
+                  eventController.clear();
+                  Navigator.of(context).pop(); // Close dialog
+                }
               },
               child: Text('Add'),
             ),
