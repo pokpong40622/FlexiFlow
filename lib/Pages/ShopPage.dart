@@ -53,7 +53,7 @@ class _ShopPageState extends State<ShopPage> {
                     SizedBox(width: screenWidth * 0.016),
                     Image.asset(
                       'assets/CoinsLogo.png',
-                      width: screenWidth * 0.1,
+                      width: screenWidth * 0.084,
                     ),
                   ],
                 ),
@@ -130,7 +130,7 @@ class _ShopPageState extends State<ShopPage> {
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.02),
+            SizedBox(height: screenHeight * 0.023),
             // Add content below based on _selectedCategory
             // For example, if you have a list of items to display:
             // if (_selectedCategory == 'Recommended') {
@@ -143,87 +143,48 @@ class _ShopPageState extends State<ShopPage> {
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    _buildShopItems(ItemPic: 'assets/Newgamepic.png', ItemLabel: 'Unlock new games!', ItemPrice: '80')
-                    // Container(
-                    //   width: screenWidth * 0.43888,
-                    //   height: screenHeight * 0.218,
-                    //   child: Column(
-                    //     mainAxisAlignment: MainAxisAlignment.start,
-                    //     crossAxisAlignment: CrossAxisAlignment.center,
-                    //     children: [
-                    //       Padding(
-                    //         padding: EdgeInsetsGeometry.directional(top: screenHeight *0.018),
-                    //         child: Container(
-                    //           width: screenWidth*0.36481,
-                    //           height: screenHeight * 0.096666,
-                    //           child: Expanded(
-                    //             child: Image.asset(
-                    //               'assets/Newgamepic.png'
-                    //             ),
-                    //           ),
-                    //           decoration: BoxDecoration(
-                    //             // color: Colors.black,
-                    //             borderRadius: BorderRadius.circular(4)
-                    //           ),
-                    //         ),
-                    //       ),
-                    //       Padding(
-                    //         padding: EdgeInsetsGeometry.directional(top:screenHeight *0.0122,bottom: screenHeight *0.0128),
-                    //         child: Text(
-                    //             'Sushiro Coupon 60B',
-                    //             style: GoogleFonts.montserrat(
-                    //               fontWeight: FontWeight.w600,
-                    //               fontSize: screenWidth * 0.0304,
-                    //               color: Colors.black
-                    //             ),
-                    //           ),
-                    //       ),
-                    //       Container(
-                    //         width: screenWidth *0.39722,
-                    //         height: screenHeight * 0.0395,
-                    //         child: Expanded(
-                    //           child: Row(
-                    //             mainAxisAlignment: MainAxisAlignment.center,
-                    //             crossAxisAlignment: CrossAxisAlignment.center,
-                    //             children: [
-                    //               Text(
-                    //                 'Buy',
-                    //                 style: GoogleFonts.inter(
-                    //                   fontSize: screenWidth * 0.027,
-                    //                   color: Colors.white,
-                    //                   fontWeight: FontWeight.w600
-                    //                 ),
-                    //               ),
-                    //               SizedBox(width: screenWidth * 0.174,),
-                    //               Text(
-                    //                 '80',
-                    //                 style: GoogleFonts.inter(
-                    //                   fontSize: screenWidth * 0.032,
-                    //                   color: Color(0xFFFDD835),
-                    //                   fontWeight: FontWeight.w700
-                    //                 ),
-                    //               ),
-                    //               SizedBox(width: screenWidth * 0.01,),
-                    //               Image.asset(
-                    //                 'assets/CoinsLogo.png',
-                    //                 width: screenWidth * 0.042,
-                    //               )
-                    //             ],
-                    //           ),
-                    //         ),
-                    //         decoration: BoxDecoration(
-                    //           borderRadius: BorderRadius.circular(4),
-                    //           color: Color(0xFF0397FD)
-                    //         ),
-                    //       )
-                    //     ],
-                    //   ),
-                    //   decoration: BoxDecoration(
-                    //     color: Color(0xFFFAFAFA),
-                    //     borderRadius: BorderRadius.circular(10)
-                    //   ),
-                    // )
+                    _buildShopItems(
+                      ItemPic: 'assets/Newgamepic.png',
+                      ItemLabel: 'Unlock new games!',
+                      ItemPrice: '80',
+                    ),
+                    SizedBox(width: screenWidth * 0.037),
+                    _buildShopItems(
+                      ItemPic: 'assets/Lotterypic.png',
+                      ItemLabel: 'Lottery',
+                      ItemPrice: '60',
+                    ),
+                  ],
+                ),
+                SizedBox(height: screenHeight * 0.021,),
+                Row(
+                  children: [
+                    _buildShopItems(
+                      ItemPic: 'assets/Sushiropic.png',
+                      ItemLabel: 'Sushiro Coupon 60B',
+                      ItemPrice: '50',
+                    ),
+                    SizedBox(width: screenWidth * 0.037),
+                    Container(
+                      width: screenWidth * 0.43888,
+                      height: screenHeight * 0.218,
+                      child: Center(
+                        child: Text(
+                          'Request',
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF8B8B8B),
+                            fontSize: screenWidth * 0.044
+                          ),
+                        ),
+                      ),
+                      decoration: BoxDecoration(
+                        color: Color(0xFFFAFAFA),
+                        borderRadius: BorderRadius.circular(10)
+                      ),
+                    ),
                   ],
                 ),
               ],
@@ -324,6 +285,6 @@ class _ShopPageState extends State<ShopPage> {
           ),
         ),
       ],
-    );
+    ); 
   }
 }
