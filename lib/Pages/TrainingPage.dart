@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:intl/intl.dart'; // Import for date formatting
 
 class TimeInputFormatter extends TextInputFormatter {
   @override
@@ -37,55 +38,64 @@ class TrainingPage extends StatefulWidget {
 }
 
 class _TrainingPageState extends State<TrainingPage> {
-  void initState() {
-    super.initState();
-  }
+  // Use a map with DateTime as keys to store schedules for specific dates
+  // This allows for more robust handling of schedules across different days.
+  final Map<DateTime, List<Map<String, dynamic>>> schedules = {};
+
+  late DateTime today; // Will store today's date
+  late DateTime selectedDate; // Will store the currently selected date in the calendar
 
   @override
-  void dispose() {
-    super.dispose();
+  void initState() {
+    super.initState();
+    today = DateTime.now();
+    // Normalize today to just year, month, day for consistent keying in map
+    today = DateTime(today.year, today.month, today.day);
+    selectedDate = today;
+
+    // Initialize some dummy data for demonstration, using actual dates as keys
+    _initializeDummySchedules();
   }
 
-  int clickedDay = 7;
-  final Map<int, List<Map<String, dynamic>>> schedules = {
-    6: [
-      {'time': '07:00', 'event': 'Morning Exercise', 'completed': false},
-      {'time': '09:00', 'event': 'Office Work', 'completed': true},
-      {'time': '12:30', 'event': 'Lunch at Cafe', 'completed': false},
-      {'time': '15:00', 'event': 'Grocery Shopping', 'completed': false},
-      {'time': '19:00', 'event': 'Watch a Movie', 'completed': true},
-    ],
-    7: [
-      {'time': '07:30', 'event': 'Wake up and brush your teeth', 'completed': true},
+  void _initializeDummySchedules() {
+    // Example: Schedule for today
+    schedules[today] = [
       {'time': '07:30', 'event': 'Wake up and brush your teeth', 'completed': true},
       {'time': '08:30', 'event': 'Leave Home for Work', 'completed': false},
       {'time': '09:00', 'event': 'Company Meeting', 'completed': false},
       {'time': '12:00', 'event': 'Lunch break', 'completed': false},
-      {'time': '16:00', 'event': 'Leave Office', 'completed': false},
-      {'time': '17:30', 'event': 'Physical Activity', 'completed': false},
-      {'time': '18:30', 'event': 'Dinner with Family', 'completed': false},
-    ],
-    8: [
+    ];
+
+    // Example: Schedule for tomorrow
+    DateTime tomorrow = today.add(Duration(days: 1));
+    schedules[tomorrow] = [
       {'time': '09:00', 'event': 'Brunch with Friends', 'completed': false},
       {'time': '11:00', 'event': 'Go to the Gym', 'completed': true},
       {'time': '14:00', 'event': 'Shopping at Mall', 'completed': false},
-      {'time': '17:00', 'event': 'Family Gathering', 'completed': false},
-      {'time': '20:00', 'event': 'Relax at Home', 'completed': true},
-    ],
-    9: [
+    ];
+
+    // Example: Schedule for the day after tomorrow
+    DateTime dayAfterTomorrow = today.add(Duration(days: 2));
+    schedules[dayAfterTomorrow] = [
       {'time': '08:00', 'event': 'Go to Church', 'completed': false},
       {'time': '10:30', 'event': 'Brunch with Family', 'completed': false},
-      {'time': '14:00', 'event': 'Relax and Read a Book', 'completed': true},
-      {'time': '18:00', 'event': 'Dinner with Friends', 'completed': false},
-    ],
-  };
+    ];
+    // Note: You can add more days as needed or fetch from a database.
+  }
+
+  @override
+  void dispose() {
+    timeController.dispose();
+    eventController.dispose();
+    super.dispose();
+  }
 
   final TextEditingController timeController = TextEditingController();
   final TextEditingController eventController = TextEditingController();
 
-  @override
-  int activeIndex = 0;
+  int activeIndex = 0; // Keeping this for carousel, not directly for calendar days
 
+  @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -96,6 +106,10 @@ class _TrainingPageState extends State<TrainingPage> {
       Container(color: Colors.white),
       Container(color: Colors.white),
     ];
+
+    // Get the dates for the current view (today + next 3 days)
+    List<DateTime> displayDates = List.generate(
+        4, (index) => DateTime(today.year, today.month, today.day).add(Duration(days: index)));
 
     return Scaffold(
       backgroundColor: Color(0xFFFAFAFA),
@@ -205,12 +219,9 @@ class _TrainingPageState extends State<TrainingPage> {
                       SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _buildCalendarDay('6', 'Thu', 6),
-                          _buildCalendarDay('7', 'Fri', 7, isActive: true),
-                          _buildCalendarDay('8', 'Sat', 8),
-                          _buildCalendarDay('9', 'Sun', 9),
-                        ],
+                        children: displayDates.map((date) {
+                          return _buildCalendarDay(date);
+                        }).toList(),
                       ),
                     ],
                   ),
@@ -258,16 +269,23 @@ class _TrainingPageState extends State<TrainingPage> {
                   ),
                   SizedBox(height: 12),
                   Container(
-                    height: screenHeight * 0.3,
+                    height: screenHeight * 0.35, // Adjust this height as needed
                     child: SingleChildScrollView(
                       child: Column(
-                        children: schedules[clickedDay]!
-                            .map((schedule) => _buildScheduleItem(
-                                  schedule['time']!,
-                                  schedule['event']!,
-                                  schedule['completed']!,
-                                  schedules[clickedDay]!.indexOf(schedule),
-                                ))
+                        children: (schedules[selectedDate] ?? [])
+                            .asMap()
+                            .entries
+                            .map((entry) {
+                              int index = entry.key;
+                              Map<String, dynamic> schedule = entry.value;
+                              return _buildScheduleItem(
+                                schedule['time']!,
+                                schedule['event']!,
+                                schedule['completed']!,
+                                index,
+                                screenWidth,
+                              );
+                            })
                             .toList(),
                       ),
                     ),
@@ -283,17 +301,19 @@ class _TrainingPageState extends State<TrainingPage> {
 
   // Builds clickable calendar day buttons with blue headers
   Widget _buildCalendarDay(
-    String day,
-    String weekday,
-    int dayIndex, {
-    bool isActive = false,
-  }) {
-    bool isSelected = clickedDay == dayIndex;
+    DateTime date,
+  ) {
+    bool isSelected = selectedDate.day == date.day &&
+        selectedDate.month == date.month &&
+        selectedDate.year == date.year;
+
+    String day = date.day.toString();
+    String weekday = DateFormat('EEE').format(date); // Formats to 'Mon', 'Tue', etc.
 
     return GestureDetector(
       onTap: () {
         setState(() {
-          clickedDay = dayIndex; // Change selected day and update schedule
+          selectedDate = date; // Change selected date
         });
       },
       child: Container(
@@ -348,77 +368,109 @@ class _TrainingPageState extends State<TrainingPage> {
     );
   }
 
-  // Creates individual schedule items with gradient background and checkboxes
-  Widget _buildScheduleItem(String time, String event, bool completed, int index) {
-    return Container(
-      margin: EdgeInsets.only(bottom: 12), // Increased spacing between items
-      padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18), // More padding for bigger look
-      decoration: BoxDecoration(
-        // Gradient background - light blue to darker blue
-        gradient: LinearGradient(
-          colors: completed 
-              ? [Color(0xFF0262A4), Color(0xFF0397FD)] // Darker gradient for completed
-              : [Color(0xFF0397FD), Color(0xFF1BA3FD)], // Lighter gradient for pending
-          begin: Alignment.centerLeft,
-          end: Alignment.centerRight,
+  // Creates swipeable schedule items with specific colors and delete functionality
+  Widget _buildScheduleItem(
+      String time, String event, bool completed, int index, double screenWidth) {
+    return Dismissible(
+      key: UniqueKey(),
+      direction: DismissDirection.endToStart,
+      background: Container(
+        margin: EdgeInsets.only(bottom: 12),
+        alignment: Alignment.centerRight,
+        padding: EdgeInsets.only(right: 20),
+        decoration: BoxDecoration(
+          color: Colors.red,
+          borderRadius: BorderRadius.circular(16),
         ),
-        borderRadius: BorderRadius.circular(16), // More rounded corners
-        boxShadow: [
-          BoxShadow(
-            color: Color(0xFF0397FD).withOpacity(0.3), // Blue shadow
-            blurRadius: 8,
-            offset: Offset(0, 4),
-          ),
-        ],
+        child: Icon(
+          Icons.delete,
+          color: Colors.white,
+          size: 24,
+        ),
       ),
-      child: Row(
-        children: [
-          // Time with bigger font and semi-bold weight
-          Text(
-            time,
-            style: GoogleFonts.inter(
-              fontSize: 18, // Increased font size
-              fontWeight: FontWeight.w700, // Semi-bold
-              color: Colors.white,
+      onDismissed: (direction) {
+        // Ensure there's a list for the selectedDate before attempting to remove
+        if (schedules[selectedDate] != null) {
+          final dismissedItem = schedules[selectedDate]!.removeAt(index);
+          // Update the state to reflect the removal in the UI
+          setState(() {});
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text('Event "${dismissedItem['event']}" deleted'),
+              duration: Duration(seconds: 2),
             ),
-          ),
-          SizedBox(width: 20), // More spacing
-          // Event text expanded to fill remaining space
-          Expanded(
-            child: Text(
-              event,
+          );
+        }
+      },
+      child: Container(
+        width: screenWidth * 0.911,
+        height: 96, // Increased height by 20% (80 * 1.2 = 96)
+        margin: EdgeInsets.only(bottom: 12),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        decoration: BoxDecoration(
+          color: completed
+              ? Color(0xFF0262A4) // Color when checked
+              : Color(0xFF0397FD), // Color when not checked
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Color(0xFF0397FD).withOpacity(0.3),
+              blurRadius: 8,
+              offset: Offset(0, 4),
+            ),
+          ],
+        ),
+        child: Row(
+          children: [
+            Text(
+              time,
               style: GoogleFonts.inter(
-                fontSize: 15, // Slightly bigger
-                fontWeight: FontWeight.w600, // Semi-bold
+                fontSize: 26, // Increased font size for time
+                fontWeight: FontWeight.w700,
                 color: Colors.white,
               ),
             ),
-          ),
-          // Completion checkbox with rounded corners
-          GestureDetector(
-            onTap: () {
-              setState(() {
-                schedules[clickedDay]![index]['completed'] = !completed;
-              });
-            },
-            child: Container(
-              width: 28, // Bigger checkbox
-              height: 28,
-              decoration: BoxDecoration(
-                color: completed ? Colors.white : Colors.transparent,
-                border: Border.all(color: Colors.white, width: 2.5), // Thicker border
-                borderRadius: BorderRadius.circular(8), // More rounded
+            SizedBox(width: 20),
+            Expanded(
+              child: Text(
+                event,
+                style: GoogleFonts.inter(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w600,
+                  color: Colors.white,
+                ),
+                overflow: TextOverflow.ellipsis,
+                maxLines: 2,
               ),
-              child: completed
-                  ? Icon(
-                      Icons.check,
-                      color: Color(0xFF0397FD),
-                      size: 18, // Bigger check icon
-                    )
-                  : null,
             ),
-          ),
-        ],
+            GestureDetector(
+              onTap: () {
+                setState(() {
+                  // Ensure the list exists before trying to update an item
+                  if (schedules[selectedDate] != null && index < schedules[selectedDate]!.length) {
+                    schedules[selectedDate]![index]['completed'] = !completed;
+                  }
+                });
+              },
+              child: Container(
+                width: 40, // Increased checkbox size slightly to match image
+                height: 40,
+                decoration: BoxDecoration(
+                  color: completed ? Colors.white : Colors.transparent,
+                  border: Border.all(color: Colors.white, width: 2.5),
+                  shape: BoxShape.circle, // Changed to circle for the checkmark container
+                ),
+                child: completed
+                    ? Icon(
+                        Icons.check,
+                        color: Color(0xFF0397FD),
+                        size: 24, // Increased check icon size
+                      )
+                    : null,
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -430,13 +482,7 @@ class _TrainingPageState extends State<TrainingPage> {
       builder: (context) {
         return AlertDialog(
           title: Text(
-            'Add Event for ${clickedDay == 6
-                ? 'Thu'
-                : clickedDay == 7
-                ? 'Fri'
-                : clickedDay == 8
-                ? 'Sat'
-                : 'Sun'}',
+            'Add Event for ${DateFormat('EEE, MMM d').format(selectedDate)}', // Display full date
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
@@ -444,11 +490,10 @@ class _TrainingPageState extends State<TrainingPage> {
               TextField(
                 controller: timeController,
                 decoration: InputDecoration(labelText: 'Time (HH:MM)'),
-                keyboardType:
-                    TextInputType.number, // Ensure only numbers are allowed
+                keyboardType: TextInputType.number,
                 inputFormatters: [
                   TimeInputFormatter(),
-                ], // Apply the custom formatter
+                ],
               ),
               TextField(
                 controller: eventController,
@@ -459,7 +504,7 @@ class _TrainingPageState extends State<TrainingPage> {
           actions: [
             TextButton(
               onPressed: () {
-                Navigator.of(context).pop(); // Close dialog without saving
+                Navigator.of(context).pop();
               },
               child: Text('Cancel'),
             ),
@@ -467,16 +512,19 @@ class _TrainingPageState extends State<TrainingPage> {
               onPressed: () {
                 if (timeController.text.isNotEmpty && eventController.text.isNotEmpty) {
                   setState(() {
-                    // Add new event to selected day's schedule
-                    schedules[clickedDay]!.add({
+                    // Initialize the list for selectedDate if it doesn't exist
+                    schedules.putIfAbsent(selectedDate, () => []);
+                    schedules[selectedDate]!.add({
                       'time': timeController.text,
                       'event': eventController.text,
                       'completed': false,
                     });
+                    // Sort the schedule by time after adding a new event
+                    schedules[selectedDate]!.sort((a, b) => a['time'].compareTo(b['time']));
                   });
-                  timeController.clear(); // Clear input fields
+                  timeController.clear();
                   eventController.clear();
-                  Navigator.of(context).pop(); // Close dialog
+                  Navigator.of(context).pop();
                 }
               },
               child: Text('Add'),
