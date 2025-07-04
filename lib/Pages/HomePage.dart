@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flexiflow/Pages/ShopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
@@ -11,26 +12,23 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   @override
-
-  int activeIndex = 0; 
+  int activeIndex = 0;
 
   void didChangeDependencies() {
-  super.didChangeDependencies();
+    super.didChangeDependencies();
 
-  final route = ModalRoute.of(context);
-}
+    final route = ModalRoute.of(context);
+  }
+
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    
-    final List<String> slideImages = [
 
+    final List<String> slideImages = [
       'assets/ImagesliderFlexicoin.png',
       'assets/ImagesliderGrandma.png',
       'assets/ImagesliderGrandpa.png',
     ];
-
-    
 
     return Scaffold(
       backgroundColor: Color(0xFFF8F8F8),
@@ -133,9 +131,20 @@ class _HomePageState extends State<HomePage> {
                               icon: Icons.support_agent,
                               label: "Chatbot",
                             ),
-                            _buildServicesButton(
-                              icon: Icons.shopping_cart_outlined,
-                              label: "Shop",
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push<void>(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (BuildContext context) =>
+                                        ShopPage(),
+                                  ),
+                                );
+                              },
+                              child: _buildServicesButton(
+                                icon: Icons.shopping_cart_outlined,
+                                label: "Shop",
+                              ),
                             ),
                           ],
                         ),

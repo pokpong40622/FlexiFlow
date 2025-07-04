@@ -21,8 +21,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      // home: NavigationBarSet(),
-      home: ShopPage(),
+      home: NavigationBarSet(),
+      
     );
   }
 }
