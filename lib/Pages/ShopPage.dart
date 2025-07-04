@@ -202,7 +202,7 @@ class _ShopPageState extends State<ShopPage> {
                 },
                 child: Container(
                   width: screenWidth * 0.9,
-                  height: screenHeight * 0.07,
+                  height: screenHeight * 0.072,
                   decoration: BoxDecoration(
                     color: Color(0xFF0397FD),
                     borderRadius: BorderRadius.circular(15.0),
@@ -211,7 +211,7 @@ class _ShopPageState extends State<ShopPage> {
                     child: Text(
                       'Back',
                       style: GoogleFonts.inter(
-                        fontSize: screenWidth * 0.05,
+                        fontSize: screenWidth * 0.044,
                         fontWeight: FontWeight.w700,
                         color: Colors.white,
                       ),
