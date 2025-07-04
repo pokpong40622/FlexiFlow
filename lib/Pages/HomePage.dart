@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:flexiflow/Pages/GetStarted.dart';
 import 'package:flexiflow/Pages/ShopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -119,9 +120,20 @@ class _HomePageState extends State<HomePage> {
                           mainAxisAlignment: MainAxisAlignment.spaceAround,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: [
-                            _buildServicesButton(
-                              icon: Icons.travel_explore,
-                              label: "Discover Posture",
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push<void>(
+                                  context,
+                                  MaterialPageRoute<void>(
+                                    builder: (BuildContext context) =>
+                                        Getstarted(),
+                                  ),
+                                );
+                              },
+                              child: _buildServicesButton(
+                                icon: Icons.travel_explore,
+                                label: "Discover Posture",
+                              ),
                             ),
                             _buildServicesButton(
                               icon: Icons.checklist,

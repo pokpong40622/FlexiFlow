@@ -28,9 +28,14 @@ class _GetstartedState extends State<Getstarted> {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
                       children: [
-                        Image.asset(
-                          'assets/FlexiFlowLogoFull.png',
-                          width: screenWidth * 0.36,
+                        GestureDetector(
+                          onTap: () {
+                            Navigator.pop(context);
+                          },
+                          child: Image.asset(
+                            'assets/FlexiFlowLogoFull.png',
+                            width: screenWidth * 0.36,
+                          ),
                         ),
                       ],
                     ),
