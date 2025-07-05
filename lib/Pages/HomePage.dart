@@ -133,15 +133,18 @@ class _HomePageState extends State<HomePage> {
                               child: _buildServicesButton(
                                 icon: Icons.travel_explore,
                                 label: "Discover Posture",
+                                ColorCode: Color(0xFF0262A4),
                               ),
                             ),
                             _buildServicesButton(
                               icon: Icons.checklist,
                               label: "Check Posture",
+                              ColorCode: Color(0xFF0397FD),
                             ),
                             _buildServicesButton(
                               icon: Icons.support_agent,
                               label: "Chatbot",
+                              ColorCode: Color(0xFF02C2FC),
                             ),
                             GestureDetector(
                               onTap: () {
@@ -156,6 +159,7 @@ class _HomePageState extends State<HomePage> {
                               child: _buildServicesButton(
                                 icon: Icons.shopping_cart_outlined,
                                 label: "Shop",
+                                ColorCode: Color(0xFF7EDBF9)
                               ),
                             ),
                           ],
@@ -191,7 +195,7 @@ class _HomePageState extends State<HomePage> {
 
   //Widget section
 
-  Widget _buildServicesButton({required IconData icon, required String label}) {
+  Widget _buildServicesButton({required IconData icon, required String label, required Color ColorCode}) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Column(
@@ -204,7 +208,7 @@ class _HomePageState extends State<HomePage> {
           child: Icon(
             icon,
             size: MediaQuery.of(context).size.width * 0.072,
-            color: Colors.black,
+            color: ColorCode,
           ),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(300),
