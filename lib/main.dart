@@ -1,4 +1,5 @@
 import 'package:flexiflow/Games/PerfectMatchPlaying.dart';
+import 'package:flexiflow/Games/MathgamePlaying.dart';
 import 'package:flexiflow/Others/NavigationBar.dart';
 import 'package:flexiflow/Pages/GetStarted.dart';
 import 'package:flexiflow/Pages/HomePage.dart';
@@ -23,7 +24,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: PerfectMatchPlaying(),
+      home: MathgamePlaying(),
       
     );
   }
