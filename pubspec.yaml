@@ -42,6 +42,9 @@ dependencies:
   image_picker: ^1.1.2
   camera_android: ^0.10.10+3
   tflite_flutter: ^0.11.0
+  google_fonts: ^6.2.1
+  carousel_slider: ^5.1.1
+  intl: ^0.20.2
 
 dev_dependencies:
   flutter_test:
@@ -61,6 +64,8 @@ dev_dependencies:
 flutter:
   assets:
     - assets/models/
+    - assets/images/
+    - assets/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

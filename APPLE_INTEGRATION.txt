@@ -1,6 +1,12 @@
 1. For iOS:
+    -- Mediapipe Hand Landmarker model integration:
    Open your project in Xcode (Runner.xcworkspace).
    In the Project Navigator (left sidebar), select the Runner target.
    Drag and drop the hand_landmarker.task file into the Runner group/folder within the Project Navigator.
    When prompted, ensure that "Copy items if needed" is checked and that the file is added to the Runner target.
    You can verify this by checking the "Build Phases" tab for the Runner target, under "Copy Bundle Resources". The hand_landmarker.task file should be listed there.
+
+   -- TF Lite integration:
+   When creating a release archive (IPA), the symbols are stripped by Xcode, so the command flutter build ipa may throw a Failed to lookup symbol ... symbol not found error. To work around this:
+   In Xcode, go to Target Runner > Build Settings > Strip Style
+   Change from All Symbols to Non-Global Symbols

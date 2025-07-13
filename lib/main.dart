@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
+import 'package:motion_kit/Others/NavigationBar.dart';
+import 'package:motion_kit/figma/chatbot.dart';
+import 'package:motion_kit/pages/GetStarted.dart';
 import 'package:motion_kit/views/pose_detection_screen.dart';
 import 'package:motion_kit/views/hand_detection_screen.dart';
 import 'package:motion_kit/views/hand_pose_detection_screen.dart';
@@ -26,7 +29,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: const HomeScreen(),
+      home: NavigationBarSet(),
+      // home: const ChatBotPage(),
     );
   }
 }
