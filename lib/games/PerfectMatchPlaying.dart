@@ -1,14 +1,179 @@
+import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:motion_kit/services/gesture_classification.dart';
+import '../services/hand_landmarker_service.dart';
+import '../views/painters/hand_painter.dart';
+import '../views/embedded_camera_view.dart';
+import '../pages/ScorePage.dart';
+import '../fake_var.dart';
+import 'dart:math';
+
+class HandPose {
+  final bool isFlipped; // true if left hand is flipped, false if right hand is flipped
+  final GestureType leftGestureType;
+  final GestureType rightGestureType;
+
+  HandPose({
+    required this.isFlipped,
+    required this.leftGestureType,
+    required this.rightGestureType,
+  });
+}
+
+List<HandPose> predefinedPoses = [
+  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: false),
+  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: true),
+  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: false),
+  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: true),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true),
+];
 
 class PerfectMatchPlaying extends StatefulWidget {
+
   const PerfectMatchPlaying({super.key});
 
   @override
   State<PerfectMatchPlaying> createState() => _PerfectMatchPlayingState();
 }
 
-class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
+class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTickerProviderStateMixin {
+  bool _canProcess = true;
+  bool _isBusy = false;
+  CustomPaint? _customPaint;
+  var _cameraLensDirection = CameraLensDirection.front;
+  final GestureClassification _gestureClassification = GestureClassification();
+
+  int _secondsRemaining = 90;
+  int _score = 0;
+  Timer? _gameTimer;
+  Timer? _countdownTimer;
+  bool _isPaused = false;
+  bool _isResumeCountdown = false;
+  int _resumeCountdownValue = 3;
+
+  int currentPoseIndex = 0;
+  late AnimationController _flashController;
+
+  @override
+  void initState() {
+    super.initState();
+    _flashController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 100),
+      reverseDuration: const Duration(milliseconds: 1000),
+    );
+    var random = Random();
+    currentPoseIndex = random.nextInt((predefinedPoses.length/2).floor()) * 2; // Ensure we start with a non-flipped pose
+    _startGameTimer();
+  }
+
+  @override
+  void dispose() {
+    _flashController.dispose();
+    _canProcess = false;
+    _gameTimer?.cancel();
+    _countdownTimer?.cancel();
+    super.dispose();
+  }
+
+  void _startGameTimer() {
+    _gameTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_secondsRemaining > 0) {
+            _secondsRemaining--;
+          } else {
+            _endGame();
+          }
+        });
+      }
+    });
+  }
+
+  void _endGame() {
+    _gameTimer?.cancel();
+    _canProcess = false;
+
+    if (!Globals.isStreakActive) {
+      Globals.isStreakActive = true;
+      Globals.streak += 1;
+    }
+
+    Globals.timeSpentTD += 90 - _secondsRemaining;
+    Globals.brainScore += _score;
+    Globals.todayExercises.add(ExerciseMetadata(
+      type: ExerciseType.PerfectMatch,
+      timeSpent: 90 - _secondsRemaining,
+      score: _score,
+    ));
+    
+    Globals.save();
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(
+        builder: (context) => ScorePage(
+          score: _score,
+          timeSpent: 90 - _secondsRemaining,
+          highScore: 46,
+        ),
+      ),
+    );
+  }
+
+  void _pauseGame() {
+    if (_isPaused || _isResumeCountdown) return;
+    _gameTimer?.cancel();
+    setState(() {
+      _isPaused = true;
+    });
+  }
+
+  void _resumeGame() {
+    setState(() {
+      _isPaused = false;
+      _isResumeCountdown = true;
+      _resumeCountdownValue = 3;
+    });
+
+    _countdownTimer = Timer.periodic(const Duration(seconds: 1), (timer) {
+      if (mounted) {
+        setState(() {
+          if (_resumeCountdownValue > 1) {
+            _resumeCountdownValue--;
+          } else {
+            _countdownTimer?.cancel();
+            _isResumeCountdown = false;
+            _startGameTimer();
+          }
+        });
+      }
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
@@ -24,30 +189,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
                 padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
                 child: Column(
                   children: [
-                    SizedBox(height: screenHeight * 0.017),
-                    Row(
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.arrow_back_ios,
-                          size: screenWidth * 0.066,
-                          color: Colors.black,
-                        ),
-                        Text(
-                          'Back',
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.0594,
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(width: screenWidth * 0.6),
-                        Icon(
-                          Icons.info_outline,
-                          size: screenWidth * 0.081,
-                          color: Colors.black,
-                        ),
-                      ],
-                    ),
+                    SizedBox(height: screenHeight * 0.062),
                     SizedBox(height: screenHeight * 0.018),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.start,
@@ -55,11 +197,11 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
                       children: [
                         SizedBox(width: screenWidth * 0.12),
                         Text(
-                          '23',
+                          '$_secondsRemaining',
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w800,
                             fontSize: screenWidth * 0.11,
-                            color: Colors.black,
+                            color: _secondsRemaining <= 10 ? Color(0xFFD32F2F) : Colors.black,
                           ),
                         ),
                         Padding(
@@ -79,10 +221,92 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
                       ],
                     ),
                     SizedBox(height: screenHeight * 0.022),
+                    // Placeholder for the video feed
                     Container(
                       width: screenWidth * 0.8394,
                       height: screenHeight * 0.51,
                       color: Colors.black,
+                      child: ClipRRect(
+                        borderRadius: BorderRadius.circular(12),
+                        child: Stack(
+                          children: [
+                            EmbeddedCameraView(
+                              customPaint: _customPaint,
+                              onImage: _processImage,
+                              initialCameraLensDirection: _cameraLensDirection,
+                              onCameraLensDirectionChanged: (value) => _cameraLensDirection = value,
+                            ),
+                            AnimatedBuilder(
+                              animation: _flashController,
+                              builder: (context, child) {
+                                return Container(
+                                  color: Colors.green.withOpacity(_flashController.value * 0.7),
+                                );
+                              },
+                            ),
+                            if (_isPaused)
+                              BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.4),
+                                  child: Center(
+                                    child: Column(
+                                      mainAxisSize: MainAxisSize.min,
+                                      children: [
+                                        Icon(
+                                          Icons.pause_circle_filled,
+                                          color: Colors.white,
+                                          size: 80,
+                                        ),
+                                        SizedBox(height: 16),
+                                        Text(
+                                          'PAUSED',
+                                          style: GoogleFonts.montserrat(
+                                            fontSize: 48,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                            letterSpacing: 2.0,
+                                            shadows: [
+                                              Shadow(
+                                                blurRadius: 10.0,
+                                                color: Colors.black45,
+                                                offset: Offset(2.0, 2.0),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            if (_isResumeCountdown)
+                              BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                child: Container(
+                                  color: Colors.black.withOpacity(0.2),
+                                  child: Center(
+                                    child: Text(
+                                      '$_resumeCountdownValue',
+                                      style: GoogleFonts.montserrat(
+                                        fontSize: 120,
+                                        fontWeight: FontWeight.w900,
+                                        color: Colors.white,
+                                        shadows: [
+                                          Shadow(
+                                            blurRadius: 15.0,
+                                            color: Colors.black45,
+                                            offset: Offset(4.0, 4.0),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
+                                  ),
+                                ),
+                              ),
+                          ],
+                        ),
+                      ),
                     ),
                     SizedBox(height: screenHeight * 0.03),
                   ],
@@ -127,25 +351,26 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
-                          Container(
-                            height: screenHeight * 0.07616,
-                            width: screenWidth * 0.4515,
-                            child: Icon(
-                              Icons.pause_circle_outlined,
-                              size: screenWidth * 0.072,
-                            ),
-                            decoration: BoxDecoration(
-                              borderRadius: BorderRadius.only(
-                                topLeft: Radius.circular(8),
-                                bottomLeft: Radius.circular(8),
+                          GestureDetector(
+                            onTap: _isPaused ? _resumeGame : _pauseGame,
+                            child: Container(
+                              height: screenHeight * 0.07616,
+                              width: screenWidth * 0.4515,
+                              child: Icon(
+                                _isPaused ? Icons.play_circle_outlined : Icons.pause_circle_outlined,
+                                size: screenWidth * 0.072,
                               ),
-                              color: Colors.white,
+                              decoration: BoxDecoration(
+                                borderRadius: BorderRadius.only(
+                                  topLeft: Radius.circular(8),
+                                  bottomLeft: Radius.circular(8),
+                                ),
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           GestureDetector(
-                            onTap: () {
-                              Navigator.pop(context);
-                            },
+                            onTap: _endGame,
                             child: Container(
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
@@ -205,10 +430,10 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
                   Container(
                     height: screenHeight * 0.159166,
                     width: screenWidth * 0.3462,
-                    child: Expanded(
-                      child: Image.asset(
-                        'assets/DoctorGraphicExample1.png'
-                      ),
+                    // REMOVED Expanded here
+                    child: Image.asset(
+                      'assets/DoctorGraphicExample1.png',
+                      fit: BoxFit.contain, // Add this if you want it to scale nicely
                     ),
                     decoration: BoxDecoration(
                       color: Colors.transparent,
@@ -251,7 +476,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
                     ),
                   ),
                   Text(
-                    '9',
+                    '$_score',
                     style: GoogleFonts.montserrat(
                       fontWeight: FontWeight.w800,
                       fontSize: screenWidth * 0.11,
@@ -274,5 +499,73 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> {
         ],
       ),
     );
+  }
+
+  Future<void> _processImage(InputImage inputImage) async {
+    if (!_canProcess) return;
+    if (_isBusy) return;
+    if (_isPaused || _isResumeCountdown) return;
+    _isBusy = true;
+    
+    try {
+      final detectedHands = await HandLandmarkerService.detectHandLandmarks(inputImage);
+      bool leftMatch = false;
+      bool rightMatch = false;
+      print(predefinedPoses[currentPoseIndex].leftGestureType);
+      print(predefinedPoses[currentPoseIndex].rightGestureType);
+      print(predefinedPoses[currentPoseIndex].isFlipped);
+      for (var hand in detectedHands) {
+        try {
+          if (hand.handedness == Handedness.left) {
+            leftMatch = _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].leftGestureType &&
+                        !predefinedPoses[currentPoseIndex].isFlipped ||
+                        _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].rightGestureType &&
+                        predefinedPoses[currentPoseIndex].isFlipped;
+          } else {
+            rightMatch = _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].rightGestureType &&
+                         !predefinedPoses[currentPoseIndex].isFlipped ||
+                         _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].leftGestureType &&
+                         predefinedPoses[currentPoseIndex].isFlipped;
+          }
+          final gesture = _gestureClassification.checkGesture(hand);
+        } catch (e) {
+          // Interpreter might not be ready
+        }
+      }
+      if (leftMatch && rightMatch) {
+        _score += 1;
+        currentPoseIndex = (currentPoseIndex + 1) % predefinedPoses.length;
+        _flashController.forward(from: 0.0).then((_) async {
+          await Future.delayed(const Duration(milliseconds: 100));
+          if (mounted) {
+            _flashController.reverse();
+          }
+        });
+      }
+
+      if (inputImage.metadata?.size != null &&
+          inputImage.metadata?.rotation != null) {
+
+        final painter = HandPainter(
+          detectedHands, 
+          inputImage.metadata!.size,
+          inputImage.metadata!.rotation,
+          _cameraLensDirection,
+          showLandmarkNumbers: true, 
+        );
+        _customPaint = CustomPaint(painter: painter);
+        
+      } else {
+         _customPaint = null;
+      }
+    } catch (e) {
+      debugPrint('Error: $e');
+      _customPaint = null;
+    }
+
+    _isBusy = false;
+    if (mounted) {
+      setState(() {});
+    }
   }
 }

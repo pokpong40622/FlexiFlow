@@ -3,7 +3,6 @@ import '../pages/MissionPage.dart';
 import '../pages/StatsPage.dart';
 import '../pages/TrainingPage.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 
 class NavigationBarSet extends StatefulWidget {
   NavigationBarSet({super.key,});
@@ -27,7 +26,11 @@ class _HomepageState extends State<NavigationBarSet> {
 
   final List<Widget> _pages = [
     HomePage(),
-    MissionPage(),
+    MissionPage(onNavigateToTraining: () {
+      setState(() {
+        myIndex = 3;
+      });
+    }),
     StatsPage(),
     TrainingPage()
   ];
@@ -105,5 +108,3 @@ class _HomepageState extends State<NavigationBarSet> {
     );
   }
 }
-
-

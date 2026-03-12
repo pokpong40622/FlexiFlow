@@ -1,5 +1,8 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/figma/chatbot.dart';
+import 'package:motion_kit/pages/ProfilePage.dart';
+import 'package:shimmer/shimmer.dart';
 import 'GetStarted.dart';
 import 'ShopPage.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +18,19 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   @override
   int activeIndex = 0;
+  bool _isLoading = true;
+
+  @override
+  void initState() {
+    super.initState();
+    Future.delayed(const Duration(milliseconds: 1500), () {
+      if (mounted) {
+        setState(() {
+          _isLoading = false;
+        });
+      }
+    });
+  }
 
   void didChangeDependencies() {
     super.didChangeDependencies();
@@ -63,7 +79,14 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Profile Picture with subtle styling
-                  Container(
+                  GestureDetector(
+                  onTap: () {
+            Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => ProfilePage()),
+            );
+            },
+              child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       boxShadow: [
@@ -83,6 +106,7 @@ class _HomePageState extends State<HomePage> {
                         fit: BoxFit.cover,
                       ),
                     ),
+                  ),
                   ),
                   // Title with improved styling
                   Column(
@@ -194,7 +218,7 @@ class _HomePageState extends State<HomePage> {
                         child: _buildServicesButton(
                           icon: Icons.travel_explore,
                           label: "Discover Posture",
-                          ColorCode: Color(0xFF0262A4),
+                          ColorCode: Color(0xFF0397FD),
                         ),
                       ),
                       _buildServicesButton(
@@ -214,7 +238,7 @@ class _HomePageState extends State<HomePage> {
                         child: _buildServicesButton(
                           icon: Icons.support_agent,
                           label: "Chatbot",
-                          ColorCode: Color(0xFF02C2FC),
+                          ColorCode: Color(0xFF0397FD),
                         ),
                       ),
                       GestureDetector(
@@ -229,7 +253,7 @@ class _HomePageState extends State<HomePage> {
                         child: _buildServicesButton(
                             icon: Icons.shopping_cart_outlined,
                             label: "Shop",
-                            ColorCode: Color(0xFF7EDBF9)),
+                            ColorCode: Color(0xFF0397FD)),
                       ),
                     ],
                   ),
@@ -325,43 +349,86 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                Container(
-                  width: screenWidth * 0.142,
-                  height: screenWidth * 0.142,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
+            child: _isLoading
+                ? Shimmer.fromColors(
+                    baseColor: Colors.grey[300]!,
+                    highlightColor: Colors.grey[100]!,
+                    child: Row(
+                      children: [
+                        Container(
+                          width: screenWidth * 0.142,
+                          height: screenWidth * 0.142,
+                          decoration: BoxDecoration(
+                            color: Colors.white,
+                            shape: BoxShape.circle,
+                          ),
+                        ),
+                        SizedBox(width: 15),
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Container(
+                                width: double.infinity,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                              SizedBox(height: 8),
+                              Container(
+                                width: screenWidth * 0.4,
+                                height: 14,
+                                decoration: BoxDecoration(
+                                  color: Colors.white,
+                                  borderRadius: BorderRadius.circular(4),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    shape: BoxShape.circle,
+                  )
+                : Row(
+                    children: [
+                      Container(
+                        width: screenWidth * 0.142,
+                        height: screenWidth * 0.142,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          shape: BoxShape.circle,
+                        ),
+                        child: Center(
+                          child: Image.asset(
+                            'assets/FlexiFlowLogoWhite.png',
+                            width: screenWidth * 0.066,
+                            height: screenHeight * 0.066,
+                          ),
+                        ),
+                      ),
+                      SizedBox(width: 15),
+                      Expanded(
+                        child: Text(
+                          Globals.isStreakActive ? 'Your brain activities has increased by 8% over the last 3 days' : 'Your brain activities has increased by 6% over the last 3 days',
+                          style: GoogleFonts.inter(
+                            color: Color(0xFF2C2C2C),
+                            fontSize: 14,
+                            fontWeight: FontWeight.w600,
+                            height: 1.16,
+                          ),
+                          softWrap: true,
+                          overflow: TextOverflow.visible,
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Center(
-                    child: Image.asset(
-                      'assets/FlexiFlowLogoWhite.png',
-                      width: screenWidth * 0.066,
-                      height: screenHeight * 0.066,
-                    ),
-                  ),
-                ),
-                SizedBox(width: 15),
-                Expanded(
-                  child: Text(
-                    'Your brain activities has increased by 6% over the last 3 days',
-                    style: GoogleFonts.inter(
-                      color: Color(0xFF2C2C2C),
-                      fontSize: 14,
-                      fontWeight: FontWeight.w600,
-                      height: 1.16,
-                    ),
-                    softWrap: true,
-                    overflow: TextOverflow.visible,
-                  ),
-                ),
-              ],
-            ),
           ),
           // Blue overlapping container
           Container(
@@ -400,7 +467,6 @@ class _HomePageState extends State<HomePage> {
   Widget _StreakWidget() {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    bool isDone = false;
 
     return Container(
       child: Stack(
@@ -434,7 +500,7 @@ class _HomePageState extends State<HomePage> {
                         height: screenWidth * 0.15,
                         decoration: BoxDecoration(
                           gradient: LinearGradient(
-                            colors: isDone ? [Color(0xFFFF6B35), Color(0xFFFF8E53)] : [Colors.grey[300]!, Colors.grey[400]!],
+                            colors: Globals.isStreakActive ? [Color(0xFFFF6B35), Color(0xFFFF8E53)] : [Colors.grey[300]!, Colors.grey[400]!],
                             begin: Alignment.topCenter,
                             end: Alignment.bottomCenter,
                           ),
@@ -448,9 +514,9 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        '67',
+                        '${Globals.streak} days',
                         style: GoogleFonts.inter(
-                          color: isDone ? Color(0xFFFF6B35) : Colors.grey[500]!,
+                          color: Globals.isStreakActive ? Color(0xFFFF6B35) : Colors.grey[500]!,
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -470,17 +536,18 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              _buildBar(0.3, screenWidth),
+                              if (!Globals.isStreakActive) _buildBar(0.3, screenWidth), // Add a bar for the current day if streak is active
                               _buildBar(0.5, screenWidth),
                               _buildBar(0.4, screenWidth),
-                              _buildBar(0.6, screenWidth),
-                              _buildBar(0.55, screenWidth),
+                              _buildBar(0, screenWidth),
+                              _buildBar(0, screenWidth),
                               _buildBar(0.7, screenWidth),
                               _buildBar(0.85, screenWidth),
                               _buildBar(1.0, screenWidth),
-                              _buildBar(0.65, screenWidth),
+                              _buildBar(0.15, screenWidth),
                               _buildBar(0.75, screenWidth),
                               _buildBar(0.8, screenWidth),
+                              if (Globals.isStreakActive) _buildBar(0.2, screenWidth), // Add a bar for the current day if streak is active
                             ],
                           ),
                         ),
@@ -537,10 +604,10 @@ class _HomePageState extends State<HomePage> {
   Widget _buildBar(double heightFactor, double screenWidth) {
     return Container(
       width: screenWidth * 0.025,
-      height: (screenWidth * 0.12) * heightFactor,
+      height: (screenWidth * 0.12) * (heightFactor == 0 ? 1 : heightFactor), // Minimum height for zero values
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF42A5F5), Color(0xFF1E88E5)],
+          colors: (heightFactor == 0 ? [Colors.grey[300]!, Colors.grey[400]!] : [Color(0xFF42A5F5), Color(0xFF1E88E5)]),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),

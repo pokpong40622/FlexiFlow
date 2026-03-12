@@ -1,9 +1,11 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:motion_kit/games/PerfectMatchPlaying.dart'; // Import for date formatting
+import 'package:motion_kit/fake_var.dart';
 
 class TimeInputFormatter extends TextInputFormatter {
   @override
@@ -41,7 +43,7 @@ class TrainingPage extends StatefulWidget {
 class _TrainingPageState extends State<TrainingPage> {
   // Use a map with DateTime as keys to store schedules for specific dates
   // This allows for more robust handling of schedules across different days.
-  final Map<DateTime, List<Map<String, dynamic>>> schedules = {};
+  // final Map<DateTime, List<Map<String, dynamic>>> schedules = {};
 
   late DateTime today; // Will store today's date
   late DateTime
@@ -56,9 +58,10 @@ class _TrainingPageState extends State<TrainingPage> {
     selectedDate = today;
 
     // Initialize some dummy data for demonstration, using actual dates as keys
-    _initializeDummySchedules();
+    // _initializeDummySchedules();
   }
 
+  /*
   void _initializeDummySchedules() {
     // Example: Schedule for today
     schedules[today] = [
@@ -88,6 +91,7 @@ class _TrainingPageState extends State<TrainingPage> {
     ];
     // Note: You can add more days as needed or fetch from a database.
   }
+  */
 
   @override
   void dispose() {
@@ -107,16 +111,6 @@ class _TrainingPageState extends State<TrainingPage> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    final Widget placeholderContainer = Container(
-      color: Colors.white,
-      child: Center(
-        child: Text(
-          'To be continued...',
-          style: GoogleFonts.inter(fontSize: 16, color: Colors.black54),
-        ),
-      ),
-    );
-
     final List<Widget> slideItems = [
       GestureDetector(
         onTap: () {
@@ -124,13 +118,90 @@ class _TrainingPageState extends State<TrainingPage> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    PerfectMatchPlaying(), // Replace with actual game page
+                    const PerfectMatchPlaying(), // Replace with actual game page
               ));
         },
         child: Image.asset('assets/PerfectMatchLogo.png'),
       ),
-      Image.asset('assets/WanderLogo.png'),
-      placeholderContainer,
+      Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/SumItUpLogo.png'),
+          if (!Globals.unlockedSumItUp)
+            ClipRRect(
+              borderRadius: BorderRadius.circular(12),
+              child: BackdropFilter(
+                filter: ImageFilter.blur(sigmaX: 4.0, sigmaY: 4.0),
+                child: Container(
+                  color: Colors.black.withOpacity(0.5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.lock_rounded,
+                        size: 40,
+                        color: Colors.white,
+                      ),
+                      SizedBox(height: 8),
+                      Text(
+                        'LOCKED',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                          letterSpacing: 2.0,
+                        ),
+                      ),
+                      SizedBox(height: 4),
+                      Text(
+                        'Unlock in Shop',
+                        style: GoogleFonts.inter(
+                          fontSize: 12,
+                          color: Colors.white70,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+        ],
+      ),
+      Stack(
+        fit: StackFit.expand,
+        children: [
+          Image.asset('assets/WanderLogo.png'),
+          ClipRRect(
+            borderRadius: BorderRadius.circular(12),
+            child: BackdropFilter(
+              filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+              child: Container(
+                color: Colors.black.withOpacity(0.4),
+                child: Center(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.white.withOpacity(0.3)),
+                      borderRadius: BorderRadius.circular(30),
+                      color: Colors.black.withOpacity(0.3),
+                    ),
+                    child: Text(
+                      'COMING\nSOON',
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.montserrat(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                        letterSpacing: 1.0,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
     ];
 
     // Get the dates for the current view (today + next 3 days)
@@ -141,33 +212,82 @@ class _TrainingPageState extends State<TrainingPage> {
 
     return Scaffold(
       backgroundColor: Color(0xFFFAFAFA),
-      body: SingleChildScrollView(
-        child: Column(
-          children: [
-            SizedBox(height: screenHeight * 0.025),
-            Padding(
-              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(screenHeight * 0.12),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0,
+                blurRadius: 10,
+                offset: Offset(0, 2),
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+                vertical: screenHeight * 0.015,
+              ),
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/FlexiFlowLogoColor.png',
-                    width: screenWidth * 0.13333,
+                  SizedBox(width: screenWidth * 0.12), // Placeholder for spacing, can be used for future icons
+                  // Title with improved styling
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Training',
+                        style: GoogleFonts.inter(
+                          fontSize: screenWidth * 0.065,
+                          fontWeight: FontWeight.w800,
+                          color: Color(0xFF2C2C2C),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      Container(
+                        height: 2,
+                        width: screenWidth * 0.1,
+                        decoration: BoxDecoration(
+                          gradient: LinearGradient(
+                            colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(2),
+                        ),
+                      ),
+                    ],
                   ),
-                  SizedBox(width: screenWidth * 0.2),
-                  Text(
-                    'Training',
-                    style: GoogleFonts.inter(
-                      fontSize: screenWidth * 0.062,
-                      fontWeight: FontWeight.w800,
+                  // Logo with improved styling
+                  Container(
+                    padding: EdgeInsets.all(8),
+                    child: Image.asset(
+                      'assets/FlexiFlowLogoColor.png',
+                      width: screenWidth * 0.1,
+                      height: screenWidth * 0.1,
                     ),
                   ),
-                  SizedBox(width: screenWidth * 0.29),
+
                 ],
               ),
             ),
-            SizedBox(height: screenHeight * 0.022),
+          ),
+        ),
+      ),
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            SizedBox(height: screenHeight * 0.02),
             Padding(
               padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0445),
               child: Row(
@@ -299,7 +419,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     height: screenHeight * 0.35, // Adjust this height as needed
                     child: SingleChildScrollView(
                       child: Column(
-                        children: (schedules[selectedDate] ?? [])
+                        children: (Globals.schedules[selectedDate] ?? [])
                             .asMap()
                             .entries
                             .map((entry) {
@@ -417,8 +537,9 @@ class _TrainingPageState extends State<TrainingPage> {
       ),
       onDismissed: (direction) {
         // Ensure there's a list for the selectedDate before attempting to remove
-        if (schedules[selectedDate] != null) {
-          final dismissedItem = schedules[selectedDate]!.removeAt(index);
+        if (Globals.schedules[selectedDate] != null) {
+          final dismissedItem = Globals.schedules[selectedDate]!.removeAt(index);
+          Globals.save(); // Save after deletion
           // Update the state to reflect the removal in the UI
           setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
@@ -475,9 +596,9 @@ class _TrainingPageState extends State<TrainingPage> {
               onTap: () {
                 setState(() {
                   // Ensure the list exists before trying to update an item
-                  if (schedules[selectedDate] != null &&
-                      index < schedules[selectedDate]!.length) {
-                    schedules[selectedDate]![index]['completed'] = !completed;
+                  if (Globals.schedules[selectedDate] != null &&
+                      index < Globals.schedules[selectedDate]!.length) {
+                    Globals.schedules[selectedDate]![index]['completed'] = !completed;
                   }
                 });
               },
@@ -544,14 +665,14 @@ class _TrainingPageState extends State<TrainingPage> {
                     eventController.text.isNotEmpty) {
                   setState(() {
                     // Initialize the list for selectedDate if it doesn't exist
-                    schedules.putIfAbsent(selectedDate, () => []);
-                    schedules[selectedDate]!.add({
+                    Globals.schedules.putIfAbsent(selectedDate, () => []);
+                    Globals.schedules[selectedDate]!.add({
                       'time': timeController.text,
                       'event': eventController.text,
                       'completed': false,
                     });
                     // Sort the schedule by time after adding a new event
-                    schedules[selectedDate]!
+                    Globals.schedules[selectedDate]!
                         .sort((a, b) => a['time'].compareTo(b['time']));
                   });
                   timeController.clear();

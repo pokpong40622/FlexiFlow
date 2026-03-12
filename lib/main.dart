@@ -3,18 +3,28 @@ import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:motion_kit/Others/NavigationBar.dart';
 import 'package:motion_kit/figma/chatbot.dart';
+import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/GetStarted.dart';
+import 'package:motion_kit/services/step_service.dart';
 import 'package:motion_kit/views/pose_detection_screen.dart';
 import 'package:motion_kit/views/hand_detection_screen.dart';
 import 'package:motion_kit/views/hand_pose_detection_screen.dart';
+import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
+import 'package:motion_kit/fake_var.dart';
 
 List<CameraDescription> cameras = [];
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await Globals.load(); // Load saved global variables
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   
   // Initialize cameras
   cameras = await availableCameras();
+  await StepService().init();
   
   runApp(const MyApp());
 }
@@ -29,7 +39,8 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: NavigationBarSet(),
+      // home: HomeScreen(),
+      home: WidgetTree(),
       // home: const ChatBotPage(),
     );
   }
@@ -88,7 +99,8 @@ class HomeScreen extends StatelessWidget {
                 padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
               ),
             ),
-            const SizedBox(height: 20),            ElevatedButton.icon(
+            const SizedBox(height: 20),
+            ElevatedButton.icon(
               onPressed: () {
                 Navigator.push(
                   context,

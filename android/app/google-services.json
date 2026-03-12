@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "25779866344",
+    "project_id": "flexiflow-955cb",
+    "storage_bucket": "flexiflow-955cb.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25779866344:android:8885543389ad590a52575d",
+        "android_client_info": {
+          "package_name": "com.example.flexiflow"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxOUh18T9xVFWXIZQ47mOByek6MYA32Q4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25779866344:android:687d124154c9f3b952575d",
+        "android_client_info": {
+          "package_name": "com.powershell1.motion_kit"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBxOUh18T9xVFWXIZQ47mOByek6MYA32Q4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

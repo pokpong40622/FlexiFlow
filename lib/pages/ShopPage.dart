@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_kit/fake_var.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -17,57 +18,115 @@ class _ShopPageState extends State<ShopPage> {
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
-      backgroundColor: Color(0xFFFFFFFF),
-      body: Stack(
-        children: [
-          Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.start,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                SizedBox(height: screenHeight * 0.024),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    Image.asset(
-                      'assets/FlexiFlowLogoColor.png',
-                      width: screenWidth * 0.13,
-                    ),
-                    Text(
-                      'Shop',
-                      style: GoogleFonts.inter(
-                        fontSize: screenWidth * 0.062,
-                        fontWeight: FontWeight.w800,
+      backgroundColor: const Color(0xFFF8F8F8),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(screenHeight * 0.12),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: const BorderRadius.only(
+              bottomLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
+            ),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.1),
+                spreadRadius: 0,
+                blurRadius: 10,
+                offset: const Offset(0, 2),
+              ),
+            ],
+          ),
+          child: SafeArea(
+            child: Padding(
+              padding: EdgeInsets.symmetric(
+                horizontal: screenWidth * 0.05,
+                vertical: screenHeight * 0.015,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: [
+                  Padding(
+                      padding: EdgeInsets.all(screenWidth * 0.02),
+                      child: Image.asset(
+                        'assets/FlexiFlowLogoColor.png',
+                        width: screenWidth * 0.1,
+                        height: screenWidth * 0.1,
+                        fit: BoxFit.contain,
                       ),
                     ),
-                    Row(
-                      children: [
-                        Text(
-                          '83',
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.06,
-                            fontWeight: FontWeight.w700,
-                            color: Color(0xFFF6B647),
+                  Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Text(
+                        'Shop',
+                        style: GoogleFonts.inter(
+                          fontSize: screenWidth * 0.065,
+                          fontWeight: FontWeight.w800,
+                          color: const Color(0xFF2C2C2C),
+                          letterSpacing: 0.5,
+                        ),
+                      ),
+                      Container(
+                        height: 2,
+                        width: screenWidth * 0.1,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
                           ),
+                          borderRadius: BorderRadius.circular(2),
                         ),
-                        SizedBox(width: screenWidth * 0.016),
-                        Image.asset(
-                          'assets/CoinsLogo.png',
-                          width: screenWidth * 0.084,
+                      ),
+                    ],
+                  ),
+                  Row(
+                    children: [
+                      Image.asset(
+                        'assets/CoinsLogo.png',
+                        width: screenWidth * 0.084,
+                      ),
+                      SizedBox(width: screenWidth * 0.016),
+                      Text(
+                        '${Globals.coins}',
+                        style: GoogleFonts.inter(
+                          fontSize: screenWidth * 0.06,
+                          fontWeight: FontWeight.w700,
+                          color: const Color(0xFFF6B647),
                         ),
-                      ],
-                    ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.034),
-                // Recommended/All Selection Part
-                Container(
-                  height: screenHeight * 0.0516,
+                      ),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ),
+      ),
+      body: Stack(
+        children: [
+          Column(
+            children: [
+              SizedBox(height: screenHeight * 0.02),
+              // Recommended/All Selection Part
+              /*
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  height: 50,
                   decoration: BoxDecoration(
-                    color: Color(0xFFFAFAFA),
-                    borderRadius: BorderRadius.circular(2),
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(25),
+                    boxShadow: [
+                      BoxShadow(
+                        color: Colors.black.withOpacity(0.05),
+                        blurRadius: 4,
+                        offset: const Offset(0, 2),
+                      ),
+                    ],
                   ),
                   child: Row(
                     children: [
@@ -78,24 +137,23 @@ class _ShopPageState extends State<ShopPage> {
                               _selectedCategory = 'Recommended';
                             });
                           },
-                          child: Container(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: _selectedCategory == 'Recommended'
-                                  ? Color(
-                                      0xFF0397FD,
-                                    ) // Selected color (blue from your image)
+                                  ? const Color(0xFF0397FD)
                                   : Colors.transparent,
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(21.0),
                             ),
                             child: Text(
                               'Recommended',
                               style: GoogleFonts.inter(
-                                fontSize: screenWidth * 0.037,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                                 color: _selectedCategory == 'Recommended'
                                     ? Colors.white
-                                    : Colors.black,
+                                    : const Color(0xFF666666),
                               ),
                             ),
                           ),
@@ -108,22 +166,23 @@ class _ShopPageState extends State<ShopPage> {
                               _selectedCategory = 'All';
                             });
                           },
-                          child: Container(
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 200),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
                               color: _selectedCategory == 'All'
-                                  ? Color(0xFF007BFF) // Selected color
+                                  ? const Color(0xFF0397FD)
                                   : Colors.transparent,
-                              borderRadius: BorderRadius.circular(10.0),
+                              borderRadius: BorderRadius.circular(21.0),
                             ),
                             child: Text(
                               'All',
                               style: GoogleFonts.inter(
-                                fontSize: screenWidth * 0.037,
-                                fontWeight: FontWeight.w700,
+                                fontSize: 14,
+                                fontWeight: FontWeight.w600,
                                 color: _selectedCategory == 'All'
                                     ? Colors.white
-                                    : Colors.black,
+                                    : const Color(0xFF666666),
                               ),
                             ),
                           ),
@@ -132,88 +191,94 @@ class _ShopPageState extends State<ShopPage> {
                     ],
                   ),
                 ),
-                SizedBox(height: screenHeight * 0.023),
-                Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildShopItems(
-                              ItemPic: 'assets/Newgamepic.png',
-                              ItemLabel: 'Unlock new games!',
-                              ItemPrice: '80',
-                            ),
-                            SizedBox(width: screenWidth * 0.037),
-                            _buildShopItems(
-                              ItemPic: 'assets/Lotterypic.png',
-                              ItemLabel: 'Lottery',
-                              ItemPrice: '60',
-                            ),
-                          ],
-                        ),
-                        SizedBox(height: screenHeight * 0.021),
-                        Row(
-                          children: [
-                            _buildShopItems(
-                              ItemPic: 'assets/Sushiropic.png',
-                              ItemLabel: 'Sushiro Coupon 60B',
-                              ItemPrice: '50',
-                            ),
-                            SizedBox(width: screenWidth * 0.037),
-                            Container(
-                              width: screenWidth * 0.43888,
-                              height: screenHeight * 0.218,
-                              child: Center(
-                                child: Text(
-                                  'Request',
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w700,
-                                    color: Color(0xFF8B8B8B),
-                                    fontSize: screenWidth * 0.044,
-                                  ),
-                                ),
-                              ),
-                              decoration: BoxDecoration(
-                                color: Color(0xFFFAFAFA),
-                                borderRadius: BorderRadius.circular(10),
-                              ),
-                            ),
-                          ],
-                        ),
-                        
-                      ],
-                    ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
+
+               */
+              Expanded(
+                child: GridView.count(
+                  padding: EdgeInsets.fromLTRB(
+                    screenWidth * 0.0425,
+                    0,
+                    screenWidth * 0.0425,
+                    screenHeight * 0.12, // Bottom padding for "Back" button
                   ),
+                  crossAxisCount: 2,
+                  childAspectRatio: 0.75,
+                  mainAxisSpacing: 16,
+                  crossAxisSpacing: 16,
+                  children: [
+                    if (!Globals.unlockedSumItUp)
+                      _buildShopItems(
+                        ItemPic: 'assets/SumItUpLogo.png',
+                        ItemLabel: 'Unlock Sum It Up',
+                        ItemPrice: '80',
+                      ),
+                    _buildShopItems(
+                      ItemPic: 'assets/Lotterypic.png',
+                      ItemLabel: 'Lottery',
+                      ItemPrice: '60',
+                    ),
+                    _buildShopItems(
+                      ItemPic: 'assets/Sushiropic.png',
+                      ItemLabel: 'Sushiro Coupon 60B',
+                      ItemPrice: '50',
+                    ),
+                    _buildRequestItem(screenWidth),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
           Align(
             alignment: Alignment.bottomCenter,
-            child: Padding(
-              padding: EdgeInsets.only(bottom: screenHeight * 0.03),
+            child: Container(
+              decoration: BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topCenter,
+                  end: Alignment.bottomCenter,
+                  colors: [
+                    const Color(0xFFF8F8F8).withOpacity(0),
+                    const Color(0xFFF8F8F8),
+                  ],
+                ),
+              ),
+              padding: EdgeInsets.only(
+                bottom: screenHeight * 0.03,
+                top: screenHeight * 0.02,
+                left: screenWidth * 0.05,
+                right: screenWidth * 0.05,
+              ),
               child: GestureDetector(
                 onTap: () {
                   Navigator.pop(context);
                 },
                 child: Container(
-                  width: screenWidth * 0.9,
-                  height: screenHeight * 0.072,
+                  width: double.infinity,
+                  height: 56,
                   decoration: BoxDecoration(
-                    color: Color(0xFF0397FD),
-                    borderRadius: BorderRadius.circular(15.0),
+                    gradient: const LinearGradient(
+                      colors: [Color(0xFF0397FD), Color(0xFF0277BD)],
+                      begin: Alignment.topLeft,
+                      end: Alignment.bottomRight,
+                    ),
+                    borderRadius: BorderRadius.circular(16.0),
+                    boxShadow: [
+                      BoxShadow(
+                        color: const Color(0xFF0397FD).withOpacity(0.3),
+                        blurRadius: 12,
+                        offset: const Offset(0, 4),
+                      ),
+                    ],
                   ),
                   child: Center(
                     child: Text(
                       'Back',
                       style: GoogleFonts.inter(
-                        fontSize: screenWidth * 0.044,
-                        fontWeight: FontWeight.w700,
+                        fontSize: 18,
+                        fontWeight: FontWeight.w600,
                         color: Colors.white,
+                        letterSpacing: 0.5,
                       ),
                     ),
                   ),
@@ -226,99 +291,361 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
+  Widget _buildRequestItem(double screenWidth) {
+    return GestureDetector(
+      onTap: () {
+        _showRequestDialog(context);
+      },
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          border: Border.all(
+              color: const Color(0xFFE0E0E0),
+              style: BorderStyle.solid,
+              width: 2),
+        ),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.add_circle_outline_rounded,
+              size: 40,
+              color: const Color(0xFF8B8B8B),
+            ),
+            const SizedBox(height: 12),
+            Text(
+              'Request',
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w700,
+                color: const Color(0xFF8B8B8B),
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 4),
+            Text(
+              'More items coming soon',
+              textAlign: TextAlign.center,
+              style: GoogleFonts.inter(
+                fontWeight: FontWeight.w500,
+                color: const Color(0xFFB0B0B0),
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showRequestDialog(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    TextEditingController requestController = TextEditingController();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(screenWidth * 0.05),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text(
+                  'Request Item',
+                  style: GoogleFonts.inter(
+                    fontSize: screenWidth * 0.055,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: screenWidth * 0.04),
+                Text(
+                  'What would you like to see in the shop?',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: screenWidth * 0.035,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                SizedBox(height: screenWidth * 0.04),
+                TextField(
+                  controller: requestController,
+                  decoration: InputDecoration(
+                    hintText: 'Enter item name...',
+                    filled: true,
+                    fillColor: Colors.grey[100],
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(10),
+                      borderSide: BorderSide.none,
+                    ),
+                    contentPadding: EdgeInsets.symmetric(
+                      horizontal: 16,
+                      vertical: 12,
+                    ),
+                  ),
+                ),
+                SizedBox(height: screenWidth * 0.06),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: Container(
+                          height: screenWidth * 0.12,
+                          decoration: BoxDecoration(
+                            color: Colors.grey.shade300,
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Cancel',
+                              style: GoogleFonts.inter(
+                                fontSize: screenWidth * 0.04,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black87,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: screenWidth * 0.04),
+                    Expanded(
+                      child: GestureDetector(
+                        onTap: () {
+                          // Handle request submission
+                          Navigator.of(context).pop();
+                          if (requestController.text.isNotEmpty) {
+                            _showThankYouDialog(context);
+                          }
+                        },
+                        child: Container(
+                          height: screenWidth * 0.12,
+                          decoration: BoxDecoration(
+                            color: Color(0xFF0397FD),
+                            borderRadius: BorderRadius.circular(10.0),
+                          ),
+                          child: Center(
+                            child: Text(
+                              'Submit',
+                              style: GoogleFonts.inter(
+                                fontSize: screenWidth * 0.04,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _showThankYouDialog(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(20.0),
+          ),
+          elevation: 0,
+          backgroundColor: Colors.transparent,
+          child: Container(
+            padding: EdgeInsets.all(screenWidth * 0.05),
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(20.0),
+            ),
+            child: Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Icon(
+                  Icons.check_circle_outline_rounded,
+                  color: const Color(0xFF0397FD),
+                  size: screenWidth * 0.15,
+                ),
+                SizedBox(height: screenWidth * 0.04),
+                Text(
+                  'Thank You!',
+                  style: GoogleFonts.inter(
+                    fontSize: screenWidth * 0.055,
+                    fontWeight: FontWeight.w700,
+                    color: Colors.black,
+                  ),
+                ),
+                SizedBox(height: screenWidth * 0.02),
+                Text(
+                  'We have received your request.',
+                  textAlign: TextAlign.center,
+                  style: GoogleFonts.inter(
+                    fontSize: screenWidth * 0.035,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                SizedBox(height: screenWidth * 0.06),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: Container(
+                    height: screenWidth * 0.12,
+                    width: double.infinity,
+                    decoration: BoxDecoration(
+                      color: const Color(0xFF0397FD),
+                      borderRadius: BorderRadius.circular(10.0),
+                    ),
+                    child: Center(
+                      child: Text(
+                        'Close',
+                        style: GoogleFonts.inter(
+                          fontSize: screenWidth * 0.04,
+                          fontWeight: FontWeight.w600,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
+  }
+
   Widget _buildShopItems({
     required String ItemPic,
     required String ItemLabel,
     required String ItemPrice,
   }) {
-    double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
-    return Column(
-      children: [
-        Container(
-          width: screenWidth * 0.43888,
-          height: screenHeight * 0.218,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.start,
-            crossAxisAlignment: CrossAxisAlignment.center,
-            children: [
-              Padding(
-                padding: EdgeInsets.only(top: screenHeight * 0.018),
-                child: Container(
-                  width: screenWidth * 0.36481,
-                  height: screenHeight * 0.096666,
-                  child: Expanded(child: Image.asset(ItemPic)),
-                  decoration: BoxDecoration(
-                    // color: Colors.black,
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                ),
+    
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(20),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.05),
+            blurRadius: 10,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: [
+          Expanded(
+            flex: 3,
+            child: Container(
+              padding: const EdgeInsets.all(16),
+              decoration: const BoxDecoration(
+                color: Color(0xFFF5F7FA),
+                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
               ),
-              Padding(
-                padding: EdgeInsets.only(
-                  top: screenHeight * 0.0122,
-                  bottom: screenHeight * 0.0128,
-                ),
-                child: Text(
-                  ItemLabel,
-                  style: GoogleFonts.montserrat(
-                    fontWeight: FontWeight.w600,
-                    fontSize: screenWidth * 0.0304,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-              GestureDetector(
-                onTap: () {
-                  _showBuyConfirmationDialog(context, ItemLabel, ItemPrice);
-                },
-                child: Container(
-                  width: screenWidth * 0.39722,
-                  height: screenHeight * 0.0395,
-                  child: Expanded(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Buy',
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.027,
-                            color: Colors.white,
-                            fontWeight: FontWeight.w600,
-                          ),
-                        ),
-                        SizedBox(width: screenWidth * 0.174),
-                        Text(
-                          ItemPrice,
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.032,
-                            color: Color(0xFFFDD835),
-                            fontWeight: FontWeight.w700,
-                          ),
-                        ),
-                        SizedBox(width: screenWidth * 0.01),
-                        Image.asset(
-                          'assets/CoinsLogo.png',
-                          width: screenWidth * 0.042,
-                        ),
-                      ],
+              child: Image.asset(ItemPic, fit: BoxFit.contain),
+            ),
+          ),
+          Expanded(
+            flex: 2,
+            child: Padding(
+              padding: const EdgeInsets.all(12),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Text(
+                    ItemLabel,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    textAlign: TextAlign.center,
+                    style: GoogleFonts.inter(
+                      fontWeight: FontWeight.w600,
+                      fontSize: 14,
+                      color: const Color(0xFF2C2C2C),
+                      height: 1.2,
                     ),
                   ),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(4),
-                    color: Color(0xFF0397FD),
+                  GestureDetector(
+                    onTap: () {
+                      _showBuyConfirmationDialog(context, ItemLabel, ItemPrice);
+                    },
+                    child: Container(
+                      height: 36,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF0397FD), Color(0xFF0277BD)],
+                        ),
+                        borderRadius: BorderRadius.circular(10),
+                        boxShadow: [
+                          BoxShadow(
+                            color: const Color(0xFF0397FD).withOpacity(0.2),
+                            blurRadius: 4,
+                            offset: const Offset(0, 2),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            'Buy',
+                            style: GoogleFonts.inter(
+                              fontSize: 13,
+                              color: Colors.white,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Container(width: 1, height: 16, color: Colors.white.withOpacity(0.3)),
+                          const SizedBox(width: 8),
+                          Text(
+                            ItemPrice,
+                            style: GoogleFonts.inter(
+                              fontSize: 14,
+                              color: const Color(0xFFFFD54F),
+                              fontWeight: FontWeight.w700,
+                            ),
+                          ),
+                          const SizedBox(width: 4),
+                          Image.asset(
+                            'assets/CoinsLogo.png',
+                            width: 14,
+                            height: 14,
+                          ),
+                        ],
+                      ),
+                    ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-          decoration: BoxDecoration(
-            color: Color(0xFFFAFAFA),
-            borderRadius: BorderRadius.circular(10),
-          ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -395,6 +722,13 @@ class _ShopPageState extends State<ShopPage> {
                         onTap: () {
                           // Handle the actual purchase logic here
                           // For now, just close the dialog and print a message
+                          setState(() {
+                            Globals.coins -= int.parse(itemPrice); // Deduct coins
+                            if (itemName == 'Unlock Sum It Up') {
+                              Globals.unlockedSumItUp = true;
+                            }
+                            Globals.save();
+                          });
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
