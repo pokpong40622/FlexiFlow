@@ -1,8 +1,14 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flexiflow/Games/PerfectMatchPlaying.dart';
 import 'package:flexiflow/Games/MathgamePlaying.dart';
+import 'package:flexiflow/Memberships/LoginPage.dart';
+import 'package:flexiflow/Memberships/SignUpPage.dart';
+import 'package:flexiflow/Memberships/widget_tree.dart';
 import 'package:flexiflow/Others/NavigationBar.dart';
 import 'package:flexiflow/Pages/GetStarted.dart';
 import 'package:flexiflow/Pages/HomePage.dart';
+import 'package:flexiflow/Pages/ProfilePage.dart';
+import 'package:flexiflow/Pages/ScorePage.dart';
 import 'package:flexiflow/Pages/ShopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -11,7 +17,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized(); 
 
   SystemChrome.setEnabledSystemUIMode(SystemUiMode.immersiveSticky);
-
+  await Firebase.initializeApp();
 
   runApp(MyApp(),
   );
@@ -24,7 +30,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: MathgamePlaying(),
+      // home: WidgetTree(),
+      home: ScorePage(),
       
     );
   }

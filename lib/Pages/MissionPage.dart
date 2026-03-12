@@ -9,7 +9,7 @@ class MissionPage extends StatefulWidget {
 }
 
 class _MissionPageState extends State<MissionPage> {
-  int selectedButtonIndex = 0; 
+  int selectedButtonIndex = 0;
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +50,7 @@ class _MissionPageState extends State<MissionPage> {
                             fontSize: screenWidth * 0.076,
                             color: Colors.white,
                           ),
-                        )
+                        ),
                       ],
                     ),
                     SizedBox(width: screenWidth * 0.108),
@@ -81,9 +81,10 @@ class _MissionPageState extends State<MissionPage> {
                             child: Text(
                               'Daily',
                               style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: screenWidth * 0.037,
-                                  color: Colors.white),
+                                fontWeight: FontWeight.w700,
+                                fontSize: screenWidth * 0.037,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           Container(
@@ -112,9 +113,10 @@ class _MissionPageState extends State<MissionPage> {
                             child: Text(
                               'All',
                               style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: screenWidth * 0.037,
-                                  color: Colors.white),
+                                fontWeight: FontWeight.w700,
+                                fontSize: screenWidth * 0.037,
+                                color: Colors.white,
+                              ),
                             ),
                           ),
                           Container(
@@ -128,11 +130,11 @@ class _MissionPageState extends State<MissionPage> {
                       ),
                     ),
                   ],
-                )
+                ),
               ],
             ),
           ),
-          SizedBox(height: screenHeight * 0.016,),
+          SizedBox(height: screenHeight * 0.016),
           Expanded(
             child: ListView(
               padding: EdgeInsets.zero, // Remove default ListView padding
@@ -142,23 +144,19 @@ class _MissionPageState extends State<MissionPage> {
                   title: 'Add your profile picture',
                   coins: 40,
                   isCompleted: true,
-                  borderColor: const Color(0xFF62DA30),
                 ),
                 _buildMissionItem(
                   context,
                   title: 'Start your first exercise',
                   coins: 50,
                   isCompleted: false,
-                  borderColor: const Color(0xFF0397FD),
                 ),
                 _buildMissionItem(
                   context,
                   title: 'Start your first exercise',
                   coins: 50,
                   isCompleted: false,
-                  borderColor: const Color(0xFFBBBBBB),
                 ),
-                
               ],
             ),
           ),
@@ -172,27 +170,51 @@ class _MissionPageState extends State<MissionPage> {
     required String title,
     required int coins,
     required bool isCompleted,
-    required Color borderColor,
   }) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Padding(
       padding: EdgeInsets.symmetric(
-          horizontal: screenWidth * 0.05, vertical: screenHeight * 0.01),
+        horizontal: screenWidth * 0.05,
+        vertical: screenHeight * 0.012,
+      ),
       child: Container(
         decoration: BoxDecoration(
           color: Colors.white,
-          borderRadius: BorderRadius.circular(10),
-          border: Border.all(
-            color: borderColor,
-            width: 3,
-          ),
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.12),
+              blurRadius: 12,
+              offset: const Offset(0, 6),
+            ),
+          ],
         ),
         padding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.04, vertical: screenHeight * 0.02),
+          horizontal: screenWidth * 0.045,
+          vertical: screenHeight * 0.02,
+        ),
         child: Row(
           children: [
+            // Checkbox or Completion Badge
+            Container(
+              decoration: BoxDecoration(
+                shape: BoxShape.circle,
+                color: isCompleted
+                    ? const Color(0xFF62DA30).withOpacity(0.15)
+                    : const Color(0xFFDDDDDD).withOpacity(0.3),
+              ),
+              padding: const EdgeInsets.all(8),
+              child: Icon(
+                isCompleted ? Icons.check : Icons.check_box_outline_blank,
+                color: isCompleted ? const Color(0xFF62DA30) : Colors.grey[500],
+                size: screenWidth * 0.06,
+              ),
+            ),
+            SizedBox(width: screenWidth * 0.04),
+
+            // Text and Coin Info
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -201,34 +223,45 @@ class _MissionPageState extends State<MissionPage> {
                     title,
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.w600,
-                      fontSize: screenWidth * 0.04,
+                      fontSize: screenWidth * 0.042,
                       color: Colors.black,
                     ),
                   ),
-                  SizedBox(height: screenHeight * 0.005),
-                  Text(
-                    'Claim $coins Flexi Coin',
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w500,
-                      fontSize: screenWidth * 0.035,
-                      color: Colors.grey[700],
-                    ),
+                  SizedBox(height: screenHeight * 0.01),
+                  Row(
+                    children: [
+                      Container(
+                        decoration: BoxDecoration(
+                          color: const Color(0xFFFFF1D6),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: screenWidth * 0.03,
+                          vertical: screenHeight * 0.005,
+                        ),
+                        child: Row(
+                          children: [
+                            Image.asset(
+                              'assets/CoinsLogo.png',
+                              width: screenWidth * 0.04,
+                            ),
+                            SizedBox(width: screenWidth * 0.012),
+                            Text(
+                              '+$coins Flexi Coin',
+                              style: GoogleFonts.inter(
+                                fontSize: screenWidth * 0.034,
+                                fontWeight: FontWeight.w500,
+                                color: const Color(0xFFFAA600),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
             ),
-            SizedBox(width: screenWidth * 0.03),
-            isCompleted
-                ? Icon(
-                    Icons.check_box,
-                    color: borderColor,
-                    size: screenWidth * 0.07,
-                  )
-                : Icon(
-                    Icons.check_box_outline_blank,
-                    color: borderColor,
-                    size: screenWidth * 0.07,
-                  ),
           ],
         ),
       ),

@@ -328,28 +328,59 @@ class _StatsPageState extends State<StatsPage> {
                                 ),
                                 Expanded(
                                   child: Center(
-                                    child: Row(
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.baseline,
-                                      textBaseline: TextBaseline.alphabetic,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.start,  
                                       children: [
-                                        Text(
-                                          '163',
-                                          style: GoogleFonts.inter(
-                                            fontSize: screenWidth * 0.08,
-                                            fontWeight: FontWeight.w800,
-                                            color: Color(0xFF0397FD),
-                                          ),
+                                        SizedBox(height: 14,),
+                                        Row(
+                                          children: [
+                                            SizedBox(width: 84,),
+                                            Column(
+                                              children: [
+                                                Icon(
+                                                  Icons.arrow_circle_up,
+                                                  size: 20,
+                                                  color: Color(0xFF62B01E),
+                                                ),
+                                                SizedBox(height: 4,),
+                                                Text(
+                                              '23%',
+                                              style: GoogleFonts.inter(
+                                                fontSize: screenWidth * 0.023,
+                                                fontWeight: FontWeight.w800,
+                                                color: Color(0xFF62B01E),
+                                                height: 0.8
+                                              ),
+                                            )
+                                              ],
+                                            ),
+                                          ],
                                         ),
-                                        Text(
-                                          ' pts',
-                                          style: GoogleFonts.inter(
-                                            fontSize: screenWidth * 0.03,
-                                            color: Colors.grey[600],
-                                            fontWeight: FontWeight.w600,
-                                          ),
+                                        Row(
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.baseline,
+                                          textBaseline: TextBaseline.alphabetic,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Text(
+                                              '163',
+                                              style: GoogleFonts.inter(
+                                                fontSize: screenWidth * 0.08,
+                                                fontWeight: FontWeight.w800,
+                                                color: Color(0xFF0397FD),
+                                                height: 1
+                                              ),
+                                            ),
+                                            Text(
+                                              ' pts',
+                                              style: GoogleFonts.inter(
+                                                fontSize: screenWidth * 0.03,
+                                                color: Colors.grey[600],
+                                                fontWeight: FontWeight.w600,
+                                              ),
+                                            ),
+                                          ],
                                         ),
                                       ],
                                     ),

@@ -1,5 +1,9 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flexiflow/Memberships/AuthPage.dart';
+import 'package:flexiflow/Memberships/LoginPage.dart';
 import 'package:flexiflow/Pages/GetStarted.dart';
+import 'package:flexiflow/Pages/ProfilePage.dart';
 import 'package:flexiflow/Pages/ShopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -45,9 +49,17 @@ class _HomePageState extends State<HomePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Image.asset(
-                  'assets/FlexiFlowProfilePic.png',
-                  width: screenWidth * 0.1453,
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => ProfilePage()),
+                    );
+                  },
+                  child: Image.asset(
+                    'assets/FlexiFlowProfilePic.png',
+                    width: screenWidth * 0.1453,
+                  ),
                 ),
                 Text(
                   'Home',
@@ -56,9 +68,20 @@ class _HomePageState extends State<HomePage> {
                     fontWeight: FontWeight.w800,
                   ),
                 ),
-                Image.asset(
-                  'assets/FlexiFlowLogoColor.png',
-                  width: screenWidth * 0.13333,
+                GestureDetector(
+                  onTap: () {
+                    // Auth().signOut;
+                    // Navigator.push<void>(
+                    //   context,
+                    //   MaterialPageRoute<void>(
+                    //     builder: (BuildContext context) => LoginPage(),
+                    //   ),
+                    // );
+                  },
+                  child: Image.asset(
+                    'assets/FlexiFlowLogoColor.png',
+                    width: screenWidth * 0.13333,
+                  ),
                 ),
               ],
             ),
@@ -159,7 +182,7 @@ class _HomePageState extends State<HomePage> {
                               child: _buildServicesButton(
                                 icon: Icons.shopping_cart_outlined,
                                 label: "Shop",
-                                ColorCode: Color(0xFF7EDBF9)
+                                ColorCode: Color(0xFF7EDBF9),
                               ),
                             ),
                           ],
@@ -195,7 +218,11 @@ class _HomePageState extends State<HomePage> {
 
   //Widget section
 
-  Widget _buildServicesButton({required IconData icon, required String label, required Color ColorCode}) {
+  Widget _buildServicesButton({
+    required IconData icon,
+    required String label,
+    required Color ColorCode,
+  }) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Column(
