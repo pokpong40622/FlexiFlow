@@ -599,6 +599,7 @@ class _TrainingPageState extends State<TrainingPage> {
                   if (Globals.schedules[selectedDate] != null &&
                       index < Globals.schedules[selectedDate]!.length) {
                     Globals.schedules[selectedDate]![index]['completed'] = !completed;
+                    Globals.save(); // Save after toggling completion
                   }
                 });
               },
@@ -674,6 +675,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     // Sort the schedule by time after adding a new event
                     Globals.schedules[selectedDate]!
                         .sort((a, b) => a['time'].compareTo(b['time']));
+                    Globals.save(); // Save after adding new event
                   });
                   timeController.clear();
                   eventController.clear();

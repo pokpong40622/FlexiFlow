@@ -155,7 +155,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: screenHeight * 0.035),
 
-          _buildProfileOption(context, 'Edit personal information', () {}),
+          _buildProfileOption(context, 'Edit personal information', () => _showResetDialog(context)),
           SizedBox(
             height: screenHeight * 0.013,
           ), // Added spacing between list tiles
@@ -256,6 +256,33 @@ class _ProfilePageState extends State<ProfilePage> {
               );
             },
             child: Text('Yes'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  void _showResetDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Text('Reset Progress'),
+        content: Text('Are you sure you want to reset all progress? This cannot be undone.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text('Cancel'),
+          ),
+          TextButton(
+            onPressed: () async {
+              await Globals.reset();
+              setState(() {}); // Update the UI
+              Navigator.pop(context);
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text('All progress has been reset.'))
+              );
+            },
+            child: Text('Reset', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

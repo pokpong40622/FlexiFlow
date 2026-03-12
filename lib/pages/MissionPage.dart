@@ -339,6 +339,7 @@ class _MissionPageState extends State<MissionPage> {
                   Globals.coins += coins;
                   Globals.exp += xp;
                   Globals.claimedMissions.add(title);
+                  Globals.save();
                 });
               } else if (status == MissionStatus.inProgress &&
                   widget.onNavigateToTraining != null) {
