@@ -329,12 +329,6 @@ class _MissionPageState extends State<MissionPage> {
             borderRadius: BorderRadius.circular(14),
             onTap: () {
               if (status == MissionStatus.claimable) {
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => ScorePage(score: 0, timeSpent: 0, highScore: 0)
-                    )
-                );
                 setState(() {
                   Globals.coins += coins;
                   Globals.exp += xp;

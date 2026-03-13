@@ -7,6 +7,8 @@ import 'package:intl/intl.dart';
 import 'package:motion_kit/games/PerfectMatchPlaying.dart'; // Import for date formatting
 import 'package:motion_kit/fake_var.dart';
 
+import '../games/MathgamePlaying.dart';
+
 class TimeInputFormatter extends TextInputFormatter {
   @override
   TextEditingValue formatEditUpdate(
@@ -118,7 +120,7 @@ class _TrainingPageState extends State<TrainingPage> {
               context,
               MaterialPageRoute(
                 builder: (context) =>
-                    const PerfectMatchPlaying(), // Replace with actual game page
+                const PerfectMatchPlaying(), // Replace with actual game page
               ));
         },
         child: Image.asset('assets/PerfectMatchLogo.png'),
@@ -126,7 +128,18 @@ class _TrainingPageState extends State<TrainingPage> {
       Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/SumItUpLogo.png'),
+          GestureDetector(
+              onTap: () {
+                if (!Globals.unlockedSumItUp) return;
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                      const MathgamePlaying(), // Replace with actual game page
+                    ));
+              },
+              child: Image.asset('assets/SumItUpLogo.png'),
+          ),
           if (!Globals.unlockedSumItUp)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),

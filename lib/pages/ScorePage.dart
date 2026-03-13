@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:motion_kit/pages/HomePage.dart';
 
 class ScorePage extends StatefulWidget {
   final int score;
@@ -9,9 +8,9 @@ class ScorePage extends StatefulWidget {
 
   const ScorePage({
     super.key,
-    this.score = 0,
-    this.timeSpent = 0,
-    this.highScore = 0,
+    required this.score,
+    required this.timeSpent,
+    required this.highScore,
   });
 
   @override
@@ -21,17 +20,38 @@ class ScorePage extends StatefulWidget {
 class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
   late Animation<double> _scaleAnimation;
-  late Animation<double> _fadeAnimation;
+  late Animation<double> _opacityAnimation;
+  late Animation<int> _scoreAnimation;
 
   @override
   void initState() {
     super.initState();
     _controller = AnimationController(
-        duration: const Duration(milliseconds: 1200), vsync: this);
-    _scaleAnimation = CurvedAnimation(
-        parent: _controller, curve: const Interval(0.0, 0.6, curve: Curves.elasticOut));
-    _fadeAnimation = CurvedAnimation(
-        parent: _controller, curve: const Interval(0.4, 1.0, curve: Curves.easeIn));
+      duration: const Duration(milliseconds: 1500),
+      vsync: this,
+    );
+
+    _scaleAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOutBack,
+      ),
+    );
+
+    _opacityAnimation = Tween<double>(begin: 0.0, end: 1.0).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOut,
+      ),
+    );
+
+    _scoreAnimation = IntTween(begin: 0, end: widget.score).animate(
+      CurvedAnimation(
+        parent: _controller,
+        curve: Curves.easeOut,
+      ),
+    );
+
     _controller.forward();
   }
 
@@ -44,220 +64,185 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF0F4F8),
-      body: Stack(
-        children: [
-          // Bubbly Background Elements
-          Positioned(
-            top: -50,
-            right: -50,
-            child: _buildBubble(200, const Color(0xFFB3E5FC).withOpacity(0.5)),
-          ),
-          Positioned(
-            top: 100,
-            left: -40,
-            child: _buildBubble(150, const Color(0xFFFFCCBC).withOpacity(0.4)),
-          ),
-          Positioned(
-            bottom: 80,
-            right: -20,
-            child: _buildBubble(120, const Color(0xFFC8E6C9).withOpacity(0.4)),
-          ),
-          Positioned(
-            bottom: -60,
-            left: 20,
-            child: _buildBubble(180, const Color(0xFFFFF9C4).withOpacity(0.6)),
-          ),
-
-          SafeArea(
-            child: Column(
-              children: [
-                const SizedBox(height: 20),
-                // Header with Trophy
-                Expanded(
-                  flex: 4,
+      backgroundColor: Colors.white,
+      body: AnimatedBuilder(
+        animation: _controller,
+        builder: (context, child) {
+          return Column(
+            children: [
+              // Curved Blue Header
+              ClipPath(
+                clipper: HeaderClipper(),
+                child: Container(
+                  height: MediaQuery.of(context).size.height * 0.41,
+                  width: double.infinity,
+                  color: const Color(0xFF0096FF),
                   child: Center(
-                    child: ScaleTransition(
-                      scale: _scaleAnimation,
-                      child: Container(
-                        padding: const EdgeInsets.all(30),
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          shape: BoxShape.circle,
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.blue.withOpacity(0.15),
-                              blurRadius: 30,
-                              spreadRadius: 10,
-                              offset: const Offset(0, 10),
-                            ),
-                          ],
-                        ),
-                        child: Image.asset(
-                          'assets/trophy.png',
-                          width: 140,
-                          fit: BoxFit.contain,
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-
-                // Score Section
-                Expanded(
-                  flex: 5,
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Text(
-                          'Awesome Job!',
-                          style: GoogleFonts.nunito(
-                            fontSize: 32,
-                            fontWeight: FontWeight.w800,
-                            color: const Color(0xFF455A64),
-                          ),
-                        ),
-                        const SizedBox(height: 20),
-                        Container(
-                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 20),
-                          decoration: BoxDecoration(
+                    child: Padding(
+                      padding: const EdgeInsets.only(top: 20.0),
+                      child: Transform.scale(
+                        scale: _scaleAnimation.value,
+                        child: Container(
+                          padding: const EdgeInsets.all(25.0),
+                          decoration: const BoxDecoration(
                             color: Colors.white,
-                            borderRadius: BorderRadius.circular(30),
-                            border: Border.all(color: const Color(0xFFE1F5FE), width: 3),
-                            boxShadow: [
-                              BoxShadow(
-                                color: const Color(0xFF0288D1).withOpacity(0.1),
-                                blurRadius: 20,
-                                offset: const Offset(0, 8),
-                              ),
-                            ],
+                            shape: BoxShape.circle,
                           ),
-                          child: Column(
-                            children: [
-                              Text(
-                                '${widget.score}',
-                                style: GoogleFonts.nunito(
-                                  fontSize: 80,
-                                  fontWeight: FontWeight.w900,
-                                  color: const Color(0xFF0288D1),
-                                  height: 1,
-                                ),
-                              ),
-                              Text(
-                                'points',
-                                style: GoogleFonts.nunito(
-                                  fontSize: 20,
-                                  fontWeight: FontWeight.w700,
-                                  color: const Color(0xFF78909C),
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(height: 30),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            _buildStatChip(
-                              icon: Icons.timer_outlined,
-                              label: '${widget.timeSpent}s',
-                              color: const Color(0xFFFFA726),
-                              bgColor: const Color(0xFFFFF3E0),
-                            ),
-                            const SizedBox(width: 20),
-                            _buildStatChip(
-                              icon: Icons.emoji_events_outlined,
-                              label: 'Best: ${widget.highScore}',
-                              color: const Color(0xFFEF5350),
-                              bgColor: const Color(0xFFFFEBEE),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-
-                // Button Section
-                Padding(
-                  padding: const EdgeInsets.fromLTRB(24, 0, 24, 40),
-                  child: FadeTransition(
-                    opacity: _fadeAnimation,
-                    child: SizedBox(
-                      width: double.infinity,
-                      height: 64,
-                      child: ElevatedButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xFF039BE5),
-                          foregroundColor: Colors.white,
-                          elevation: 8,
-                          shadowColor: const Color(0xFF039BE5).withOpacity(0.4),
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(32),
-                          ),
-                        ),
-                        child: Text(
-                          'Back to Home',
-                          style: GoogleFonts.nunito(
-                            fontSize: 20,
-                            fontWeight: FontWeight.w800,
+                          child: Image.asset(
+                            'assets/trophy.png',
+                            width: 130,
+                            fit: BoxFit.contain,
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ],
+              ),
+
+              const SizedBox(height: 40),
+
+              Opacity(
+                opacity: _opacityAnimation.value,
+                child: Text(
+                  'Congrats!  You score',
+                  style: GoogleFonts.montserrat(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 4),
+
+              // Score Row - Centering the score
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.baseline,
+                textBaseline: TextBaseline.alphabetic,
+                children: [
+                  // This SizedBox helps offset the "points" text
+                  // to keep the number exactly in the center of the screen
+                  const SizedBox(width: 60),
+                  Text(
+                    '${_scoreAnimation.value}',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 110,
+                      fontWeight: FontWeight.w800,
+                      color: const Color(0xFF005DAE),
+                    ),
+                  ),
+                  const SizedBox(width: 8),
+                  SizedBox(
+                    width: 60, // Match the offset width
+                    child: Opacity(
+                      opacity: _opacityAnimation.value,
+                      child: Text(
+                        'points',
+                        style: GoogleFonts.montserrat(
+                          fontSize: 16,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black,
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+
+              Opacity(
+                opacity: _opacityAnimation.value,
+                child: Text(
+                  'in ${widget.timeSpent} seconds',
+                  style: GoogleFonts.montserrat(
+                    fontSize: 24,
+                    fontWeight: FontWeight.w600,
+                    color: Colors.black,
+                  ),
+                ),
+              ),
+
+              const Spacer(),
+
+              // High Score - Positioned just above the button
+              Padding(
+                padding: const EdgeInsets.only(right: 20),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: Text(
+                    'High score: ${widget.highScore}',
+                    style: GoogleFonts.montserrat(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w700,
+                      color: Colors.black,
+                    ),
+                  ),
+                ),
+              ),
+
+              const SizedBox(
+                height: 8,
+              ), // Minimal gap between high score and button
+              // Back Button - Wide with minimal side padding
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  16,
+                  6,
+                  16,
+                  24,
+                ), // Low horizontal padding (16)
+                child: SizedBox(
+                  width: double.infinity,
+                  height: 68,
+                  child: ElevatedButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFF0096FF),
+                      elevation: 0,
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                    ),
+                    child: Text(
+                      'Back',
+                      style: GoogleFonts.montserrat(
+                        fontSize: 18,
+                        fontWeight: FontWeight.w700,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
+  }
+}
+
+class HeaderClipper extends CustomClipper<Path> {
+  @override
+  Path getClip(Size size) {
+    Path path = Path();
+    path.lineTo(0, size.height * 0.8);
+    var controlPoint = Offset(size.width / 2, size.height * 1.1);
+    var endPoint = Offset(size.width, size.height * 0.8);
+    path.quadraticBezierTo(
+      controlPoint.dx,
+      controlPoint.dy,
+      endPoint.dx,
+      endPoint.dy,
+    );
+    path.lineTo(size.width, 0);
+    path.close();
+    return path;
   }
 
-  Widget _buildBubble(double size, Color color) {
-    return Container(
-      width: size,
-      height: size,
-      decoration: BoxDecoration(
-        color: color,
-        shape: BoxShape.circle,
-      ),
-    );
-  }
-
-  Widget _buildStatChip({
-    required IconData icon,
-    required String label,
-    required Color color,
-    required Color bgColor,
-  }) {
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-      decoration: BoxDecoration(
-        color: bgColor,
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(icon, color: color, size: 20),
-          const SizedBox(width: 8),
-          Text(
-            label,
-            style: GoogleFonts.nunito(
-              fontSize: 16,
-              fontWeight: FontWeight.w700,
-              color: color,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
+  @override
+  bool shouldReclip(CustomClipper<Path> oldClipper) => false;
 }

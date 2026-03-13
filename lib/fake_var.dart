@@ -56,7 +56,7 @@ class Globals {
   static int streak = 6;
   static bool isStreakActive = false;
 
-  static bool unlockedSumItUp = false;
+  static bool unlockedSumItUp = true;
 
   static int coins = 680;
   static int exp = 750;
@@ -146,7 +146,7 @@ class Globals {
     totalStepsTD = 0;
     streak = 6;
     isStreakActive = false;
-    unlockedSumItUp = false;
+    unlockedSumItUp = true;
     coins = 680;
     exp = 750;
     brainScore = 163;
