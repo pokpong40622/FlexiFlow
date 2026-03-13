@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../fake_var.dart';
 
 class ChatBotPage extends StatefulWidget {
   const ChatBotPage({Key? key}) : super(key: key);
@@ -33,6 +34,7 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
   List<String> randomSuggestions = List.from(suggestions)..shuffle();
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
+  int _responseIndex = 0;
 
   @override
   void initState() {
@@ -70,7 +72,7 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
       });
       
       // Simulate bot response
-      Future.delayed(const Duration(milliseconds: 1500), () {
+      Future.delayed(const Duration(milliseconds: 3000), () {
         if (mounted) {
           setState(() {
             _messages.add({
@@ -86,15 +88,26 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
   }
 
   String _getBotResponse(String userMessage) {
+    int totalSeconds = Globals.timeSpentWK;
+    int hours = totalSeconds ~/ 3600;
+    int minutes = (totalSeconds % 3600) ~/ 60;
+    int seconds = totalSeconds % 60;
+
+    List<String> parts = [];
+    if (hours > 0) parts.add("$hours ชั่วโมง");
+    if (minutes > 0) parts.add("$minutes นาที");
+    parts.add("$seconds วินาที");
+    String timeString = parts.join(" ");
+
     // Simple response logic - in a real app, this would connect to an AI service
     final responses = [
-      "That's a great question! FlexiFlow is designed to help you improve your flexibility through guided exercises and personalized routines.",
-      "I'd be happy to help you with that! Based on your current level, I recommend starting with 15-20 minutes of practice daily.",
-      "Here are some tips to improve your flexibility: stay consistent, warm up properly, and listen to your body's limits.",
-      "FlexiFlow offers many benefits including improved mobility, reduced muscle tension, and better posture.",
-      "Let me suggest a beginner-friendly routine that focuses on major muscle groups and gradual progression.",
+      "ในสัปดาห์นี้คุณได้ใช้เวลาเล่นเกมไป $timeStringครับ",
+      "โดยคะแนนเฉลี่ยที่คุณควรได้ในช่วงอายุ 14-20 ปี คือ 20-26 คะแนนต่อเกมครับ",
+      "1.คุณควรเดินให้ถึงเป้าหมาย 4700-5400 ก้าวต่อวันครับ\n2.ในเกม Perfect Match คุณควรได้คะแนนมากกว่านี้ครับ\n3.ในเกม Sum It Up คุณควรทำเวลาให้ดีกว่านี้ครับ",
     ];
-    return responses[userMessage.hashCode % responses.length];
+    String response = responses[_responseIndex];
+    _responseIndex = (_responseIndex + 1) % responses.length;
+    return response;
   }
 
   @override

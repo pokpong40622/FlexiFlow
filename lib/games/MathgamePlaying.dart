@@ -100,6 +100,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
 
     Globals.timeSpentTD += 90 - _secondsRemaining;
     Globals.brainScore += _score;
+    Globals.totalExercisesCompletedTD += 1;
     Globals.todayExercises.add(ExerciseMetadata(
       type: ExerciseType.SumItUp, // Assuming SumItUp is the type for Math Game
       timeSpent: 90 - _secondsRemaining,

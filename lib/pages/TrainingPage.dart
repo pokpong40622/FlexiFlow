@@ -125,6 +125,17 @@ class _TrainingPageState extends State<TrainingPage> {
         },
         child: Image.asset('assets/PerfectMatchLogo.png'),
       ),
+      GestureDetector(
+        onTap: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) =>
+                const MathgamePlaying(), // Replace with actual game page
+              ));
+        },
+        child: Image.asset('assets/SumItUpLogo.png'),
+      ),
       Stack(
         fit: StackFit.expand,
         children: [
@@ -138,7 +149,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       const MathgamePlaying(), // Replace with actual game page
                     ));
               },
-              child: Image.asset('assets/SumItUpLogo.png'),
+              child: Image.asset('assets/WanderLogo.png'),
           ),
           if (!Globals.unlockedSumItUp)
             ClipRRect(
@@ -180,10 +191,10 @@ class _TrainingPageState extends State<TrainingPage> {
             ),
         ],
       ),
+      /*
       Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset('assets/WanderLogo.png'),
           ClipRRect(
             borderRadius: BorderRadius.circular(12),
             child: BackdropFilter(
@@ -213,8 +224,10 @@ class _TrainingPageState extends State<TrainingPage> {
               ),
             ),
           ),
+
         ],
       ),
+       */
     ];
 
     // Get the dates for the current view (today + next 3 days)

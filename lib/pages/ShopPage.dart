@@ -210,9 +210,9 @@ class _ShopPageState extends State<ShopPage> {
                   children: [
                     if (!Globals.unlockedSumItUp)
                       _buildShopItems(
-                        ItemPic: 'assets/SumItUpLogo.png',
-                        ItemLabel: 'Unlock Sum It Up',
-                        ItemPrice: '80',
+                        ItemPic: 'assets/WanderLogo.png',
+                        ItemLabel: 'Unlock Wander',
+                        ItemPrice: '250',
                       ),
                     _buildShopItems(
                       ItemPic: 'assets/Lotterypic.png',

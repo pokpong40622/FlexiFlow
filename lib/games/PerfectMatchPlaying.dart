@@ -17,40 +17,42 @@ class HandPose {
   final GestureType leftGestureType;
   final GestureType rightGestureType;
   final String imagePath;
+  final String name;
 
   HandPose({
     required this.isFlipped,
     required this.leftGestureType,
     required this.rightGestureType,
     required this.imagePath,
+    required this.name,
   });
 }
 
 List<HandPose> predefinedPoses = [
-  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/PinchSeven.png'),
-  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/PinchSeven.png'),
-  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: false, imagePath: 'assets/hand/SixKoi.png'),
-  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: true, imagePath: 'assets/hand/SixKoi.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: false, imagePath: 'assets/hand/OneOne.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: true, imagePath: 'assets/hand/OneOne.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: false, imagePath: 'assets/hand/OneTwo.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: true, imagePath: 'assets/hand/OneTwo.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: false, imagePath: 'assets/hand/OneThree.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: true, imagePath: 'assets/hand/OneThree.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: false, imagePath: 'assets/hand/OneFour.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: true, imagePath: 'assets/hand/OneFour.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: false, imagePath: 'assets/hand/OneSix.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: true, imagePath: 'assets/hand/OneSix.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/OneSeven.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/OneSeven.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: false, imagePath: 'assets/hand/OneEight.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: true, imagePath: 'assets/hand/OneEight.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: false, imagePath: 'assets/hand/OneNine.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: true, imagePath: 'assets/hand/OneNine.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png'),
+  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/PinchSeven.png', name: 'L + Fingertip pinch'),
+  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/PinchSeven.png', name: 'Fingertip pinch + L'),
+  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: false, imagePath: 'assets/hand/SixKoi.png', name: 'Thumb + Pinky'),
+  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: true, imagePath: 'assets/hand/SixKoi.png', name: 'Pinky + Thumb'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: false, imagePath: 'assets/hand/OneOne.png', name: 'Point + One'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: true, imagePath: 'assets/hand/OneOne.png', name: 'One + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: false, imagePath: 'assets/hand/OneTwo.png', name: 'Point + Two'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: true, imagePath: 'assets/hand/OneTwo.png', name: 'Two + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: false, imagePath: 'assets/hand/OneThree.png', name: 'Point + Three'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: true, imagePath: 'assets/hand/OneThree.png', name: 'Three + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: false, imagePath: 'assets/hand/OneFour.png', name: 'Point + Four'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: true, imagePath: 'assets/hand/OneFour.png', name: 'Four + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png', name: 'Point + Five'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png', name: 'Five + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: false, imagePath: 'assets/hand/OneSix.png', name: 'Point + Six'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: true, imagePath: 'assets/hand/OneSix.png', name: 'Six + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/OneSeven.png', name: 'Point + Seven'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/OneSeven.png', name: 'Seven + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: false, imagePath: 'assets/hand/OneEight.png', name: 'Point + Eight'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: true, imagePath: 'assets/hand/OneEight.png', name: 'Eight + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: false, imagePath: 'assets/hand/OneNine.png', name: 'Point + Nine'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: true, imagePath: 'assets/hand/OneNine.png', name: 'Nine + Point'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png', name: 'Point + Ten'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png', name: 'Ten + Point'),
 ];
 
 class PerfectMatchPlaying extends StatefulWidget {
@@ -126,6 +128,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
 
     Globals.timeSpentTD += 90 - _secondsRemaining;
     Globals.brainScore += _score;
+    Globals.totalExercisesCompletedTD += 1;
     Globals.todayExercises.add(ExerciseMetadata(
       type: ExerciseType.PerfectMatch,
       timeSpent: 90 - _secondsRemaining,
@@ -339,7 +342,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
                               ),
                             ),
                             Text(
-                              'L + fingertip pinch: ',
+                              '${predefinedPoses[currentPoseIndex].name}: ',
                               style: GoogleFonts.montserrat(
                                 fontSize: screenWidth * 0.054,
                                 fontWeight: FontWeight.w700,

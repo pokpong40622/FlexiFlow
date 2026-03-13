@@ -66,7 +66,7 @@ class _GetstartedState extends State<Getstarted> {
                             decoration: BoxDecoration(
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: Image.asset('assets/DoctorGraphicExample1.png'),
+                            child: Image.asset('assets/hand/PinchSeven.png'),
                           ),
                           SizedBox(height: screenHeight * 0.068),
                           Container(
@@ -119,28 +119,61 @@ class _GetstartedState extends State<Getstarted> {
             alignment: Alignment.bottomCenter,
             child: Padding(
               padding: EdgeInsets.only(bottom: screenHeight * 0.03),
-              child: GestureDetector(
-                onTap: () {
-                  
-                },
-                child: Container(
-                  width: screenWidth * 0.92,
-                  height: screenHeight * 0.072,
-                  decoration: BoxDecoration(
-                    color: Color(0xFF0397FD),
-                    borderRadius: BorderRadius.circular(10.0),
-                  ),
-                  child: Center(
-                    child: Text(
-                      'Next',
-                      style: GoogleFonts.inter(
-                        fontSize: screenWidth * 0.044,
-                        fontWeight: FontWeight.w700,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.pop(context);
+                    },
+                    child: Container(
+                      width: screenWidth * 0.44,
+                      height: screenHeight * 0.072,
+                      decoration: BoxDecoration(
                         color: Colors.white,
+                        borderRadius: BorderRadius.circular(10.0),
+                        border: Border.all(
+                          color: Color(0xFF0397FD),
+                          width: 1.5,
+                        ),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Back',
+                          style: GoogleFonts.inter(
+                            fontSize: screenWidth * 0.044,
+                            fontWeight: FontWeight.w700,
+                            color: Color(0xFF0397FD),
+                          ),
+                        ),
                       ),
                     ),
                   ),
-                ),
+                  SizedBox(width: screenWidth * 0.04),
+                  GestureDetector(
+                    onTap: () {
+                      
+                    },
+                    child: Container(
+                      width: screenWidth * 0.44,
+                      height: screenHeight * 0.072,
+                      decoration: BoxDecoration(
+                        color: Color(0xFF0397FD),
+                        borderRadius: BorderRadius.circular(10.0),
+                      ),
+                      child: Center(
+                        child: Text(
+                          'Next',
+                          style: GoogleFonts.inter(
+                            fontSize: screenWidth * 0.044,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
