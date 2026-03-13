@@ -16,39 +16,41 @@ class HandPose {
   final bool isFlipped; // true if left hand is flipped, false if right hand is flipped
   final GestureType leftGestureType;
   final GestureType rightGestureType;
+  final String imagePath;
 
   HandPose({
     required this.isFlipped,
     required this.leftGestureType,
     required this.rightGestureType,
+    required this.imagePath,
   });
 }
 
 List<HandPose> predefinedPoses = [
-  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: false),
-  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: true),
-  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: false),
-  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: true),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true),
+  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/PinchSeven.png'),
+  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/PinchSeven.png'),
+  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: false, imagePath: 'assets/hand/SixKoi.png'),
+  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: true, imagePath: 'assets/hand/SixKoi.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: false, imagePath: 'assets/hand/OneOne.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: true, imagePath: 'assets/hand/OneOne.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: false, imagePath: 'assets/hand/OneTwo.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: true, imagePath: 'assets/hand/OneTwo.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: false, imagePath: 'assets/hand/OneThree.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: true, imagePath: 'assets/hand/OneThree.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: false, imagePath: 'assets/hand/OneFour.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: true, imagePath: 'assets/hand/OneFour.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: false, imagePath: 'assets/hand/OneSix.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: true, imagePath: 'assets/hand/OneSix.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/OneSeven.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/OneSeven.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: false, imagePath: 'assets/hand/OneEight.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: true, imagePath: 'assets/hand/OneEight.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: false, imagePath: 'assets/hand/OneNine.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: true, imagePath: 'assets/hand/OneNine.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png'),
+  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png'),
 ];
 
 class PerfectMatchPlaying extends StatefulWidget {
@@ -431,9 +433,12 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
                     height: screenHeight * 0.159166,
                     width: screenWidth * 0.3462,
                     // REMOVED Expanded here
-                    child: Image.asset(
-                      'assets/DoctorGraphicExample1.png',
-                      fit: BoxFit.contain, // Add this if you want it to scale nicely
+                    child: Transform.flip(
+                      flipX: !predefinedPoses[currentPoseIndex].isFlipped, // Flips the child horizontally along the X-axis
+                      child: Image.asset(
+                        predefinedPoses[currentPoseIndex].imagePath,
+                        fit: BoxFit.contain, // Add this if you want it to scale nicely within the container
+                      ),
                     ),
                     decoration: BoxDecoration(
                       color: Colors.transparent,
