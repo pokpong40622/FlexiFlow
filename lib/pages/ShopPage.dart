@@ -724,7 +724,7 @@ class _ShopPageState extends State<ShopPage> {
                           // For now, just close the dialog and print a message
                           setState(() {
                             Globals.coins -= int.parse(itemPrice); // Deduct coins
-                            if (itemName == 'Unlock Sum It Up') {
+                            if (itemName == 'Unlock Wander') {
                               Globals.unlockedSumItUp = true;
                             }
                             Globals.save();

@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/figma/chatbot.dart';
+import 'package:motion_kit/pages/LeaderboardPage.dart';
 import 'package:motion_kit/pages/ProfilePage.dart';
 import 'package:shimmer/shimmer.dart';
 import 'GetStarted.dart';
@@ -221,10 +222,18 @@ class _HomePageState extends State<HomePage> {
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
-                      _buildServicesButton(
-                        icon: Icons.checklist,
-                        label: "Check Posture",
-                        ColorCode: Color(0xFF0397FD),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const LeaderboardPage()),
+                          );
+                        },
+                        child: _buildServicesButton(
+                          icon: Icons.leaderboard,
+                          label: "Leaderboard",
+                          ColorCode: Color(0xFF0397FD),
+                        ),
                       ),
                       GestureDetector(
                         onTap: () {

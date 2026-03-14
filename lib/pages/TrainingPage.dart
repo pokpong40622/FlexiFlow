@@ -142,12 +142,14 @@ class _TrainingPageState extends State<TrainingPage> {
           GestureDetector(
               onTap: () {
                 if (!Globals.unlockedSumItUp) return;
+                /*
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
                       const MathgamePlaying(), // Replace with actual game page
                     ));
+                 */
               },
               child: Image.asset('assets/WanderLogo.png'),
           ),
@@ -442,25 +444,56 @@ class _TrainingPageState extends State<TrainingPage> {
                   ),
                   SizedBox(height: screenHeight * 0.014),
                   Container(
-                    height: screenHeight * 0.35, // Adjust this height as needed
-                    child: SingleChildScrollView(
-                      child: Column(
-                        children: (Globals.schedules[selectedDate] ?? [])
-                            .asMap()
-                            .entries
-                            .map((entry) {
-                          int index = entry.key;
-                          Map<String, dynamic> schedule = entry.value;
-                          return _buildScheduleItem(
-                            schedule['time']!,
-                            schedule['event']!,
-                            schedule['completed']!,
-                            index,
-                            screenWidth,
-                          );
-                        }).toList(),
-                      ),
-                    ),
+                    height: screenHeight * 0.35,
+                    child: (Globals.schedules[selectedDate] == null ||
+                            Globals.schedules[selectedDate]!.isEmpty)
+                        ? Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.event_available_rounded,
+                                  size: 64,
+                                  color: Colors.grey.shade300,
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'No tasks for today',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 16,
+                                    fontWeight: FontWeight.w500,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Tap "Add" to create a schedule',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 12,
+                                    color: Colors.grey.shade400,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        : SingleChildScrollView(
+                            child: Column(
+                              children: (Globals.schedules[selectedDate] ?? [])
+                                  .asMap()
+                                  .entries
+                                  .map((entry) {
+                                int index = entry.key;
+                                Map<String, dynamic> schedule = entry.value;
+                                return _buildScheduleItem(
+                                  schedule['time']!,
+                                  schedule['event']!,
+                                  schedule['completed']!,
+                                  index,
+                                  screenWidth,
+                                );
+                              }).toList(),
+                            ),
+                          ),
                   ),
                 ],
               ),
@@ -489,52 +522,55 @@ class _TrainingPageState extends State<TrainingPage> {
           selectedDate = date; // Change selected date
         });
       },
-      child: Container(
-        width: MediaQuery.of(context).size.width * 0.206,
-        padding: EdgeInsets.only(bottom: 24),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+        width: MediaQuery.of(context).size.width * 0.21,
+        padding: const EdgeInsets.symmetric(vertical: 20),
         decoration: BoxDecoration(
-          color: Colors.white,
-          borderRadius: BorderRadius.circular(6),
-          boxShadow: isSelected
-              ? []
-              : [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 4,
-                    offset: Offset(0, 3),
-                  ),
-                ],
+          color: isSelected ? const Color(0xFF0397FD) : Colors.white,
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.grey.withOpacity(0.1),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
+            ),
+          ],
+          border: isSelected
+              ? null
+              : Border.all(color: Colors.grey.shade200, width: 1.5),
         ),
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: double.infinity,
-              height: 18,
-              decoration: BoxDecoration(
-                color: isSelected ? Color(0xFF0262A4) : Color(0xFF0397FD),
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(6),
-                  topRight: Radius.circular(6),
-                ),
-              ),
-            ),
-            SizedBox(height: 12),
-            Text(
-              day,
-              style: GoogleFonts.inter(
-                fontSize: 18,
-                fontWeight: FontWeight.w700,
-                color: Colors.black,
-              ),
-            ),
             Text(
               weekday,
               style: GoogleFonts.inter(
-                fontSize: 9,
-                color: Colors.black54,
+                fontSize: 14,
                 fontWeight: FontWeight.w600,
+                color: isSelected ? Colors.white.withOpacity(0.9) : Colors.grey,
               ),
             ),
+            const SizedBox(height: 8),
+            Text(
+              day,
+              style: GoogleFonts.inter(
+                fontSize: 22,
+                fontWeight: FontWeight.bold,
+                color: isSelected ? Colors.white : Colors.black87,
+              ),
+            ),
+            if (isSelected)
+              Container(
+                margin: const EdgeInsets.only(top: 8),
+                width: 6,
+                height: 6,
+                decoration: const BoxDecoration(
+                  color: Colors.white,
+                  shape: BoxShape.circle,
+                ),
+              ),
           ],
         ),
       ),
@@ -548,101 +584,123 @@ class _TrainingPageState extends State<TrainingPage> {
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
       background: Container(
-        margin: EdgeInsets.only(bottom: 12),
+        margin: const EdgeInsets.only(bottom: 12),
         alignment: Alignment.centerRight,
-        padding: EdgeInsets.only(right: 20),
+        padding: const EdgeInsets.only(right: 24),
         decoration: BoxDecoration(
-          color: Colors.red,
-          borderRadius: BorderRadius.circular(16),
+          color: const Color(0xFFFF5252),
+          borderRadius: BorderRadius.circular(20),
         ),
-        child: Icon(
-          Icons.delete,
+        child: const Icon(
+          Icons.delete_outline_rounded,
           color: Colors.white,
-          size: 24,
+          size: 28,
         ),
       ),
       onDismissed: (direction) {
         // Ensure there's a list for the selectedDate before attempting to remove
         if (Globals.schedules[selectedDate] != null) {
-          final dismissedItem = Globals.schedules[selectedDate]!.removeAt(index);
+          final dismissedItem =
+              Globals.schedules[selectedDate]!.removeAt(index);
           Globals.save(); // Save after deletion
           // Update the state to reflect the removal in the UI
           setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
               content: Text('Event "${dismissedItem['event']}" deleted'),
-              duration: Duration(seconds: 2),
+              duration: const Duration(seconds: 2),
+              behavior: SnackBarBehavior.floating,
+              shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(10)),
             ),
           );
         }
       },
       child: Container(
-        width: screenWidth * 0.911,
-        height: 96,
-        // Increased height by 20% (80 * 1.2 = 96)
-        margin: EdgeInsets.only(bottom: 12),
-        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 18),
+        width: screenWidth * 0.92,
+        margin: const EdgeInsets.only(bottom: 12),
+        padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: completed
-              ? Color(0xFF0262A4) // Color when checked
-              : Color(0xFF0397FD), // Color when not checked
-          borderRadius: BorderRadius.circular(16),
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
           boxShadow: [
             BoxShadow(
-              color: Color(0xFF0397FD).withOpacity(0.3),
-              blurRadius: 8,
-              offset: Offset(0, 4),
+              color: Colors.black.withOpacity(0.04),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
           ],
+          border: Border.all(color: Colors.grey.shade100),
         ),
         child: Row(
           children: [
-            Text(
-              time,
-              style: GoogleFonts.inter(
-                fontSize: 26, // Increased font size for time
-                fontWeight: FontWeight.w700,
-                color: Colors.white,
+            // Time Badge
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+              decoration: BoxDecoration(
+                color: completed
+                    ? const Color(0xFFF5F5F5)
+                    : const Color(0xFFE3F2FD),
+                borderRadius: BorderRadius.circular(12),
+              ),
+              child: Text(
+                time,
+                style: GoogleFonts.inter(
+                  fontSize: 14,
+                  fontWeight: FontWeight.w700,
+                  color: completed ? Colors.grey : const Color(0xFF1565C0),
+                ),
               ),
             ),
-            SizedBox(width: 20),
+            const SizedBox(width: 16),
+            // Event Details
             Expanded(
               child: Text(
                 event,
                 style: GoogleFonts.inter(
-                  fontSize: 15,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.white,
+                  color: completed ? Colors.grey.shade400 : Colors.black87,
+                  decoration: completed ? TextDecoration.lineThrough : null,
+                  decorationColor: Colors.grey.shade400,
                 ),
-                overflow: TextOverflow.ellipsis,
                 maxLines: 2,
+                overflow: TextOverflow.ellipsis,
               ),
             ),
+            const SizedBox(width: 12),
+            // Checkbox
             GestureDetector(
               onTap: () {
                 setState(() {
                   // Ensure the list exists before trying to update an item
                   if (Globals.schedules[selectedDate] != null &&
                       index < Globals.schedules[selectedDate]!.length) {
-                    Globals.schedules[selectedDate]![index]['completed'] = !completed;
+                    Globals.schedules[selectedDate]![index]['completed'] =
+                        !completed;
                     Globals.save(); // Save after toggling completion
                   }
                 });
               },
-              child: Container(
-                width: 40, // Increased checkbox size slightly to match image
-                height: 40,
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 200),
+                width: 28,
+                height: 28,
                 decoration: BoxDecoration(
-                  color: completed ? Colors.white : Colors.transparent,
-                  border: Border.all(color: Colors.white, width: 2.5),
-                  shape: BoxShape
-                      .circle, // Changed to circle for the checkmark container
+                  color: completed ? const Color(0xFF0397FD) : Colors.transparent,
+                  borderRadius: BorderRadius.circular(8),
+                  border: Border.all(
+                    color: completed
+                        ? const Color(0xFF0397FD)
+                        : Colors.grey.shade300,
+                    width: 2,
+                  ),
                 ),
                 child: completed
-                    ? Icon(
+                    ? const Icon(
                         Icons.check,
-                        color: Color(0xFF0397FD),
-                        size: 24, // Increased check icon size
+                        color: Colors.white,
+                        size: 20,
                       )
                     : null,
               ),
@@ -659,23 +717,49 @@ class _TrainingPageState extends State<TrainingPage> {
       context: context,
       builder: (context) {
         return AlertDialog(
+          shape:
+              RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            'Add Event for ${DateFormat('EEE, MMM d').format(selectedDate)}', // Display full date
+            'Add Event',
+            style: GoogleFonts.inter(fontWeight: FontWeight.bold),
           ),
           content: Column(
             mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
+              Text(
+                DateFormat('EEEE, MMM d').format(selectedDate),
+                style: GoogleFonts.inter(
+                  color: Colors.grey,
+                  fontSize: 14,
+                ),
+              ),
+              const SizedBox(height: 16),
               TextField(
                 controller: timeController,
-                decoration: InputDecoration(labelText: 'Time (HH:MM)'),
+                decoration: InputDecoration(
+                  labelText: 'Time (HH:MM)',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.access_time),
+                ),
                 keyboardType: TextInputType.number,
                 inputFormatters: [
                   TimeInputFormatter(),
                 ],
               ),
+              const SizedBox(height: 16),
               TextField(
                 controller: eventController,
-                decoration: InputDecoration(labelText: 'Event'),
+                decoration: InputDecoration(
+                  labelText: 'Event Description',
+                  border: OutlineInputBorder(
+                    borderRadius: BorderRadius.circular(12),
+                  ),
+                  prefixIcon: const Icon(Icons.event_note),
+                ),
+                textCapitalization: TextCapitalization.sentences,
               ),
             ],
           ),
@@ -684,9 +768,19 @@ class _TrainingPageState extends State<TrainingPage> {
               onPressed: () {
                 Navigator.of(context).pop();
               },
-              child: Text('Cancel'),
+              child: Text(
+                'Cancel',
+                style: GoogleFonts.inter(color: Colors.grey),
+              ),
             ),
-            TextButton(
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: const Color(0xFF0397FD),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                foregroundColor: Colors.white,
+              ),
               onPressed: () {
                 if (timeController.text.isNotEmpty &&
                     eventController.text.isNotEmpty) {
@@ -708,9 +802,14 @@ class _TrainingPageState extends State<TrainingPage> {
                   Navigator.of(context).pop();
                 }
               },
-              child: Text('Add'),
+              child: Text(
+                'Add Event',
+                style: GoogleFonts.inter(fontWeight: FontWeight.w600),
+              ),
             ),
           ],
+          actionsPadding:
+              const EdgeInsets.symmetric(horizontal: 24, vertical: 24),
         );
       },
     );

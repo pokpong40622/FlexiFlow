@@ -115,7 +115,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
         builder: (context) => ScorePage(
           score: _score,
           timeSpent: 90 - _secondsRemaining,
-          highScore: 0, // Pass actual high score logic if available
+          highScore: 33, // Pass actual high score logic if available
         ),
       ),
     );
