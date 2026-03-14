@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../fake_var.dart';
+
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});
 
@@ -17,6 +19,11 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   final Color textMainColor = const Color(0xFF2D3436);
   final Color mutedColor = const Color(0xFFB2BEC3);
 
+  // Rank colors
+  final Color goldColor = const Color(0xFFFFD700);
+  final Color silverColor = const Color(0xFFC0C0C0);
+  final Color bronzeColor = const Color(0xFFCD7F32);
+
   // Track expanded item index (-1 means none expanded)
   int _expandedIndex = 2; // Default to rank 3 expanded as per design
 
@@ -24,48 +31,59 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   final List<Map<String, dynamic>> leaderboardData = [
     {
       'rank': 1,
-      'name': 'You',
+      'name': 'Audrey',
       'rankText': 'Rank 1',
-      'points': 1500,
+      'points': 1263,
+      'imageUrl': 'assets/profiles/audrey.png',
+      'isCurrentUser': false,
+      'avgScore': '26',
+      'games': 48,
+      'streak': 26,
+    },
+    {
+      'rank': 2,
+      'name': 'Max',
+      'rankText': 'Rank 2',
+      'points': 1049,
+      'imageUrl': 'assets/profiles/max.png',
+      'isCurrentUser': false,
+      'avgScore': '18',
+      'games': 56,
+      'streak': 31,
+    },
+    {
+      'rank': 3,
+      'name': 'Clara',
+      'rankText': 'Rank 3',
+      'points': 867,
+      'imageUrl': 'assets/profiles/clara.png',
+      'isCurrentUser': false,
+      'avgScore': '19',
+      'games': 44,
+      'streak': 24,
+    },
+    {
+      'rank': 4,
+      'name': 'Natthan',
+      'rankText': 'Rank 4',
+      'points': 751,
+      'imageUrl': 'assets/profiles/natthan.png',
+      'isCurrentUser': false,
+      'avgScore': '20',
+      'games': 36,
+      'streak': 42,
+    },
+    {
+      'rank': '-',
+      'name': 'You',
+      'rankText': 'Rank -',
+      'points': Globals.brainScore,
       'imageUrl': 'assets/FlexiFlowProfilePic.png',
       // or network image if preferred
       'isCurrentUser': true,
       'winRate': '68%',
       'games': 156,
       'streak': 5,
-    },
-    {
-      'rank': 2,
-      'name': 'Alex',
-      'rankText': 'Rank 2',
-      'points': 1200,
-      'imageUrl': 'https://lh3.googleusercontent.com/aida-public/AB6AXuB36kLy8O7-bLl2PpLF1C20whfaDmwvhalq4EU3t7FV4LRwFULwpVFuAigICl3qX19khE0ZgPtNv6SxYXfamAiWMVXtU0g5UPLyjOjoFYqnDd5xjDikleUrL-6mg5LYqH3FiNTo2-j0aVU-Tg9LT8Ztetav7zPqA8U9uEv7KJXZY4OGos1kQtzNRdi0alEAJ0lBYcPpyoHvR-xU4fv6_lQ8_mdl0PFU9LNS-SPI2sEPaOPVJK7YgtrvIsEI9m5oDAFwg0upeA-B-5ID',
-      'isCurrentUser': false,
-      'winRate': '55%',
-      'games': 98,
-      'streak': 2,
-    },
-    {
-      'rank': 3,
-      'name': 'Sam',
-      'rankText': 'Rank 3',
-      'points': 900,
-      'imageUrl': 'https://lh3.googleusercontent.com/aida-public/AB6AXuB2SgEdfp2Acv76QdJCa_vKoGlVcPr315PqBHW7tF6z6gkpR-bcyLbWSjCuTiAGqKrc72fnIV6UVwFCLYg-lS6Txr10Em2RqfR_bwh-FL1sLYr3HWXHuwMllh-VXSQu4fV6JgLpPSTi9li0lTUk2SDuVhVXBpErlwxlc2IcL7Ea3aN1v3kpY_Pk9RZeecPYFOao7Zd1KnophPC-zQylphvSMktZbPjSbCPx4pJOgZf67O9zvIt-lYchLggQx0HR-GRMmK3V2YF9GKF4',
-      'isCurrentUser': false,
-      'winRate': '64%',
-      'games': 142,
-      'streak': 3,
-    },
-    {
-      'rank': 4,
-      'name': 'Jordan',
-      'rankText': 'Rank 4',
-      'points': 750,
-      'imageUrl': 'https://lh3.googleusercontent.com/aida-public/AB6AXuCLnm4lMeOTFjyS0P6uMvx9YhbVJ2XX9WhG5sfb75bHd5j7ATGVZqpIn-OIBBxp_2rQGdHchq7VSfQ50iUNHpg87zYYROpo7EA0tJg-A3btcgom4eOY9fByXhNSTC8ovZgwMdtFFXS6u9jgJoDJU9Wuv86_krLQ273yClXy-fPmgZ3J7dfOg0KarNd0UU7Fs_w2XZYmGby3zMW_4fYvVrZbior3Mx2ms3EdALQkNY0jTk0voBXWMng6BOFDNAHU1WDEQFs7WNEu8mbq',
-      'isCurrentUser': false,
-      'winRate': '45%',
-      'games': 67,
-      'streak': 0,
     },
   ];
 
@@ -145,10 +163,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             child: Padding(
               padding: const EdgeInsets.only(right: 48.0), // Balance the back button space
               child: Text(
-                'Rankings',
+                'Weekly Rankings',
                 textAlign: TextAlign.center,
                 style: GoogleFonts.splineSans(
-                  fontSize: 28, // ~text-3xl
+                  fontSize: 24, // ~text-3xl
                   fontWeight: FontWeight.bold, // font-bold
                   color: textMainColor,
                   height: 1.1,
@@ -181,6 +199,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         clipBehavior: Clip.none,
         children: [
           // Badge Icon
+          if (data['rank'] == 1)
           Positioned(
             top: -12,
             left: -8,
@@ -307,6 +326,13 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   Widget _buildStandardPlayerCard(
     Map<String, dynamic> data, int index, bool isExpanded) {
+    
+    int rank = data['rank'] is int ? data['rank'] : 999;
+    Color rankColor = mutedColor;
+    if (rank == 1) rankColor = goldColor;
+    else if (rank == 2) rankColor = silverColor;
+    else if (rank == 3) rankColor = bronzeColor;
+
     return GestureDetector(
       onTap: () {
         setState(() {
@@ -336,133 +362,165 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             ),
           ],
         ),
-        child: Column(
+        child: Stack(
+          clipBehavior: Clip.none,
           children: [
-            // Header Row
-            Container(
-              height: 80,
-              padding: const EdgeInsets.symmetric(horizontal: 20),
-              decoration: BoxDecoration(
-                color: isExpanded ? primaryColor.withValues(alpha: 0.05) : Colors.transparent,
-                borderRadius: isExpanded 
-                    ? const BorderRadius.vertical(top: Radius.circular(24)) 
-                    : BorderRadius.circular(24),
-              ),
-              child: Row(
-                children: [
-                  // Rank Number
-                  SizedBox(
-                    width: 32,
-                    child: Center(
-                      child: Text(
-                        '${data['rank']}',
-                        style: GoogleFonts.splineSans(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: mutedColor,
-                        ),
-                      ),
-                    ),
+            Column(
+              children: [
+                // Header Row
+                Container(
+                  height: 80,
+                  padding: const EdgeInsets.symmetric(horizontal: 20),
+                  decoration: BoxDecoration(
+                    color: isExpanded ? primaryColor.withValues(alpha: 0.05) : Colors.transparent,
+                    borderRadius: isExpanded 
+                        ? const BorderRadius.vertical(top: Radius.circular(24)) 
+                        : BorderRadius.circular(24),
                   ),
-                  const SizedBox(width: 16),
-                  // Avatar
-                  Container(
-                    width: 50,
-                    height: 50,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      border: Border.all(color: backgroundLight, width: 2),
-                      image: DecorationImage(
-                        image: data['imageUrl'].startsWith('assets')
-                          ? AssetImage(data['imageUrl']) as ImageProvider
-                          : NetworkImage(data['imageUrl']),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 16),
-                  // Text Info
-                  Expanded(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          data['name'],
-                          style: GoogleFonts.splineSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: textMainColor,
-                            height: 1.0,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          data['rankText'],
-                          style: GoogleFonts.splineSans(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w600,
-                            color: mutedColor,
-                            height: 1.0,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                  // Points & Icon
-                  Row(
+                  child: Row(
                     children: [
-                      RichText(
-                        text: TextSpan(
-                          text: '${NumberFormat('#,###').format(data['points'])} ',
-                          style: GoogleFonts.splineSans(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
-                            color: textMainColor,
+                      // Rank Number
+                      SizedBox(
+                        width: 32,
+                        child: Center(
+                          child: Text(
+                            '${data['rank']}',
+                            style: GoogleFonts.splineSans(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: rankColor,
+                            ),
                           ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      // Avatar
+                      Container(
+                        width: 50,
+                        height: 50,
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          border: Border.all(color: rank <= 3 ? rankColor : backgroundLight, width: 2),
+                          image: DecorationImage(
+                            image: data['imageUrl'].startsWith('assets')
+                              ? AssetImage(data['imageUrl']) as ImageProvider
+                              : NetworkImage(data['imageUrl']),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 16),
+                      // Text Info
+                      Expanded(
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            TextSpan(
-                              text: 'pts',
+                            Text(
+                              data['name'],
+                              style: GoogleFonts.splineSans(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: textMainColor,
+                                height: 1.0,
+                              ),
+                            ),
+                            const SizedBox(height: 4),
+                            Text(
+                              data['rankText'],
                               style: GoogleFonts.splineSans(
                                 fontSize: 14,
                                 fontWeight: FontWeight.w600,
-                                color: mutedColor,
+                                color: mutedColor, // Keeping muted for rank text as requested, or should it change? 'Make first... places gold...' usually refers to the main indicator. I changed the number and the avatar border.
+                                height: 1.0,
                               ),
                             ),
                           ],
                         ),
                       ),
-                      const SizedBox(width: 8),
-                      Icon(
-                        isExpanded ? Icons.expand_less : Icons.expand_more,
-                        color: isExpanded ? primaryColor : mutedColor,
-                        size: 20,
+                      // Points & Icon
+                      Row(
+                        children: [
+                          RichText(
+                            text: TextSpan(
+                              text: '${NumberFormat('#,###').format(data['points'])} ',
+                              style: GoogleFonts.splineSans(
+                                fontSize: 18,
+                                fontWeight: FontWeight.bold,
+                                color: textMainColor,
+                              ),
+                              children: [
+                                TextSpan(
+                                  text: 'pts',
+                                  style: GoogleFonts.splineSans(
+                                    fontSize: 14,
+                                    fontWeight: FontWeight.w600,
+                                    color: mutedColor,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(width: 8),
+                          Icon(
+                            isExpanded ? Icons.expand_less : Icons.expand_more,
+                            color: isExpanded ? primaryColor : mutedColor,
+                            size: 20,
+                          ),
+                        ],
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            // Expanded Content
-            if (isExpanded)
-              Container(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                decoration: BoxDecoration(
-                  color: surfaceColor, // Kept surface color
-                  border: Border(
-                    top: BorderSide(color: backgroundLight),
-                  ),
-                  borderRadius: const BorderRadius.vertical(
-                    bottom: Radius.circular(24),
-                  ),
                 ),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _buildStatItem('WIN RATE', data['winRate']),
-                    _buildStatItem('GAMES', '${data['games']}'),
-                    _buildStatItem('STREAK', '${data['streak']}', isFire: true),
-                  ],
+                // Expanded Content
+                if (isExpanded)
+                  Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    decoration: BoxDecoration(
+                      color: surfaceColor, // Kept surface color
+                      border: Border(
+                        top: BorderSide(color: backgroundLight),
+                      ),
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(24),
+                      ),
+                    ),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        _buildStatItem('AVG SCORE', data['avgScore'] ?? 'N/A'),
+                        _buildStatItem('GAMES', '${data['games']}'),
+                        _buildStatItem('STREAK', '${data['streak']}', isFire: true),
+                      ],
+                    ),
+                  ),
+              ],
+            ),
+            if (rank == 1)
+              Positioned(
+                top: -12,
+                left: -8,
+                child: Transform.rotate(
+                  angle: -15 * 3.14159 / 180, // -15 deg
+                  child: Container(
+                    padding: const EdgeInsets.all(4),
+                    decoration: BoxDecoration(
+                      color: surfaceColor,
+                      shape: BoxShape.circle,
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          offset: const Offset(2, 4),
+                          blurRadius: 8,
+                        ),
+                      ],
+                    ),
+                    child: Icon(
+                      Icons.emoji_events,
+                      color: goldColor,
+                      size: 20,
+                    ),
+                  ),
                 ),
               ),
           ],

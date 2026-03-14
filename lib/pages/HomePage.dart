@@ -326,7 +326,7 @@ class _HomePageState extends State<HomePage> {
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w600,
-                fontSize: screenWidth * 0.0286,
+                fontSize: screenWidth * 0.027,
                 height: 1.04,
               ),
             ),
