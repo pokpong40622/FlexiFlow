@@ -6,6 +6,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:motion_kit/games/PerfectMatchPlaying.dart'; // Import for date formatting
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/games/WanderPlaying.dart';
 
 import '../games/MathgamePlaying.dart';
 
@@ -141,19 +142,18 @@ class _TrainingPageState extends State<TrainingPage> {
         children: [
           GestureDetector(
               onTap: () {
-                if (!Globals.unlockedSumItUp) return;
-                /*
+                // if (!Globals.unlockedSumItUp) return;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) =>
-                      const MathgamePlaying(), // Replace with actual game page
-                    ));
-                 */
+                      const WanderPlaying(), // Replace with actual game page
+                    ),
+                );
               },
               child: Image.asset('assets/WanderLogo.png'),
           ),
-          if (!Globals.unlockedSumItUp)
+          if (Globals.unlockedSumItUp)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: BackdropFilter(
