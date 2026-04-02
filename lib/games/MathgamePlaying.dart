@@ -12,6 +12,8 @@ import '../views/embedded_camera_view.dart';
 import '../pages/ScorePage.dart';
 import '../fake_var.dart';
 
+enum MathGameLevel { easy, normal, hard, extreme }
+
 class MathgamePlaying extends StatefulWidget {
   const MathgamePlaying({super.key});
 
@@ -37,6 +39,8 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
   int _currentAnswer = 0;
   String _currentEquation = "";
   
+  MathGameLevel? _selectedLevel;
+
   late AnimationController _flashController;
 
   @override
@@ -47,8 +51,6 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
       duration: const Duration(milliseconds: 100),
       reverseDuration: const Duration(milliseconds: 1000),
     );
-    _generateEquation();
-    _startGameTimer();
   }
 
   @override
@@ -62,16 +64,117 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
 
   void _generateEquation() {
      var random = Random();
-     _currentAnswer = random.nextInt(100); // 0 to 99
-     
-     // Generate random equation: A + B = Answer
-     int a = random.nextInt(_currentAnswer + 1); // 0 to Answer
-     int b = _currentAnswer - a;
-     
-     if (mounted) {
-       setState(() {
-         _currentEquation = "$a + $b = ?";
-       });
+     if (_selectedLevel == null) return;
+
+     if (_selectedLevel == MathGameLevel.extreme) {
+       int type = random.nextInt(5);
+       if (type == 0) {
+         // Difference of Squares: A^2 - B^2
+         int a, b, tempAnswer;
+         do {
+           a = random.nextInt(15) + 1; // 1 to 15
+           b = random.nextInt(a + 1);  // 0 to a
+           tempAnswer = (a * a) - (b * b);
+         } while (tempAnswer > 99 || tempAnswer < 0);
+         
+         _currentAnswer = tempAnswer;
+         if (mounted) setState(() => _currentEquation = "$a\u00B2 - $b\u00B2 = ?");
+       } else if (type == 1) {
+         // Perfect Square Trinomial: A^2 + 2AB + B^2
+         int a = random.nextInt(8) + 1;
+         int b = random.nextInt(9 - a) + 1; // ensures A + B <= 9, so (A+B)^2 <= 81
+         int mid = 2 * a * b;
+         _currentAnswer = (a + b) * (a + b);
+         if (mounted) setState(() => _currentEquation = "$a\u00B2 + $mid + $b\u00B2 = ?");
+       } else if (type == 2) {
+         // Factorials
+         int a = random.nextInt(2) + 3; // 3 or 4 (3! = 6, 4! = 24)
+         int fact = (a == 3) ? 6 : 24;
+         int operator = random.nextInt(2); // 0: +, 1: x
+         if (operator == 0) {
+           int b = random.nextInt(100 - fact);
+           _currentAnswer = fact + b;
+           if (mounted) setState(() => _currentEquation = "$a! + $b = ?");
+         } else {
+           int maxMultiplier = 99 ~/ fact;
+           int b = random.nextInt(maxMultiplier + 1);
+           _currentAnswer = fact * b;
+           if (mounted) setState(() => _currentEquation = "$a! x $b = ?");
+         }
+       } else if (type == 3) {
+         // Percentages
+         List<int> percs = [10, 20, 25, 30, 40, 50, 60, 75, 80];
+         int p = percs[random.nextInt(percs.length)];
+         int maxN = (9900 ~/ p);
+         int n;
+         do {
+            n = random.nextInt(maxN) + 1;
+         } while ((p * n) % 100 != 0); // ensure integer result
+         _currentAnswer = (p * n) ~/ 100;
+         if (mounted) setState(() => _currentEquation = "$p% of $n = ?");
+       } else {
+         // Square Roots
+         int x = random.nextInt(9) + 1; // 1 to 9
+         int sq = x * x;
+         int operator = random.nextInt(2); // 0: +, 1: x
+         if (operator == 0) {
+            int b = random.nextInt(100 - x);
+            _currentAnswer = x + b;
+            if (mounted) setState(() => _currentEquation = "\u221A$sq + $b = ?");
+         } else {
+            int maxB = 99 ~/ x;
+            int b = random.nextInt(maxB + 1);
+            _currentAnswer = x * b;
+            if (mounted) setState(() => _currentEquation = "\u221A$sq x $b = ?");
+         }
+       }
+     } else {
+       _currentAnswer = random.nextInt(100); // 0 to 99
+       
+       if (_selectedLevel == MathGameLevel.easy) {
+         int a = random.nextInt(_currentAnswer + 1);
+         int b = _currentAnswer - a;
+         if (mounted) setState(() => _currentEquation = "$a + $b = ?");
+       } else if (_selectedLevel == MathGameLevel.normal) {
+         bool isAdd = random.nextBool();
+         if (isAdd) {
+           int a = random.nextInt(_currentAnswer + 1);
+           int b = _currentAnswer - a;
+           if (mounted) setState(() => _currentEquation = "$a + $b = ?");
+         } else {
+           int b = random.nextInt(50);
+           int a = _currentAnswer + b;
+           if (mounted) setState(() => _currentEquation = "$a - $b = ?");
+         }
+       } else {
+         int op = random.nextInt(4);
+         if (op == 0) {
+           int a = random.nextInt(_currentAnswer + 1);
+           int b = _currentAnswer - a;
+           if (mounted) setState(() => _currentEquation = "$a + $b = ?");
+         } else if (op == 1) {
+           int b = random.nextInt(50);
+           int a = _currentAnswer + b;
+           if (mounted) setState(() => _currentEquation = "$a - $b = ?");
+         } else if (op == 2) {
+           List<int> factors = [];
+           for (int i = 1; i <= _currentAnswer; i++) {
+             if (_currentAnswer % i == 0) factors.add(i);
+           }
+           if (factors.isEmpty || _currentAnswer == 0) {
+             factors = [0];
+             if (_currentAnswer != 0) factors = [1, _currentAnswer];
+           }
+           int a = factors[random.nextInt(factors.length)];
+           int b = a == 0 ? random.nextInt(10) : _currentAnswer ~/ a;
+           if (a == 0) _currentAnswer = 0;
+           if (mounted) setState(() => _currentEquation = "$a x $b = ?");
+         } else {
+           int b = random.nextInt(10) + 1;
+           int a = _currentAnswer * b;
+           if (mounted) setState(() => _currentEquation = "$a ÷ $b = ?");
+         }
+       }
      }
   }
 
@@ -167,10 +270,125 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
     }
   }
 
+  void _selectLevel(MathGameLevel level) {
+    setState(() {
+      _selectedLevel = level;
+    });
+    _generateEquation();
+    _startGameTimer();
+  }
+
   @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+
+    if (_selectedLevel == null) {
+      return Scaffold(
+        backgroundColor: const Color(0xFFF8FBFA),
+        body: SafeArea(
+          child: Column(
+            children: [
+              Padding(
+                padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.05, vertical: screenHeight * 0.02),
+                child: Row(
+                  children: [
+                    InkWell(
+                      onTap: () {
+                        Navigator.pop(context);
+                      },
+                      child: Container(
+                        width: screenWidth * 0.12,
+                        height: screenWidth * 0.12,
+                        decoration: BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.circular(screenWidth * 0.03),
+                          boxShadow: const [
+                            BoxShadow(
+                              color: Color(0x1A000000), // black with 10% opacity
+                              blurRadius: 10,
+                              offset: Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Icon(
+                          Icons.arrow_back_ios_new,
+                          color: Colors.black,
+                          size: screenWidth * 0.06,
+                        ),
+                      ),
+                    ),
+                    Expanded(
+                      child: Center(
+                        child: Text(
+                          'Sum It Up',
+                          style: GoogleFonts.montserrat(
+                            fontSize: screenWidth * 0.06,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(width: screenWidth * 0.12), // Balances the row
+                  ],
+                ),
+              ),
+              Expanded(
+                child: SingleChildScrollView(
+                  child: Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.08),
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        SizedBox(height: screenHeight * 0.05),
+                        Text(
+                          'Select Difficulty',
+                          style: GoogleFonts.montserrat(
+                            fontSize: screenWidth * 0.07,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF0397FD),
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.01),
+                        Text(
+                          'Choose a level to start the game',
+                          style: GoogleFonts.montserrat(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey[600],
+                          ),
+                        ),
+                        SizedBox(height: screenHeight * 0.06),
+                        _buildLevelButton('Easy (Addition)', MathGameLevel.easy, screenWidth, screenHeight),
+                        SizedBox(height: screenHeight * 0.025),
+                        _buildLevelButton('Normal (+, -)', MathGameLevel.normal, screenWidth, screenHeight),
+                        SizedBox(height: screenHeight * 0.025),
+                        _buildLevelButton('Hard (+, -, x, ÷)', MathGameLevel.hard, screenWidth, screenHeight),
+                        SizedBox(height: screenHeight * 0.025),
+                        _buildLevelButton('Extreme (Advanced Math)', MathGameLevel.extreme, screenWidth, screenHeight),
+                        SizedBox(height: screenHeight * 0.015),
+                        Text(
+                          '* Note: You might need a piece of paper for this one!',
+                          style: GoogleFonts.montserrat(
+                            fontSize: screenWidth * 0.035,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey[600],
+                            fontStyle: FontStyle.italic,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                        SizedBox(height: screenHeight * 0.05),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ),
+      );
+    }
 
     return Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
@@ -456,6 +674,42 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
             ),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLevelButton(String title, MathGameLevel level, double screenWidth, double screenHeight) {
+    return GestureDetector(
+      onTap: () => _selectLevel(level),
+      child: Container(
+        width: double.infinity,
+        height: screenHeight * 0.085,
+        decoration: BoxDecoration(
+          gradient: const LinearGradient(
+            colors: [Color(0xFF0397FD), Color(0xFF0262A4)],
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+          ),
+          borderRadius: BorderRadius.circular(screenWidth * 0.04),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x33000000), // black with 20% opacity
+              spreadRadius: 0,
+              blurRadius: 10,
+              offset: Offset(0, 5),
+            ),
+          ],
+        ),
+        alignment: Alignment.center,
+        child: Text(
+          title,
+          style: GoogleFonts.montserrat(
+            fontSize: screenWidth * 0.045,
+            fontWeight: FontWeight.w700,
+            color: Colors.white,
+            letterSpacing: 1.0,
+          ),
+        ),
       ),
     );
   }

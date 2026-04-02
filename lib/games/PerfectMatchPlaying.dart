@@ -81,6 +81,12 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
   int currentPoseIndex = 0;
   late AnimationController _flashController;
 
+  // --- Gimmick: Combo Multiplier ---
+  int _comboCounter = 0;
+  double _comboTimeRemaining = 0.0; 
+  Timer? _comboTimerTick;
+  final double _maxComboTime = 3.0; // 3 seconds to keep combo alive
+
   @override
   void initState() {
     super.initState();
@@ -92,6 +98,21 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
     var random = Random();
     currentPoseIndex = random.nextInt((predefinedPoses.length/2).floor()) * 2; // Ensure we start with a non-flipped pose
     _startGameTimer();
+    
+    // Start combo countdown timer
+    _comboTimerTick = Timer.periodic(const Duration(milliseconds: 100), (timer) {
+       if (_isPaused || _isResumeCountdown) return;
+       
+       if (_comboTimeRemaining > 0) {
+         setState(() {
+           _comboTimeRemaining -= 0.1;
+           if (_comboTimeRemaining <= 0) {
+             _comboTimeRemaining = 0;
+             _comboCounter = 0; // Reset combo if time runs out
+           }
+         });
+       }
+    });
   }
 
   @override
@@ -99,6 +120,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
     _flashController.dispose();
     _canProcess = false;
     _gameTimer?.cancel();
+    _comboTimerTick?.cancel();
     _countdownTimer?.cancel();
     super.dispose();
   }
@@ -452,6 +474,66 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
               ),
             ),
           ),
+
+          // COMBO GIMMICK UI
+          if (_comboCounter > 1)
+            Positioned(
+              top: screenHeight * 0.35,
+              right: screenWidth * 0.05,
+              child: AnimatedOpacity(
+                duration: const Duration(milliseconds: 300),
+                opacity: _comboTimeRemaining > 0 ? 1.0 : 0.0,
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.end,
+                  children: [
+                    Text(
+                      'COMBO x${1 + (_comboCounter ~/ 3)}',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w900,
+                        fontSize: screenWidth * 0.08,
+                        color: Colors.orangeAccent,
+                        shadows: [
+                          const Shadow(
+                            color: Colors.red,
+                            blurRadius: 10,
+                            offset: Offset(0, 0),
+                          ),
+                        ],
+                      ),
+                    ),
+                    Text(
+                      '$_comboCounter Hits!',
+                      style: GoogleFonts.montserrat(
+                        fontWeight: FontWeight.w700,
+                        fontSize: screenWidth * 0.04,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: screenHeight * 0.01),
+                    // Combo Timer Bar
+                    Container(
+                      width: screenWidth * 0.3,
+                      height: screenHeight * 0.01,
+                      decoration: BoxDecoration(
+                        color: Colors.black45,
+                        borderRadius: BorderRadius.circular(4),
+                      ),
+                      child: FractionallySizedBox(
+                        alignment: Alignment.centerRight,
+                        widthFactor: (_comboTimeRemaining / _maxComboTime).clamp(0.0, 1.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            color: _comboTimeRemaining < 1.0 ? Colors.red : Colors.orangeAccent,
+                            borderRadius: BorderRadius.circular(4),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ),
+
           // SCORE box
           Positioned(
             top: screenHeight * 0.634,
@@ -541,7 +623,16 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
         }
       }
       if (leftMatch && rightMatch) {
-        _score += 1;
+         // --- Combo Gimmick logic ---
+         _comboCounter++;
+         _comboTimeRemaining = _maxComboTime; // Reset combo time
+         
+         // Calculate score based on combo multiplier
+         int multiplier = 1 + (_comboCounter ~/ 3); // Multiplier increases every 3 hits
+         if (multiplier > 5) multiplier = 5; // Cap at 5x
+         
+         _score += multiplier;
+
         currentPoseIndex = (currentPoseIndex + 1) % predefinedPoses.length;
         _flashController.forward(from: 0.0).then((_) async {
           await Future.delayed(const Duration(milliseconds: 100));
