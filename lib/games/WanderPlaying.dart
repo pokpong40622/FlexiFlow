@@ -114,24 +114,13 @@ class _WanderPlayingState extends State<WanderPlaying>
   }
 
   void _endGame() {
-    if (!_canProcess) return;
-
     _gameTimer?.cancel();
-    _countdownTimer?.cancel();
-    _canProcess = false;
 
-    if (!Globals.isStreakActive) {
-      Globals.isStreakActive = true;
-      Globals.streak += 1;
-    }
-
-    Globals.timeSpentTD += 90 - _secondsRemaining;
-    Globals.brainScore += _score;
-    Globals.totalExercisesCompletedTD += 1;
-    Globals.todayExercises.add(ExerciseMetadata(
+    Globals.exercisesList.add(ExerciseMetadata(
       type: ExerciseType.Wander,
-      timeSpent: 90 - _secondsRemaining,
+      timeSpent: 120 - _secondsRemaining,
       score: _score,
+      timestamp: DateTime.now(),
     ));
 
     Globals.save();

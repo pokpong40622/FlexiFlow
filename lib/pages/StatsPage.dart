@@ -404,7 +404,7 @@ class _StatsPageState extends State<StatsPage> {
                                     ],
                                   ),
                                 )
-                              else if (Globals.todayExercises.isEmpty)
+                              else if (Globals.exercisesList.isEmpty)
                                 Expanded(
                                   child: Center(
                                     child: Column(
@@ -795,7 +795,7 @@ class _StatsPageState extends State<StatsPage> {
 
   /// Returns up to 3 Expanded tiles that fill all remaining vertical space.
   List<Widget> _buildRecentTiles(double screenWidth, double screenHeight) {
-    final exercises = Globals.todayExercises.reversed.take(3).toList();
+    final exercises = Globals.exercisesList.reversed.take(3).toList();
     final List<Widget> tiles = [];
 
     for (int i = 0; i < exercises.length; i++) {

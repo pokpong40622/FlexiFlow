@@ -12,17 +12,20 @@ class ExerciseMetadata {
   final ExerciseType type;
   final int timeSpent; // in seconds
   final int score;
+  final DateTime timestamp;
 
   ExerciseMetadata({
     required this.type,
     required this.timeSpent,
     required this.score,
+    required this.timestamp,
   });
 
   Map<String, dynamic> toJson() => {
         'type': type.index,
         'timeSpent': timeSpent,
         'score': score,
+        'timestamp': timestamp.toIso8601String(),
       };
 
   factory ExerciseMetadata.fromJson(Map<String, dynamic> json) {
@@ -30,6 +33,7 @@ class ExerciseMetadata {
       type: ExerciseType.values[json['type']],
       timeSpent: json['timeSpent'],
       score: json['score'],
+      timestamp: json['timestamp'] != null ? DateTime.parse(json['timestamp']) : DateTime.now(),
     );
   }
 }
@@ -44,17 +48,77 @@ double expToLvl(int exp) {
 
 class Globals {
   // Seconds spent on each
-  static int timeSpentTD = 1*60 + 51;
-  static int get timeSpentWK => timeSpentTD + 30*60 + 14;
-  static int get timeSpentMH => timeSpentWK + 135*60 + 42;
+  static int get timeSpentTD {
+    final now = DateTime.now();
+    return exercisesList
+        .where((e) => e.timestamp.year == now.year && e.timestamp.month == now.month && e.timestamp.day == now.day)
+        .fold(0, (sum, item) => sum + item.timeSpent);
+  }
 
-  static int totalExercisesCompletedTD = 1;
+  static int get timeSpentWK {
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    return exercisesList.where((e) {
+      final exDate = DateTime(e.timestamp.year, e.timestamp.month, e.timestamp.day);
+      final diff = todayDate.difference(exDate).inDays;
+      return diff >= 0 && diff < 7;
+    }).fold(0, (sum, item) => sum + item.timeSpent);
+  }
+
+  static int get timeSpentMH {
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    return exercisesList.where((e) {
+      final exDate = DateTime(e.timestamp.year, e.timestamp.month, e.timestamp.day);
+      final diff = todayDate.difference(exDate).inDays;
+      return diff >= 0 && diff < 30;
+    }).fold(0, (sum, item) => sum + item.timeSpent);
+  }
+
+  static int get totalExercisesCompletedTD {
+    final now = DateTime.now();
+    return exercisesList
+        .where((e) => e.timestamp.year == now.year && e.timestamp.month == now.month && e.timestamp.day == now.day)
+        .length;
+  }
   static int get totalExercisesCompletedWK => totalExercisesCompletedTD + 4;
 
   static int totalStepsTD = 0;
 
-  static int streak = 6;
-  static bool isStreakActive = false;
+  static int get streak {
+    final dates = exercisesList
+        .map((e) => DateTime(e.timestamp.year, e.timestamp.month, e.timestamp.day))
+        .toSet()
+        .toList();
+    dates.sort((a, b) => b.compareTo(a));
+
+    if (dates.isEmpty) return 0;
+
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+
+    int currentStreak = 0;
+    DateTime expectedDate = dates.first;
+
+    if (expectedDate.isBefore(todayDate.subtract(const Duration(days: 1)))) {
+      return 0; // Streak broken if most recent is older than yesterday
+    }
+
+    for (int i = 0; i < dates.length; i++) {
+      if (dates[i] == expectedDate) {
+        currentStreak++;
+        expectedDate = expectedDate.subtract(const Duration(days: 1));
+      } else {
+        break;
+      }
+    }
+    return currentStreak;
+  }
+
+  static bool get isStreakActive {
+    final now = DateTime.now();
+    return exercisesList.any((e) => e.timestamp.year == now.year && e.timestamp.month == now.month && e.timestamp.day == now.day);
+  }
 
   static bool unlockedSumItUp = false;
 
@@ -64,34 +128,107 @@ class Globals {
   static int get leftoverExp => exp - lvlToExp(level).floor();
   static int get requiredExp => (lvlToExp(level + 1) - lvlToExp(level)).floor();
 
-  static int brainScore = 163;
+  static int get brainScore => exercisesList.fold(0, (sum, item) => sum + item.score);
+
+  static String get brainActivityFeedbackText {
+    if (exercisesList.isEmpty) {
+      return 'Start exercising to track your brain activities!';
+    }
+    
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    
+    int recentScore = 0;
+    int previousScore = 0;
+    
+    for (var ex in exercisesList) {
+      final exDate = DateTime(ex.timestamp.year, ex.timestamp.month, ex.timestamp.day);
+      final diff = todayDate.difference(exDate).inDays;
+      
+      if (diff >= 0 && diff < 3) {
+        recentScore += ex.score;
+      } else if (diff >= 3 && diff < 6) {
+        previousScore += ex.score;
+      }
+    }
+    
+    if (previousScore == 0 && recentScore > 0) {
+      return 'Your brain activities has increased significantly over the last 3 days';
+    } else if (previousScore == 0 && recentScore == 0) {
+      return 'Go ahead and complete some exercises today to boost your brain activity!';
+    }
+    
+    double percentage = ((recentScore - previousScore) / previousScore) * 100;
+    
+    if (percentage > 0) {
+      return 'Your brain activities has increased by ${percentage.toStringAsFixed(0)}% over the last 3 days';
+    } else if (percentage < 0) {
+      return 'Your brain activities has decreased by ${percentage.abs().toStringAsFixed(0)}% over the last 3 days';
+    } else {
+      return 'Your brain activities have been consistent over the last 3 days';
+    }
+  }
+
+  static List<double> get past10DaysBars {
+    final today = DateTime.now();
+    final todayDate = DateTime(today.year, today.month, today.day);
+    Map<int, int> timeSpentMap = {};
+
+    for (int i = 0; i < 11; i++) {
+        timeSpentMap[i] = 0;
+    }
+
+    for (var ex in exercisesList) {
+      final exDate = DateTime(ex.timestamp.year, ex.timestamp.month, ex.timestamp.day);
+      final difference = todayDate.difference(exDate).inDays;
+      if (difference >= 0 && difference <= 10) {
+        timeSpentMap[difference] = (timeSpentMap[difference] ?? 0) + ex.timeSpent;
+      }
+    }
+
+    int barsCount = isStreakActive ? 11 : 10;
+    List<double> bars = [];
+    int startDiff = isStreakActive ? 0 : 1; 
+    
+    int maxTime = -1;
+    for (int i = startDiff; i < startDiff + barsCount; i++) {
+        final spent = timeSpentMap[i] ?? 0;
+        if (spent > maxTime) maxTime = spent;
+    }
+
+    for (int i = startDiff + barsCount - 1; i >= startDiff; i--) {
+        final spent = timeSpentMap[i] ?? 0;
+        if (maxTime == 0) {
+            bars.add(0.0);
+        } else {
+            bars.add(spent / maxTime);
+        }
+    }
+
+    return bars;
+  }
 
   static Set<String> claimedMissions = {};
-  static List<ExerciseMetadata> todayExercises = [
-    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25),
-    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26),
-    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16),
-    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14),
+  static List<ExerciseMetadata> exercisesList = [
+    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25, timestamp: DateTime.now().subtract(const Duration(days: 1))),
+    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26, timestamp: DateTime.now().subtract(const Duration(hours: 2))),
+    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16, timestamp: DateTime.now().subtract(const Duration(hours: 1))),
+    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14, timestamp: DateTime.now()),
   ];
 
   static Map<DateTime, List<Map<String, dynamic>>> schedules = _getDummySchedules();
 
   static Future<void> save() async {
     final prefs = await SharedPreferences.getInstance();
-    await prefs.setInt('timeSpentTD', timeSpentTD);
-    await prefs.setInt('totalExercisesCompletedTD', totalExercisesCompletedTD);
     await prefs.setInt('totalStepsTD', totalStepsTD);
-    await prefs.setInt('streak', streak);
-    await prefs.setBool('isStreakActive', isStreakActive);
     await prefs.setBool('unlockedSumItUp', unlockedSumItUp);
     await prefs.setInt('coins', coins);
     await prefs.setInt('exp', exp);
-    await prefs.setInt('brainScore', brainScore);
     await prefs.setStringList('claimedMissions', claimedMissions.toList());
 
-    final todayExercisesJson =
-        todayExercises.map((e) => jsonEncode(e.toJson())).toList();
-    await prefs.setStringList('todayExercises', todayExercisesJson);
+    final exercisesListJson =
+        exercisesList.map((e) => jsonEncode(e.toJson())).toList();
+    await prefs.setStringList('exercisesList', exercisesListJson);
 
     final schedulesJson = schedules.map((key, value) =>
         MapEntry(key.toIso8601String(), value));
@@ -100,24 +237,19 @@ class Globals {
 
   static Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
-    timeSpentTD = prefs.getInt('timeSpentTD') ?? 1 * 60 + 51;
-    totalExercisesCompletedTD = prefs.getInt('totalExercisesCompletedTD') ?? 1;
     totalStepsTD = prefs.getInt('totalStepsTD') ?? 0;
-    streak = prefs.getInt('streak') ?? 6;
-    isStreakActive = prefs.getBool('isStreakActive') ?? false;
     unlockedSumItUp = prefs.getBool('unlockedSumItUp') ?? false;
     coins = prefs.getInt('coins') ?? 680;
     exp = prefs.getInt('exp') ?? 750;
-    brainScore = prefs.getInt('brainScore') ?? 163;
     
     final claimedMissionsList = prefs.getStringList('claimedMissions');
     if (claimedMissionsList != null) {
       claimedMissions = claimedMissionsList.toSet();
     }
 
-    final todayExercisesList = prefs.getStringList('todayExercises');
-    if (todayExercisesList != null) {
-      todayExercises = todayExercisesList
+    final exercisesListList = prefs.getStringList('exercisesList');
+    if (exercisesListList != null) {
+      exercisesList = exercisesListList
           .map((e) => ExerciseMetadata.fromJson(jsonDecode(e)))
           .toList();
     }
@@ -141,21 +273,16 @@ class Globals {
     await prefs.clear();
     
     // Reset to default values
-    timeSpentTD = 1 * 60 + 51;
-    totalExercisesCompletedTD = 1;
     totalStepsTD = 0;
-    streak = 6;
-    isStreakActive = false;
     unlockedSumItUp = false;
     coins = 680;
     exp = 750;
-    brainScore = 163;
     claimedMissions = {};
-    todayExercises = [
-      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25),
-      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26),
-      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16),
-      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14),
+    exercisesList = [
+      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25, timestamp: DateTime.now().subtract(const Duration(hours: 3))),
+      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26, timestamp: DateTime.now().subtract(const Duration(hours: 2))),
+      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16, timestamp: DateTime.now().subtract(const Duration(hours: 1))),
+      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14, timestamp: DateTime.now()),
     ];
     schedules = _getDummySchedules();
   }

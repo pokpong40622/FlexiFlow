@@ -9,8 +9,84 @@ class ShopPage extends StatefulWidget {
   State<ShopPage> createState() => _ShopPageState();
 }
 
+class ShopItem {
+  final String name;
+  final String price;
+  final String imagePath;
+
+  ShopItem({required this.name, required this.price, required this.imagePath});
+}
+
+class CardMetadata {
+  final String title;
+  final String description;
+  final String imagePath;
+  final List<ShopItem> items;
+
+  CardMetadata({required this.title, required this.description, required this.imagePath, required this.items});
+}
+
+int coinPD = 240;
+double governmentPPD = 6.5;
+double aiaPPD = 4.5;
+
+List<CardMetadata> availableCards = [
+  CardMetadata(
+    title: 'None',
+    description: 'Handpicked items just for you',
+    imagePath: 'assets/Newgamepic.png',
+    items: [
+      ShopItem(name: 'Unlock Wander', price: '250', imagePath: 'assets/WanderLogo.png'),
+    ],
+  ),
+  CardMetadata(
+    title: 'Universal Coverage Scheme',
+    description: 'Explore our full range of mostly from the government',
+    imagePath: 'assets/Newgamepic.png',
+    items: [
+      // Add more items here
+      ShopItem(name: 'PTT Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/PTT.jpg'),
+      ShopItem(name: 'BCP Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/BCP.png'),
+      ShopItem(name: 'MEA/PEA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Electricity.png'),
+      ShopItem(name: 'MWA/PWA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Water.jpg'),
+      ShopItem(name: 'NT 250B Discount', price: ((250 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/NT.jpg'),
+      ShopItem(name: 'MRT 200B Balance', price: ((200 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MRT.jpg'),
+      ShopItem(name: 'Thailand Post 100B Balance', price: ((100 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/ThailandP.png'),
+      ShopItem(name: 'Government Lottery Ticket', price: ((80 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Lottery.png'),
+    ],
+  ),
+  CardMetadata(
+    title: 'AIA Vitality',
+    description: 'Exclusive deals for AIA Vitality members',
+    imagePath: 'assets/Newgamepic.png',
+    items: [
+      ShopItem(name: 'Sushiro Coupon 60B', price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
+      ShopItem(name: 'MK Restaurant 150B', price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
+      ShopItem(name: 'Momo Paradise 20% off', price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
+      ShopItem(name: 'Free major cinema ticket', price: ((220 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MAJOR.png'),
+      ShopItem(name: 'Free medium popcorn at SF', price: ((120 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/SFC.jpeg'),
+
+      // Add more items here
+    ],
+  ),
+];
+
 class _ShopPageState extends State<ShopPage> {
   String _selectedCategory = 'Recommended'; //Selected recommended or all
+  int _selectedCardIndex = 0;
+  late PageController _pageController;
+
+  @override
+  void initState() {
+    super.initState();
+    _pageController = PageController(viewportFraction: 0.85);
+  }
+
+  @override
+  void dispose() {
+    _pageController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -110,6 +186,22 @@ class _ShopPageState extends State<ShopPage> {
           Column(
             children: [
               SizedBox(height: screenHeight * 0.02),
+              SizedBox(
+                height: screenHeight * 0.22,
+                child: PageView.builder(
+                  controller: _pageController,
+                  onPageChanged: (index) {
+                    setState(() {
+                      _selectedCardIndex = index;
+                    });
+                  },
+                  itemCount: availableCards.length,
+                  itemBuilder: (context, index) {
+                    return _buildCreditCard(availableCards[index], index == _selectedCardIndex);
+                  },
+                ),
+              ),
+              SizedBox(height: screenHeight * 0.02),
               // Recommended/All Selection Part
               /*
               Padding(
@@ -208,22 +300,13 @@ class _ShopPageState extends State<ShopPage> {
                   mainAxisSpacing: 16,
                   crossAxisSpacing: 16,
                   children: [
-                    if (!Globals.unlockedSumItUp)
-                      _buildShopItems(
-                        ItemPic: 'assets/WanderLogo.png',
-                        ItemLabel: 'Unlock Wander',
-                        ItemPrice: '250',
-                      ),
-                    _buildShopItems(
-                      ItemPic: 'assets/Lotterypic.png',
-                      ItemLabel: 'Lottery',
-                      ItemPrice: '60',
-                    ),
-                    _buildShopItems(
-                      ItemPic: 'assets/Sushiropic.png',
-                      ItemLabel: 'Sushiro Coupon 60B',
-                      ItemPrice: '50',
-                    ),
+                    for (var item in availableCards[_selectedCardIndex].items)
+                      if (!(item.name == 'Unlock Wander' && Globals.unlockedSumItUp))
+                        _buildShopItems(
+                          ItemPic: item.imagePath,
+                          ItemLabel: item.name,
+                          ItemPrice: item.price,
+                        ),
                     _buildRequestItem(screenWidth),
                   ],
                 ),
@@ -537,6 +620,71 @@ class _ShopPageState extends State<ShopPage> {
     );
   }
 
+  Widget _buildCreditCard(CardMetadata card, bool isActive) {
+    return AnimatedContainer(
+      duration: const Duration(milliseconds: 300),
+      margin: EdgeInsets.symmetric(
+        horizontal: 8,
+        vertical: isActive ? 0 : 16,
+      ),
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          colors: card.title == 'AIA Vitality'
+              ? [const Color(0xFFD32F2F), const Color(0xFFC62828)]
+              : card.title == 'Universal Coverage Scheme'
+                  ? [const Color(0xFF00B0FF), const Color(0xFF0081CB)]
+                  : [const Color(0xFF424242), const Color(0xFF212121)],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.1),
+            blurRadius: 8,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Expanded(
+                  child: Text(
+                    card.title,
+                    style: GoogleFonts.inter(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                      color: Colors.white,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const Icon(Icons.credit_card, color: Colors.white70),
+              ],
+            ),
+            const Spacer(),
+            Text(
+              card.description,
+              style: GoogleFonts.inter(
+                fontSize: 14,
+                color: Colors.white.withOpacity(0.8),
+              ),
+              maxLines: 2,
+              overflow: TextOverflow.ellipsis,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildShopItems({
     required String ItemPic,
     required String ItemLabel,
@@ -573,20 +721,24 @@ class _ShopPageState extends State<ShopPage> {
           Expanded(
             flex: 2,
             child: Padding(
-              padding: const EdgeInsets.all(12),
+              padding: const EdgeInsets.all(8),
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Text(
-                    ItemLabel,
-                    maxLines: 2,
-                    overflow: TextOverflow.ellipsis,
-                    textAlign: TextAlign.center,
-                    style: GoogleFonts.inter(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14,
-                      color: const Color(0xFF2C2C2C),
-                      height: 1.2,
+                  Expanded(
+                    child: Center(
+                      child: Text(
+                        ItemLabel,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.inter(
+                          fontWeight: FontWeight.w600,
+                          fontSize: 13,
+                          color: const Color(0xFF2C2C2C),
+                          height: 1.2,
+                        ),
+                      ),
                     ),
                   ),
                   GestureDetector(

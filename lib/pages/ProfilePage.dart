@@ -3,6 +3,7 @@ import 'package:motion_kit/memberships/AuthPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
+import 'package:motion_kit/pages/ThaiIdInputPage.dart';
 
 import '../fake_var.dart';
 
@@ -159,7 +160,15 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: screenHeight * 0.013,
           ), // Added spacing between list tiles
-          _buildProfileOption(context, 'Feedback', () {}),
+          _buildProfileOption(context, 'Feedback', () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Feedback option coming soon!'))
+                );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ThaiIdInputPage()),
+              );
+          }),
           SizedBox(
             height: screenHeight * 0.013,
           ), // Added spacing between list tiles

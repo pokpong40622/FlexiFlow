@@ -141,22 +141,13 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
 
   void _endGame() {
     _gameTimer?.cancel();
-    _canProcess = false;
-
-    if (!Globals.isStreakActive) {
-      Globals.isStreakActive = true;
-      Globals.streak += 1;
-    }
-
-    Globals.timeSpentTD += 90 - _secondsRemaining;
-    Globals.brainScore += _score;
-    Globals.totalExercisesCompletedTD += 1;
-    Globals.todayExercises.add(ExerciseMetadata(
+    Globals.exercisesList.add(ExerciseMetadata(
       type: ExerciseType.PerfectMatch,
       timeSpent: 90 - _secondsRemaining,
       score: _score,
+      timestamp: DateTime.now(),
     ));
-    
+
     Globals.save();
 
     Navigator.pushReplacement(

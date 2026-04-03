@@ -425,7 +425,7 @@ class _HomePageState extends State<HomePage> {
                       SizedBox(width: 15),
                       Expanded(
                         child: Text(
-                          Globals.isStreakActive ? 'Your brain activities has increased by 8% over the last 3 days' : 'Your brain activities has increased by 6% over the last 3 days',
+                          Globals.brainActivityFeedbackText,
                           style: GoogleFonts.inter(
                             color: Color(0xFF2C2C2C),
                             fontSize: 14,
@@ -545,18 +545,7 @@ class _HomePageState extends State<HomePage> {
                             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                             crossAxisAlignment: CrossAxisAlignment.end,
                             children: [
-                              if (!Globals.isStreakActive) _buildBar(0.3, screenWidth), // Add a bar for the current day if streak is active
-                              _buildBar(0.5, screenWidth),
-                              _buildBar(0.4, screenWidth),
-                              _buildBar(0, screenWidth),
-                              _buildBar(0, screenWidth),
-                              _buildBar(0.7, screenWidth),
-                              _buildBar(0.85, screenWidth),
-                              _buildBar(1.0, screenWidth),
-                              _buildBar(0.15, screenWidth),
-                              _buildBar(0.75, screenWidth),
-                              _buildBar(0.8, screenWidth),
-                              if (Globals.isStreakActive) _buildBar(0.2, screenWidth), // Add a bar for the current day if streak is active
+                              ...Globals.past10DaysBars.map((val) => _buildBar(val, screenWidth, val == Globals.past10DaysBars.last)).toList(),
                             ],
                           ),
                         ),
@@ -610,17 +599,37 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  Widget _buildBar(double heightFactor, double screenWidth) {
-    return Container(
-      width: screenWidth * 0.025,
-      height: (screenWidth * 0.12) * (heightFactor == 0 ? 1 : heightFactor), // Minimum height for zero values
+  Widget _buildBar(double heightFactor, double screenWidth, bool isLast) {
+    bool isZero = heightFactor == 0.0;
+    double minHeight = screenWidth * 0.015;
+    double maxHeight = screenWidth * 0.12;
+    double height = isZero ? minHeight : (maxHeight * heightFactor);
+    if (height < minHeight) height = minHeight;
+
+    return AnimatedContainer(
+      duration: Duration(milliseconds: 600),
+      curve: Curves.easeOutCubic,
+      width: screenWidth * 0.032,
+      height: height,
+      margin: EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: (heightFactor == 0 ? [Colors.grey[300]!, Colors.grey[400]!] : [Color(0xFF42A5F5), Color(0xFF1E88E5)]),
+          colors: isZero 
+              ? [Colors.grey[300]!, Colors.grey[400]!] 
+              : (isLast && Globals.isStreakActive 
+                  ? [Color(0xFFFF8E53), Color(0xFFFF6B35)] 
+                  : [Color(0xFF64B5F6), Color(0xFF1E88E5)]),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
-        borderRadius: BorderRadius.circular(3),
+        borderRadius: BorderRadius.circular(6),
+        boxShadow: !isZero ? [
+          BoxShadow(
+            color: (isLast && Globals.isStreakActive ? Color(0xFFFF6B35) : Color(0xFF1E88E5)).withOpacity(0.3),
+            blurRadius: 4,
+            offset: Offset(0, 2),
+          )
+        ] : [],
       ),
     );
   }

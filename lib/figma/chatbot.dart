@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:cloud_functions/cloud_functions.dart';
+import 'package:genkit/genkit.dart' hide Key;
+import 'package:genkit_google_genai/genkit_google_genai.dart';
 import '../fake_var.dart';
 
 class ChatBotPage extends StatefulWidget {
@@ -34,11 +37,12 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
   List<String> randomSuggestions = List.from(suggestions)..shuffle();
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
-  int _responseIndex = 0;
+  late Genkit ai;
 
   @override
   void initState() {
     super.initState();
+    ai = Genkit(plugins: [googleAI()]);
     randomSuggestions = randomSuggestions.take(4).toList();
     _controller.addListener(_onTextChanged);
     _fadeController = AnimationController(
@@ -57,7 +61,7 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
     });
   }
 
-  void _sendMessage([String? customMessage]) {
+  Future<void> _sendMessage([String? customMessage]) async {
     final message = customMessage ?? _controller.text;
     if (message.isNotEmpty) {
       setState(() {
@@ -71,43 +75,49 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
         _isBotTyping = true;
       });
       
-      // Simulate bot response
-      Future.delayed(const Duration(milliseconds: 3000), () {
+      try {
+        final userDataContext = '''
+User Data Context:
+Weekly Time Spent: ${Globals.timeSpentWK} seconds
+Today's Time Spent: ${Globals.timeSpentTD} seconds
+Monthly Time Spent: ${Globals.timeSpentMH} seconds
+Today's Steps: ${Globals.totalStepsTD}
+Current Streak: ${Globals.streak} days
+Coins: ${Globals.coins}
+Exp: ${Globals.exp} (Level ${Globals.level})
+Brain Score: ${Globals.brainScore}
+Sum It Up Unlocked: ${Globals.unlockedSumItUp}
+''';
+
+        final requestPrompt = '$userDataContext\n\nUser Question: $message';
+        final response = await ai.generate(
+          model: googleAI.gemini('gemini-2.5-flash'),
+          prompt: requestPrompt,
+        );
+
         if (mounted) {
           setState(() {
             _messages.add({
-              'text': _getBotResponse(message),
+              'text': response.text ?? 'No response',
               'isUser': false,
               'timestamp': DateTime.now(),
             });
             _isBotTyping = false;
           });
         }
-      });
+      } catch (e) {
+        if (mounted) {
+          setState(() {
+            _messages.add({
+              'text': "Sorry, I'm having trouble connecting to the assistant. Please try again later.\nError: $e",
+              'isUser': false,
+              'timestamp': DateTime.now(),
+            });
+            _isBotTyping = false;
+          });
+        }
+      }
     }
-  }
-
-  String _getBotResponse(String userMessage) {
-    int totalSeconds = Globals.timeSpentWK;
-    int hours = totalSeconds ~/ 3600;
-    int minutes = (totalSeconds % 3600) ~/ 60;
-    int seconds = totalSeconds % 60;
-
-    List<String> parts = [];
-    if (hours > 0) parts.add("$hours ชั่วโมง");
-    if (minutes > 0) parts.add("$minutes นาที");
-    parts.add("$seconds วินาที");
-    String timeString = parts.join(" ");
-
-    // Simple response logic - in a real app, this would connect to an AI service
-    final responses = [
-      "ในสัปดาห์นี้คุณได้ใช้เวลาเล่นเกมไป $timeStringครับ",
-      "โดยคะแนนเฉลี่ยที่คุณควรได้ในช่วงอายุ 14-20 ปี คือ 20-26 คะแนนต่อเกมครับ",
-      "1.คุณควรเดินให้ถึงเป้าหมาย 4700-5400 ก้าวต่อวันครับ\n2.ในเกม Perfect Match คุณควรได้คะแนนมากกว่านี้ครับ\n3.ในเกม Sum It Up คุณควรทำเวลาให้ดีกว่านี้ครับ",
-    ];
-    String response = responses[_responseIndex];
-    _responseIndex = (_responseIndex + 1) % responses.length;
-    return response;
   }
 
   @override

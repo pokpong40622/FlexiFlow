@@ -194,20 +194,11 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
 
   void _endGame() {
     _gameTimer?.cancel();
-    _canProcess = false;
-
-    if (!Globals.isStreakActive) {
-      Globals.isStreakActive = true;
-      Globals.streak += 1;
-    }
-
-    Globals.timeSpentTD += 90 - _secondsRemaining;
-    Globals.brainScore += _score;
-    Globals.totalExercisesCompletedTD += 1;
-    Globals.todayExercises.add(ExerciseMetadata(
+    Globals.exercisesList.add(ExerciseMetadata(
       type: ExerciseType.SumItUp, // Assuming SumItUp is the type for Math Game
       timeSpent: 90 - _secondsRemaining,
       score: _score,
+      timestamp: DateTime.now(),
     ));
     
     Globals.save();
