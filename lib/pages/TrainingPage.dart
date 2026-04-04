@@ -142,7 +142,7 @@ class _TrainingPageState extends State<TrainingPage> {
         children: [
           GestureDetector(
               onTap: () {
-                // if (!Globals.unlockedSumItUp) return;
+                if (!Globals.unlockedSumItUp) return;
                 Navigator.push(
                     context,
                     MaterialPageRoute(
@@ -153,7 +153,7 @@ class _TrainingPageState extends State<TrainingPage> {
               },
               child: Image.asset('assets/WanderLogo.png'),
           ),
-          if (Globals.unlockedSumItUp)
+          if (!Globals.unlockedSumItUp)
             ClipRRect(
               borderRadius: BorderRadius.circular(12),
               child: BackdropFilter(

@@ -121,6 +121,7 @@ class Globals {
   }
 
   static bool unlockedSumItUp = false;
+  static bool isThaiIdVerified = false;
 
   static int coins = 680;
   static int exp = 750;
@@ -210,10 +211,10 @@ class Globals {
 
   static Set<String> claimedMissions = {};
   static List<ExerciseMetadata> exercisesList = [
-    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25, timestamp: DateTime.now().subtract(const Duration(days: 1))),
-    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26, timestamp: DateTime.now().subtract(const Duration(hours: 2))),
-    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16, timestamp: DateTime.now().subtract(const Duration(hours: 1))),
-    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14, timestamp: DateTime.now()),
+    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25, timestamp: DateTime.now().subtract(const Duration(days: 4))),
+    ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26, timestamp: DateTime.now().subtract(const Duration(days: 3))),
+    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16, timestamp: DateTime.now().subtract(const Duration(days: 2))),
+    ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14, timestamp: DateTime.now().subtract(const Duration(days: 1))),
   ];
 
   static Map<DateTime, List<Map<String, dynamic>>> schedules = _getDummySchedules();
@@ -222,6 +223,7 @@ class Globals {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setInt('totalStepsTD', totalStepsTD);
     await prefs.setBool('unlockedSumItUp', unlockedSumItUp);
+    await prefs.setBool('isThaiIdVerified', isThaiIdVerified);
     await prefs.setInt('coins', coins);
     await prefs.setInt('exp', exp);
     await prefs.setStringList('claimedMissions', claimedMissions.toList());
@@ -239,6 +241,7 @@ class Globals {
     final prefs = await SharedPreferences.getInstance();
     totalStepsTD = prefs.getInt('totalStepsTD') ?? 0;
     unlockedSumItUp = prefs.getBool('unlockedSumItUp') ?? false;
+    isThaiIdVerified = prefs.getBool('isThaiIdVerified') ?? false;
     coins = prefs.getInt('coins') ?? 680;
     exp = prefs.getInt('exp') ?? 750;
     
@@ -273,16 +276,17 @@ class Globals {
     await prefs.clear();
     
     // Reset to default values
-    totalStepsTD = 0;
+    totalStepsTD = 3246;
+    isThaiIdVerified = false;
     unlockedSumItUp = false;
     coins = 680;
     exp = 750;
     claimedMissions = {};
     exercisesList = [
-      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25, timestamp: DateTime.now().subtract(const Duration(hours: 3))),
-      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26, timestamp: DateTime.now().subtract(const Duration(hours: 2))),
-      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16, timestamp: DateTime.now().subtract(const Duration(hours: 1))),
-      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14, timestamp: DateTime.now()),
+      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 90, score: 25, timestamp: DateTime.now().subtract(const Duration(days: 4))),
+      ExerciseMetadata(type: ExerciseType.PerfectMatch, timeSpent: 67, score: 26, timestamp: DateTime.now().subtract(const Duration(days: 3))),
+      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 16, timestamp: DateTime.now().subtract(const Duration(days: 2))),
+      ExerciseMetadata(type: ExerciseType.SumItUp, timeSpent: 90, score: 14, timestamp: DateTime.now().subtract(const Duration(days: 1))),
     ];
     schedules = _getDummySchedules();
   }

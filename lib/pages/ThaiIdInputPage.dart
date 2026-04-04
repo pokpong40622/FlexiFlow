@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_kit/fake_var.dart';
 
 class ThaiIdInputPage extends StatefulWidget {
   const ThaiIdInputPage({super.key});
@@ -16,6 +17,8 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
   void _submit() {
     if (_formKey.currentState!.validate()) {
       // Logic for submitting the ID goes here
+      Globals.isThaiIdVerified = true;
+      Globals.save();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
@@ -25,7 +28,7 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
           backgroundColor: Colors.green,
         ),
       );
-      Navigator.pop(context);
+      Navigator.pop(context, true);
     }
   }
 

@@ -28,6 +28,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   int _expandedIndex = 2; // Default to rank 3 expanded as per design
 
   // Mock Data
+  /*
   final List<Map<String, dynamic>> leaderboardData = [
     {
       'rank': 1,
@@ -77,6 +78,22 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
       'rank': '-',
       'name': 'You',
       'rankText': 'Rank -',
+      'points': Globals.brainScore,
+      'imageUrl': 'assets/FlexiFlowProfilePic.png',
+      // or network image if preferred
+      'isCurrentUser': true,
+      'winRate': '68%',
+      'games': 156,
+      'streak': 5,
+    },
+  ];
+
+   */
+  final List<Map<String, dynamic>> leaderboardData = [
+    {
+      'rank': '1',
+      'name': 'You',
+      'rankText': 'Rank 1',
       'points': Globals.brainScore,
       'imageUrl': 'assets/FlexiFlowProfilePic.png',
       // or network image if preferred

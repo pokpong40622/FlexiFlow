@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/pages/ThaiIdInputPage.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -30,51 +31,65 @@ int coinPD = 240;
 double governmentPPD = 6.5;
 double aiaPPD = 4.5;
 
-List<CardMetadata> availableCards = [
-  CardMetadata(
-    title: 'None',
-    description: 'Handpicked items just for you',
-    imagePath: 'assets/Newgamepic.png',
-    items: [
-      ShopItem(name: 'Unlock Wander', price: '250', imagePath: 'assets/WanderLogo.png'),
-    ],
-  ),
-  CardMetadata(
-    title: 'Universal Coverage Scheme',
-    description: 'Explore our full range of mostly from the government',
-    imagePath: 'assets/Newgamepic.png',
-    items: [
-      // Add more items here
-      ShopItem(name: 'PTT Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/PTT.jpg'),
-      ShopItem(name: 'BCP Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/BCP.png'),
-      ShopItem(name: 'MEA/PEA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Electricity.png'),
-      ShopItem(name: 'MWA/PWA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Water.jpg'),
-      ShopItem(name: 'NT 250B Discount', price: ((250 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/NT.jpg'),
-      ShopItem(name: 'MRT 200B Balance', price: ((200 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MRT.jpg'),
-      ShopItem(name: 'Thailand Post 100B Balance', price: ((100 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/ThailandP.png'),
-      ShopItem(name: 'Government Lottery Ticket', price: ((80 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Lottery.png'),
-    ],
-  ),
-  CardMetadata(
-    title: 'AIA Vitality',
-    description: 'Exclusive deals for AIA Vitality members',
-    imagePath: 'assets/Newgamepic.png',
-    items: [
-      ShopItem(name: 'Sushiro Coupon 60B', price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
-      ShopItem(name: 'MK Restaurant 150B', price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
-      ShopItem(name: 'Momo Paradise 20% off', price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
-      ShopItem(name: 'Free major cinema ticket', price: ((220 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MAJOR.png'),
-      ShopItem(name: 'Free medium popcorn at SF', price: ((120 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/SFC.jpeg'),
-
-      // Add more items here
-    ],
-  ),
-];
-
 class _ShopPageState extends State<ShopPage> {
   String _selectedCategory = 'Recommended'; //Selected recommended or all
   int _selectedCardIndex = 0;
   late PageController _pageController;
+
+  List<CardMetadata> get availableCards {
+    List<CardMetadata> cards = [
+      CardMetadata(
+      title: 'None',
+      description: 'Handpicked items just for you',
+      imagePath: 'assets/Newgamepic.png',
+      items: [
+        ShopItem(name: 'Unlock Wander', price: '250', imagePath: 'assets/WanderLogo.png'),
+      ],
+    )];
+
+    if (Globals.isThaiIdVerified) {
+      cards.addAll([
+        CardMetadata(
+          title: 'Universal Coverage Scheme',
+          description: 'Explore our full range of mostly from the government',
+          imagePath: 'assets/card/gold_flat.png',
+          items: [
+            ShopItem(name: 'PTT Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/PTT.jpg'),
+            ShopItem(name: 'BCP Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/BCP.png'),
+            ShopItem(name: 'MEA/PEA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Electricity.png'),
+            ShopItem(name: 'MWA/PWA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Water.jpg'),
+            ShopItem(name: 'NT 250B Discount', price: ((250 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/NT.jpg'),
+            ShopItem(name: 'MRT 200B Balance', price: ((200 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MRT.jpg'),
+            ShopItem(name: 'Thailand Post 100B Balance', price: ((100 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/ThailandP.png'),
+            ShopItem(name: 'Government Lottery Ticket', price: ((80 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Lottery.png'),
+          ],
+        ),
+        CardMetadata(
+          title: 'AIA Vitality',
+          description: 'Exclusive deals for AIA Vitality members',
+          imagePath: 'assets/card/aia_vita.png',
+          items: [
+            ShopItem(name: 'Sushiro Coupon 60B', price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
+            ShopItem(name: 'MK Restaurant 150B', price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
+            ShopItem(name: 'Momo Paradise 20% off', price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
+            ShopItem(name: 'Free major cinema ticket', price: ((220 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MAJOR.png'),
+            ShopItem(name: 'Free medium popcorn at SF', price: ((120 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/SFC.jpeg'),
+          ],
+        ),
+      ]);
+    }
+
+    cards.add(
+      CardMetadata(
+        title: 'Thai ID',
+        description: Globals.isThaiIdVerified ? 'Successfully linked' : 'Tap to verify your Thai ID',
+        imagePath: 'assets/ThaiID-Front.png',
+        items: [],
+      )
+    );
+
+    return cards;
+  }
 
   @override
   void initState() {
@@ -197,7 +212,23 @@ class _ShopPageState extends State<ShopPage> {
                   },
                   itemCount: availableCards.length,
                   itemBuilder: (context, index) {
-                    return _buildCreditCard(availableCards[index], index == _selectedCardIndex);
+                    final card = availableCards[index];
+                    return GestureDetector(
+                      onTap: () async {
+                        if (card.title == 'Thai ID' && !Globals.isThaiIdVerified) {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (context) => const ThaiIdInputPage()),
+                          );
+                          if (result == true) {
+                            setState(() {
+                              _selectedCardIndex = 0;
+                            });
+                          }
+                        }
+                      },
+                      child: _buildCreditCard(card, index == _selectedCardIndex),
+                    );
                   },
                 ),
               ),
@@ -621,6 +652,30 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Widget _buildCreditCard(CardMetadata card, bool isActive) {
+    if (card.title == 'AIA Vitality' || card.title == 'Universal Coverage Scheme') {
+      return AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        margin: EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: isActive ? 0 : 16,
+        ),
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(16),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.1),
+              blurRadius: 8,
+              offset: const Offset(0, 4),
+            ),
+          ],
+          image: DecorationImage(
+            image: AssetImage(card.imagePath),
+            fit: BoxFit.cover,
+          ),
+        ),
+      );
+    }
+
     return AnimatedContainer(
       duration: const Duration(milliseconds: 300),
       margin: EdgeInsets.symmetric(
@@ -633,7 +688,11 @@ class _ShopPageState extends State<ShopPage> {
               ? [const Color(0xFFD32F2F), const Color(0xFFC62828)]
               : card.title == 'Universal Coverage Scheme'
                   ? [const Color(0xFF00B0FF), const Color(0xFF0081CB)]
-                  : [const Color(0xFF424242), const Color(0xFF212121)],
+                  : card.title == 'Thai ID'
+                      ? (Globals.isThaiIdVerified
+                          ? [const Color(0xFF388E3C), const Color(0xFF2E7D32)]
+                          : [const Color(0xFFFF9800), const Color(0xFFF57C00)])
+                      : [const Color(0xFF424242), const Color(0xFF212121)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
