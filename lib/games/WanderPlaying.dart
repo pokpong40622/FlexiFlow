@@ -262,7 +262,7 @@ class _WanderPlayingState extends State<WanderPlaying>
 
   void _generateRandomShape(Size imageSize) {
     final shape = TraceShapeType.values[
-        _random.nextInt(TraceShapeType.values.length)];
+    _random.nextInt(TraceShapeType.values.length)];
 
     List<Offset> points;
     switch (shape) {
@@ -296,7 +296,7 @@ class _WanderPlayingState extends State<WanderPlaying>
   void _resetTraceState() {
     _segmentCoverage = List<List<bool>>.generate(
       _quadPoints.length,
-      (_) => List<bool>.filled(_coverageBinsPerSegment, false),
+          (_) => List<bool>.filled(_coverageBinsPerSegment, false),
     );
   }
 
@@ -352,7 +352,7 @@ class _WanderPlayingState extends State<WanderPlaying>
     }
 
     final projection = ((point.dx - start.dx) * segment.dx +
-            (point.dy - start.dy) * segment.dy) /
+        (point.dy - start.dy) * segment.dy) /
         segmentLengthSq;
     final t = projection.clamp(0.0, 1.0).toDouble();
 
@@ -408,23 +408,23 @@ class _WanderPlayingState extends State<WanderPlaying>
         for (int step = 1; step < interpolationSteps; step++) {
           final t = step / interpolationSteps;
           final interpolated =
-              Offset.lerp(lastFingerTip, currentFingerTip, t)!;
+          Offset.lerp(lastFingerTip, currentFingerTip, t)!;
           fingerPath.insert(step, interpolated);
         }
       }
 
       for (final fingerPos in fingerPath) {
         final projection =
-            _projectOnSegment(fingerPos, shapeSegmentStart, shapeSegmentEnd);
+        _projectOnSegment(fingerPos, shapeSegmentStart, shapeSegmentEnd);
         final distanceFromLine =
             (fingerPos - projection.point).distance;
 
         if (distanceFromLine <= tracingThreshold) {
           final centerBin =
-              (projection.t * (_coverageBinsPerSegment - 1)).round();
+          (projection.t * (_coverageBinsPerSegment - 1)).round();
           final startBin = max(0, centerBin - brushHalfWidth);
           final endBin =
-              min(_coverageBinsPerSegment - 1, centerBin + brushHalfWidth);
+          min(_coverageBinsPerSegment - 1, centerBin + brushHalfWidth);
 
           for (int j = startBin; j <= endBin; j++) {
             if (!bins[j]) {
@@ -534,8 +534,8 @@ class _WanderPlayingState extends State<WanderPlaying>
                         SizedBox(height: screenHeight * 0.02),
                         Text(
                           'A random shape appears each round: triangle, quadrilateral,\n'
-                          'pentagon, star, or circle.\n'
-                          'Trace lines with your index fingertip until every edge is filled.',
+                              'pentagon, star, or circle.\n'
+                              'Trace lines with your index fingertip until every edge is filled.',
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.04,
                             fontWeight: FontWeight.w500,
@@ -885,7 +885,7 @@ class _WanderPlayingState extends State<WanderPlaying>
 
     try {
       final detectedHands =
-          await HandLandmarkerService.detectHandLandmarks(inputImage);
+      await HandLandmarkerService.detectHandLandmarks(inputImage);
 
       final metadata = inputImage.metadata;
       if (metadata?.size != null && metadata?.rotation != null) {
@@ -1053,15 +1053,15 @@ class _WanderTracePainter extends CustomPainter {
           ? _isSegmentComplete(segmentCoverage[prevSegment])
           : false;
       final rightTouched = i < segmentCoverage.length
-        ? segmentCoverage[i].any((bin) => bin)
-        : false;
+          ? segmentCoverage[i].any((bin) => bin)
+          : false;
       final leftTouched = prevSegment < segmentCoverage.length
-        ? segmentCoverage[prevSegment].any((bin) => bin)
-        : false;
+          ? segmentCoverage[prevSegment].any((bin) => bin)
+          : false;
 
       final dotPaint = (leftComplete && rightComplete)
           ? completedDotPaint
-        : (leftTouched || rightTouched ? activeDotPaint : inactiveDotPaint);
+          : (leftTouched || rightTouched ? activeDotPaint : inactiveDotPaint);
 
       canvas.drawCircle(points[i], 9, dotPaint);
       canvas.drawCircle(points[i], 9, dotOutlinePaint);

@@ -13,7 +13,8 @@ import '../fake_var.dart';
 import 'dart:math';
 
 class HandPose {
-  final bool isFlipped; // true if left hand is flipped, false if right hand is flipped
+  final bool
+      isFlipped; // true if left hand is flipped, false if right hand is flipped
   final GestureType leftGestureType;
   final GestureType rightGestureType;
   final String imagePath;
@@ -29,41 +30,161 @@ class HandPose {
 }
 
 List<HandPose> predefinedPoses = [
-  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/PinchSeven.png', name: 'L + Fingertip pinch'),
-  HandPose(leftGestureType: GestureType.jeep, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/PinchSeven.png', name: 'Fingertip pinch + L'),
-  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: false, imagePath: 'assets/hand/SixKoi.png', name: 'Thumb + Pinky'),
-  HandPose(leftGestureType: GestureType.six, rightGestureType: GestureType.pinky, isFlipped: true, imagePath: 'assets/hand/SixKoi.png', name: 'Pinky + Thumb'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: false, imagePath: 'assets/hand/OneOne.png', name: 'Point + One'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.one, isFlipped: true, imagePath: 'assets/hand/OneOne.png', name: 'One + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: false, imagePath: 'assets/hand/OneTwo.png', name: 'Point + Two'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.two, isFlipped: true, imagePath: 'assets/hand/OneTwo.png', name: 'Two + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: false, imagePath: 'assets/hand/OneThree.png', name: 'Point + Three'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.three, isFlipped: true, imagePath: 'assets/hand/OneThree.png', name: 'Three + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: false, imagePath: 'assets/hand/OneFour.png', name: 'Point + Four'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.four, isFlipped: true, imagePath: 'assets/hand/OneFour.png', name: 'Four + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png', name: 'Point + Five'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png', name: 'Five + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: false, imagePath: 'assets/hand/OneSix.png', name: 'Point + Six'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.six, isFlipped: true, imagePath: 'assets/hand/OneSix.png', name: 'Six + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: false, imagePath: 'assets/hand/OneSeven.png', name: 'Point + Seven'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.seven, isFlipped: true, imagePath: 'assets/hand/OneSeven.png', name: 'Seven + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: false, imagePath: 'assets/hand/OneEight.png', name: 'Point + Eight'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.eight, isFlipped: true, imagePath: 'assets/hand/OneEight.png', name: 'Eight + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: false, imagePath: 'assets/hand/OneNine.png', name: 'Point + Nine'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.nine, isFlipped: true, imagePath: 'assets/hand/OneNine.png', name: 'Nine + Point'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: false, imagePath: 'assets/hand/OneFive.png', name: 'Point + Ten'),
-  HandPose(leftGestureType: GestureType.one, rightGestureType: GestureType.five, isFlipped: true, imagePath: 'assets/hand/OneFive.png', name: 'Ten + Point'),
+  HandPose(
+      leftGestureType: GestureType.jeep,
+      rightGestureType: GestureType.seven,
+      isFlipped: false,
+      imagePath: 'assets/hand/PinchSeven.png',
+      name: 'L + Fingertip pinch'),
+  HandPose(
+      leftGestureType: GestureType.jeep,
+      rightGestureType: GestureType.seven,
+      isFlipped: true,
+      imagePath: 'assets/hand/PinchSeven.png',
+      name: 'Fingertip pinch + L'),
+  HandPose(
+      leftGestureType: GestureType.six,
+      rightGestureType: GestureType.pinky,
+      isFlipped: false,
+      imagePath: 'assets/hand/SixKoi.png',
+      name: 'Thumb + Pinky'),
+  HandPose(
+      leftGestureType: GestureType.six,
+      rightGestureType: GestureType.pinky,
+      isFlipped: true,
+      imagePath: 'assets/hand/SixKoi.png',
+      name: 'Pinky + Thumb'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.one,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneOne.png',
+      name: 'Point + One'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.one,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneOne.png',
+      name: 'One + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.two,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneTwo.png',
+      name: 'Point + Two'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.two,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneTwo.png',
+      name: 'Two + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.three,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneThree.png',
+      name: 'Point + Three'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.three,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneThree.png',
+      name: 'Three + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.four,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneFour.png',
+      name: 'Point + Four'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.four,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneFour.png',
+      name: 'Four + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.five,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneFive.png',
+      name: 'Point + Five'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.five,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneFive.png',
+      name: 'Five + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.six,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneSix.png',
+      name: 'Point + Six'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.six,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneSix.png',
+      name: 'Six + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.seven,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneSeven.png',
+      name: 'Point + Seven'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.seven,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneSeven.png',
+      name: 'Seven + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.eight,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneEight.png',
+      name: 'Point + Eight'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.eight,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneEight.png',
+      name: 'Eight + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.nine,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneNine.png',
+      name: 'Point + Nine'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.nine,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneNine.png',
+      name: 'Nine + Point'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.five,
+      isFlipped: false,
+      imagePath: 'assets/hand/OneFive.png',
+      name: 'Point + Ten'),
+  HandPose(
+      leftGestureType: GestureType.one,
+      rightGestureType: GestureType.five,
+      isFlipped: true,
+      imagePath: 'assets/hand/OneFive.png',
+      name: 'Ten + Point'),
 ];
 
 class PerfectMatchPlaying extends StatefulWidget {
-
   const PerfectMatchPlaying({super.key});
 
   @override
   State<PerfectMatchPlaying> createState() => _PerfectMatchPlayingState();
 }
 
-class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTickerProviderStateMixin {
+class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
+    with TickerProviderStateMixin {
   bool _canProcess = true;
   bool _isBusy = false;
   CustomPaint? _customPaint;
@@ -80,10 +201,11 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
 
   int currentPoseIndex = 0;
   late AnimationController _flashController;
+  late AnimationController _fallController;
 
   // --- Gimmick: Combo Multiplier ---
   int _comboCounter = 0;
-  double _comboTimeRemaining = 0.0; 
+  double _comboTimeRemaining = 0.0;
   Timer? _comboTimerTick;
   final double _maxComboTime = 3.0; // 3 seconds to keep combo alive
 
@@ -95,34 +217,71 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
       duration: const Duration(milliseconds: 100),
       reverseDuration: const Duration(milliseconds: 1000),
     );
+    _fallController = AnimationController(
+      vsync: this,
+      duration: const Duration(seconds: 4),
+    )..repeat();
+
     var random = Random();
-    currentPoseIndex = random.nextInt((predefinedPoses.length/2).floor()) * 2; // Ensure we start with a non-flipped pose
+    currentPoseIndex = random.nextInt((predefinedPoses.length / 2).floor()) *
+        2; // Ensure we start with a non-flipped pose
     _startGameTimer();
-    
+
     // Start combo countdown timer
-    _comboTimerTick = Timer.periodic(const Duration(milliseconds: 100), (timer) {
-       if (_isPaused || _isResumeCountdown) return;
-       
-       if (_comboTimeRemaining > 0) {
-         setState(() {
-           _comboTimeRemaining -= 0.1;
-           if (_comboTimeRemaining <= 0) {
-             _comboTimeRemaining = 0;
-             _comboCounter = 0; // Reset combo if time runs out
-           }
-         });
-       }
+    _comboTimerTick =
+        Timer.periodic(const Duration(milliseconds: 100), (timer) {
+      if (_isPaused || _isResumeCountdown) return;
+
+      if (_comboTimeRemaining > 0) {
+        setState(() {
+          _comboTimeRemaining -= 0.1;
+          if (_comboTimeRemaining <= 0) {
+            _comboTimeRemaining = 0;
+            _comboCounter = 0; // Reset combo if time runs out
+          }
+        });
+      }
     });
   }
 
   @override
   void dispose() {
     _flashController.dispose();
+    _fallController.dispose();
     _canProcess = false;
     _gameTimer?.cancel();
     _comboTimerTick?.cancel();
     _countdownTimer?.cancel();
     super.dispose();
+  }
+
+  String _getIndividualHandImage(GestureType type) {
+    switch (type) {
+      case GestureType.jeep:
+        return 'assets/hand/individual/Pinch.png';
+      case GestureType.pinky:
+        return 'assets/hand/individual/Koi.png';
+      case GestureType.one:
+        return 'assets/hand/individual/One.png';
+      case GestureType.two:
+        return 'assets/hand/individual/Two.png';
+      case GestureType.three:
+        return 'assets/hand/individual/Three.png';
+      case GestureType.four:
+        return 'assets/hand/individual/Four.png';
+      case GestureType.five:
+        return 'assets/hand/individual/Five.png';
+      case GestureType.six:
+        return 'assets/hand/individual/Six.png';
+      case GestureType.seven:
+        return 'assets/hand/individual/Seven.png';
+      case GestureType.eight:
+        return 'assets/hand/individual/Eight.png';
+      case GestureType.nine:
+        return 'assets/hand/individual/Nine.png';
+      default:
+        return 'assets/hand/individual/One.png';
+    }
   }
 
   void _startGameTimer() {
@@ -219,7 +378,9 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w800,
                             fontSize: screenWidth * 0.11,
-                            color: _secondsRemaining <= 10 ? Color(0xFFD32F2F) : Colors.black,
+                            color: _secondsRemaining <= 10
+                                ? Color(0xFFD32F2F)
+                                : Colors.black,
                           ),
                         ),
                         Padding(
@@ -252,19 +413,22 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
                               customPaint: _customPaint,
                               onImage: _processImage,
                               initialCameraLensDirection: _cameraLensDirection,
-                              onCameraLensDirectionChanged: (value) => _cameraLensDirection = value,
+                              onCameraLensDirectionChanged: (value) =>
+                                  _cameraLensDirection = value,
                             ),
                             AnimatedBuilder(
                               animation: _flashController,
                               builder: (context, child) {
                                 return Container(
-                                  color: Colors.green.withOpacity(_flashController.value * 0.7),
+                                  color: Colors.green.withOpacity(
+                                      _flashController.value * 0.7),
                                 );
                               },
                             ),
                             if (_isPaused)
                               BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                filter:
+                                    ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                                 child: Container(
                                   color: Colors.black.withOpacity(0.4),
                                   child: Center(
@@ -300,7 +464,8 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
                               ),
                             if (_isResumeCountdown)
                               BackdropFilter(
-                                filter: ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
+                                filter:
+                                    ImageFilter.blur(sigmaX: 5.0, sigmaY: 5.0),
                                 child: Container(
                                   color: Colors.black.withOpacity(0.2),
                                   child: Center(
@@ -375,7 +540,9 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
                               child: Icon(
-                                _isPaused ? Icons.play_circle_outlined : Icons.pause_circle_outlined,
+                                _isPaused
+                                    ? Icons.play_circle_outlined
+                                    : Icons.pause_circle_outlined,
                                 size: screenWidth * 0.072,
                               ),
                               decoration: BoxDecoration(
@@ -422,48 +589,70 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
             ],
           ),
 
-          //Do this Box
-          Positioned(
-            top: screenHeight * 0.072,
-            right: screenWidth * 0.021,
-            child: Container(
-              width: screenWidth * 0.40462,
-              height: screenHeight * 0.23035,
-              padding: EdgeInsets.all(screenWidth * 0.0262),
-              decoration: BoxDecoration(
-                color: Color(0xFF0397FD),
-                borderRadius: BorderRadius.circular(12),
-              ),
-              child: Column(
+          // Falling Hands Animation
+          AnimatedBuilder(
+            animation: _fallController,
+            builder: (context, child) {
+              double fallY = Tween<double>(begin: -200, end: screenHeight)
+                  .evaluate(_fallController);
+
+              var currentPose = predefinedPoses[currentPoseIndex];
+              var leftScreenGesture = !currentPose.isFlipped
+                  ? currentPose.rightGestureType
+                  : currentPose.leftGestureType;
+              var rightScreenGesture = !currentPose.isFlipped
+                  ? currentPose.leftGestureType
+                  : currentPose.rightGestureType;
+
+              return Stack(
                 children: [
-                  Text(
-                    'Do this',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w700,
-                      fontSize: screenWidth * 0.0516,
-                      color: Colors.white,
-                    ),
-                  ),
-                  SizedBox(height: screenHeight * 0.008),
-                  Container(
-                    height: screenHeight * 0.159166,
-                    width: screenWidth * 0.3462,
-                    // REMOVED Expanded here
-                    child: Transform.flip(
-                      flipX: !predefinedPoses[currentPoseIndex].isFlipped, // Flips the child horizontally along the X-axis
-                      child: Image.asset(
-                        predefinedPoses[currentPoseIndex].imagePath,
-                        fit: BoxFit.contain, // Add this if you want it to scale nicely within the container
+                  Positioned(
+                    top: fallY,
+                    left: screenWidth * 0.15,
+                    child: Container(
+                      width: screenWidth * 0.3,
+                      height: screenWidth * 0.3,
+                      decoration: BoxDecoration(
+                        color: Colors.white70,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: Colors.black12, blurRadius: 8)
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Image.asset(
+                          _getIndividualHandImage(leftScreenGesture),
+                          fit: BoxFit.contain,
+                        ),
                       ),
                     ),
-                    decoration: BoxDecoration(
-                      color: Colors.transparent,
-                      borderRadius: BorderRadius.circular(8),
+                  ),
+                  Positioned(
+                    top: fallY,
+                    right: screenWidth * 0.15,
+                    child: Container(
+                      width: screenWidth * 0.3,
+                      height: screenWidth * 0.3,
+                      decoration: BoxDecoration(
+                        color: Colors.white70,
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(color: Colors.black12, blurRadius: 8)
+                        ],
+                      ),
+                      child: Padding(
+                        padding: const EdgeInsets.all(12.0),
+                        child: Image.asset(
+                          _getIndividualHandImage(rightScreenGesture),
+                          fit: BoxFit.contain,
+                        ),
+                      ),
                     ),
                   ),
                 ],
-              ),
-            ),
+              );
+            },
           ),
 
           // COMBO GIMMICK UI
@@ -511,10 +700,13 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
                       ),
                       child: FractionallySizedBox(
                         alignment: Alignment.centerRight,
-                        widthFactor: (_comboTimeRemaining / _maxComboTime).clamp(0.0, 1.0),
+                        widthFactor: (_comboTimeRemaining / _maxComboTime)
+                            .clamp(0.0, 1.0),
                         child: Container(
                           decoration: BoxDecoration(
-                            color: _comboTimeRemaining < 1.0 ? Colors.red : Colors.orangeAccent,
+                            color: _comboTimeRemaining < 1.0
+                                ? Colors.red
+                                : Colors.orangeAccent,
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),
@@ -587,9 +779,10 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
     if (_isBusy) return;
     if (_isPaused || _isResumeCountdown) return;
     _isBusy = true;
-    
+
     try {
-      final detectedHands = await HandLandmarkerService.detectHandLandmarks(inputImage);
+      final detectedHands =
+          await HandLandmarkerService.detectHandLandmarks(inputImage);
       bool leftMatch = false;
       bool rightMatch = false;
       print(predefinedPoses[currentPoseIndex].leftGestureType);
@@ -598,15 +791,19 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
       for (var hand in detectedHands) {
         try {
           if (hand.handedness == Handedness.left) {
-            leftMatch = _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].leftGestureType &&
-                        !predefinedPoses[currentPoseIndex].isFlipped ||
-                        _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].rightGestureType &&
-                        predefinedPoses[currentPoseIndex].isFlipped;
+            leftMatch = _gestureClassification.checkGesture(hand).type ==
+                        predefinedPoses[currentPoseIndex].leftGestureType &&
+                    !predefinedPoses[currentPoseIndex].isFlipped ||
+                _gestureClassification.checkGesture(hand).type ==
+                        predefinedPoses[currentPoseIndex].rightGestureType &&
+                    predefinedPoses[currentPoseIndex].isFlipped;
           } else {
-            rightMatch = _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].rightGestureType &&
-                         !predefinedPoses[currentPoseIndex].isFlipped ||
-                         _gestureClassification.checkGesture(hand).type == predefinedPoses[currentPoseIndex].leftGestureType &&
-                         predefinedPoses[currentPoseIndex].isFlipped;
+            rightMatch = _gestureClassification.checkGesture(hand).type ==
+                        predefinedPoses[currentPoseIndex].rightGestureType &&
+                    !predefinedPoses[currentPoseIndex].isFlipped ||
+                _gestureClassification.checkGesture(hand).type ==
+                        predefinedPoses[currentPoseIndex].leftGestureType &&
+                    predefinedPoses[currentPoseIndex].isFlipped;
           }
           final gesture = _gestureClassification.checkGesture(hand);
         } catch (e) {
@@ -614,17 +811,21 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
         }
       }
       if (leftMatch && rightMatch) {
-         // --- Combo Gimmick logic ---
-         _comboCounter++;
-         _comboTimeRemaining = _maxComboTime; // Reset combo time
-         
-         // Calculate score based on combo multiplier
-         int multiplier = 1 + (_comboCounter ~/ 3); // Multiplier increases every 3 hits
-         if (multiplier > 5) multiplier = 5; // Cap at 5x
-         
-         _score += multiplier;
+        // --- Combo Gimmick logic ---
+        _comboCounter++;
+        _comboTimeRemaining = _maxComboTime; // Reset combo time
+
+        // Calculate score based on combo multiplier
+        int multiplier =
+            1 + (_comboCounter ~/ 3); // Multiplier increases every 3 hits
+        if (multiplier > 5) multiplier = 5; // Cap at 5x
+
+        _score += multiplier;
 
         currentPoseIndex = (currentPoseIndex + 1) % predefinedPoses.length;
+        _fallController.forward(from: 0.0);
+        _fallController.repeat();
+
         _flashController.forward(from: 0.0).then((_) async {
           await Future.delayed(const Duration(milliseconds: 100));
           if (mounted) {
@@ -635,18 +836,16 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying> with SingleTi
 
       if (inputImage.metadata?.size != null &&
           inputImage.metadata?.rotation != null) {
-
         final painter = HandPainter(
-          detectedHands, 
+          detectedHands,
           inputImage.metadata!.size,
           inputImage.metadata!.rotation,
           _cameraLensDirection,
-          showLandmarkNumbers: true, 
+          showLandmarkNumbers: true,
         );
         _customPaint = CustomPaint(painter: painter);
-        
       } else {
-         _customPaint = null;
+        _customPaint = null;
       }
     } catch (e) {
       debugPrint('Error: $e');
