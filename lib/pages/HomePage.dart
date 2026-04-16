@@ -5,6 +5,7 @@ import 'package:motion_kit/pages/LeaderboardPage.dart';
 import 'package:motion_kit/pages/ProfilePage.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 import 'GetStarted.dart';
 import 'ShopPage.dart';
 import 'package:flutter/material.dart';
@@ -509,6 +510,7 @@ class _HomePageState extends State<HomePage> {
   Widget _StreakWidget() {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final tokens = tokensOf(context);
 
     return Container(
       child: Stack(
@@ -555,10 +557,16 @@ class _HomePageState extends State<HomePage> {
                         ),
                       ),
                       SizedBox(height: 8),
-                      Text(
-                        '${Globals.streak} days',
-                        style: GoogleFonts.inter(
-                          color: Globals.isStreakActive ? Color(0xFFFF6B35) : Colors.grey[500]!,
+                        Text(
+                          '${Globals.streak} days',
+                          style: GoogleFonts.inter(
+                          color: Globals.isStreakActive
+                              ? const Color(0xFFFF6B35)
+                              : wcagColor(
+                                  context,
+                                  standard: Colors.grey[500]!,
+                                  wcag: tokens.textMuted,
+                                ),
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
                         ),
@@ -586,7 +594,11 @@ class _HomePageState extends State<HomePage> {
                         Text(
                           'Time spent in the past 10 days',
                           style: GoogleFonts.inter(
-                            color: Colors.grey[500],
+                            color: wcagColor(
+                              context,
+                              standard: Colors.grey[500]!,
+                              wcag: tokens.textMuted,
+                            ),
                             fontSize: 11,
                             fontWeight: FontWeight.w400,
                           ),

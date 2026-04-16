@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:async';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 import '../fake_var.dart';
 
@@ -448,14 +449,22 @@ class _StatsPageState extends State<StatsPage> {
                                         Icon(
                                           Icons.sentiment_neutral_outlined,
                                           size: screenWidth * 0.12,
-                                          color: Colors.grey[400],
+                                          color: wcagColor(
+                                            context,
+                                            standard: Colors.grey[400]!,
+                                            wcag: tokensOf(context).textDisabled,
+                                          ),
                                         ),
                                         SizedBox(height: screenHeight * 0.01),
                                         Text(
                                           'Nothing to\nshow',
                                           textAlign: TextAlign.center,
                                           style: GoogleFonts.inter(
-                                            color: Colors.grey[400],
+                                            color: wcagColor(
+                                              context,
+                                              standard: Colors.grey[400]!,
+                                              wcag: tokensOf(context).textDisabled,
+                                            ),
                                             fontSize: screenWidth * 0.035,
                                             fontWeight: FontWeight.w600,
                                           ),
@@ -534,13 +543,17 @@ class _StatsPageState extends State<StatsPage> {
                                                 ),
                                                 Text(
                                                   ' pts',
-                                                  style: GoogleFonts.inter(
-                                                    fontSize:
-                                                        screenWidth * 0.03,
-                                                    color: Colors.grey[600],
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
+                                                   style: GoogleFonts.inter(
+                                                     fontSize:
+                                                         screenWidth * 0.03,
+                                                     color: wcagColor(
+                                                       context,
+                                                       standard: Colors.grey[600]!,
+                                                       wcag: tokensOf(context).textMuted,
+                                                     ),
+                                                     fontWeight: FontWeight.w600,
+                                                   ),
+                                                 ),
                                               ],
                                             ),
                                           ),
@@ -607,13 +620,17 @@ class _StatsPageState extends State<StatsPage> {
                                                 ),
                                                 Text(
                                                   ' steps',
-                                                  style: GoogleFonts.inter(
-                                                    fontSize:
-                                                        screenWidth * 0.035,
-                                                    color: Colors.grey[600],
-                                                    fontWeight: FontWeight.w600,
-                                                  ),
-                                                ),
+                                                   style: GoogleFonts.inter(
+                                                     fontSize:
+                                                         screenWidth * 0.035,
+                                                     color: wcagColor(
+                                                       context,
+                                                       standard: Colors.grey[600]!,
+                                                       wcag: tokensOf(context).textMuted,
+                                                     ),
+                                                     fontWeight: FontWeight.w600,
+                                                   ),
+                                                 ),
                                               ],
                                             ),
                                           ),

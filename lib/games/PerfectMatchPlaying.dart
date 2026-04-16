@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:motion_kit/services/gesture_classification.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 import '../services/hand_landmarker_service.dart';
 import '../views/painters/hand_painter.dart';
 import '../views/embedded_camera_view.dart';
@@ -356,6 +357,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
+    final tokens = tokensOf(context);
     final gameplayTextScale = mediaQuery.textScaler
         .scale(1.0)
         .clamp(1.0, 1.15)
@@ -546,7 +548,9 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                         children: [
                           GestureDetector(
                             onTap: _isPaused ? _resumeGame : _pauseGame,
-                            child: Container(
+                            child: WcagTapTarget(
+                              compact: false,
+                              child: Container(
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
                               child: Icon(
@@ -562,11 +566,14 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                                 ),
                                 color: Colors.white,
                               ),
+                              ),
                             ),
                           ),
                           GestureDetector(
                             onTap: _endGame,
-                            child: Container(
+                            child: WcagTapTarget(
+                              compact: false,
+                              child: Container(
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
                               child: Icon(
@@ -580,6 +587,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                                   bottomRight: Radius.circular(8),
                                 ),
                                 color: Color(0xFFF1615D),
+                              ),
                               ),
                             ),
                           ),
@@ -681,7 +689,11 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                       style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w900,
                         fontSize: screenWidth * 0.08,
-                        color: Colors.orangeAccent,
+                        color: wcagColor(
+                          context,
+                          standard: Colors.orangeAccent,
+                          wcag: tokens.textReward,
+                        ),
                         shadows: [
                           const Shadow(
                             color: Colors.red,
@@ -716,7 +728,11 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                           decoration: BoxDecoration(
                             color: _comboTimeRemaining < 1.0
                                 ? Colors.red
-                                : Colors.orangeAccent,
+                                : wcagColor(
+                                    context,
+                                    standard: Colors.orangeAccent,
+                                    wcag: tokens.textReward,
+                                  ),
                             borderRadius: BorderRadius.circular(4),
                           ),
                         ),

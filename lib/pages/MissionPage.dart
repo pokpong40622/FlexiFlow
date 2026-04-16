@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 class MissionPage extends StatefulWidget {
   final VoidCallback? onNavigateToTraining;
@@ -308,6 +309,7 @@ class _MissionPageState extends State<MissionPage> {
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
+    final tokens = tokensOf(context);
 
     // Derive colours & icons from status
     final Color accentColor;
@@ -316,7 +318,11 @@ class _MissionPageState extends State<MissionPage> {
 
     switch (status) {
       case MissionStatus.claimed:
-        accentColor = const Color(0xFF62DA30);
+        accentColor = wcagColor(
+          context,
+          standard: const Color(0xFF62DA30),
+          wcag: tokens.textSuccess,
+        );
         leadingIcon = Icons.check_circle;
         cardOpacity = 0.72;
         break;
@@ -326,12 +332,20 @@ class _MissionPageState extends State<MissionPage> {
         cardOpacity = 1.0;
         break;
       case MissionStatus.inProgress:
-        accentColor = const Color(0xFFFFA726);
+        accentColor = wcagColor(
+          context,
+          standard: const Color(0xFFFFA726),
+          wcag: tokens.textWarning,
+        );
         leadingIcon = Icons.play_circle_fill_rounded;
         cardOpacity = 1.0;
         break;
       case MissionStatus.locked:
-        accentColor = const Color(0xFFBBBBBB);
+        accentColor = wcagColor(
+          context,
+          standard: const Color(0xFFBBBBBB),
+          wcag: tokens.textDisabled,
+        );
         leadingIcon = Icons.lock_rounded;
         cardOpacity = 0.6;
         break;
@@ -413,8 +427,12 @@ class _MissionPageState extends State<MissionPage> {
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
                                 fontSize: screenWidth * 0.038,
-                                color: status == MissionStatus.claimed
-                                    ? Colors.grey[600]
+                                 color: status == MissionStatus.claimed
+                                    ? wcagColor(
+                                        context,
+                                        standard: Colors.grey[600]!,
+                                        wcag: tokens.textDisabled,
+                                      )
                                     : Colors.black87,
                                 decoration: status == MissionStatus.claimed
                                     ? TextDecoration.lineThrough
@@ -437,7 +455,11 @@ class _MissionPageState extends State<MissionPage> {
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: screenWidth * 0.032,
-                                    color: const Color(0xFFE5A100),
+                                    color: wcagColor(
+                                      context,
+                                      standard: const Color(0xFFE5A100),
+                                      wcag: tokens.textReward,
+                                    ),
                                   ),
                                 ),
                                 Padding(
@@ -445,11 +467,15 @@ class _MissionPageState extends State<MissionPage> {
                                       horizontal: screenWidth * 0.02),
                                   child: Text(
                                     '•',
-                                    style: TextStyle(
-                                      color: Colors.grey[300],
-                                      fontSize: screenWidth * 0.032,
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                      style: TextStyle(
+                                       color: wcagColor(
+                                         context,
+                                         standard: Colors.grey[300]!,
+                                         wcag: tokens.textDisabled,
+                                       ),
+                                       fontSize: screenWidth * 0.032,
+                                       fontWeight: FontWeight.bold,
+                                     ),
                                   ),
                                 ),
                                 Text(
@@ -457,7 +483,11 @@ class _MissionPageState extends State<MissionPage> {
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: screenWidth * 0.032,
-                                    color: const Color(0xFF0397FD),
+                                    color: wcagColor(
+                                      context,
+                                      standard: const Color(0xFF0397FD),
+                                      wcag: tokens.textSecondary,
+                                    ),
                                   ),
                                 ),
                                 if (requiredLevel > 0) ...[
@@ -466,11 +496,15 @@ class _MissionPageState extends State<MissionPage> {
                                         horizontal: screenWidth * 0.02),
                                     child: Text(
                                       '•',
-                                      style: TextStyle(
-                                        color: Colors.grey[300],
-                                        fontSize: screenWidth * 0.032,
-                                        fontWeight: FontWeight.bold,
-                                      ),
+                                       style: TextStyle(
+                                         color: wcagColor(
+                                           context,
+                                           standard: Colors.grey[300]!,
+                                           wcag: tokens.textDisabled,
+                                         ),
+                                         fontSize: screenWidth * 0.032,
+                                         fontWeight: FontWeight.bold,
+                                       ),
                                     ),
                                   ),
                                   Text(
@@ -478,7 +512,11 @@ class _MissionPageState extends State<MissionPage> {
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w600,
                                       fontSize: screenWidth * 0.032,
-                                      color: const Color(0xFFFF5252),
+                                      color: wcagColor(
+                                        context,
+                                        standard: const Color(0xFFFF5252),
+                                        wcag: tokens.textWarning,
+                                      ),
                                     ),
                                   ),
                                 ],

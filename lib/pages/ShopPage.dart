@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -198,7 +199,11 @@ class _ShopPageState extends State<ShopPage> {
                             style: GoogleFonts.inter(
                               fontSize: screenWidth * 0.06,
                               fontWeight: FontWeight.w700,
-                              color: const Color(0xFFF6B647),
+                              color: wcagColor(
+                                context,
+                                standard: const Color(0xFFF6B647),
+                                wcag: tokensOf(context).textReward,
+                              ),
                             ),
                           ),
                         ],
@@ -869,7 +874,11 @@ class _ShopPageState extends State<ShopPage> {
                                   ItemPrice,
                                   style: GoogleFonts.inter(
                                     fontSize: 14,
-                                    color: const Color(0xFFFFD54F),
+                                    color: wcagColor(
+                                      context,
+                                      standard: const Color(0xFFFFD54F),
+                                      wcag: tokensOf(context).textReward,
+                                    ),
                                     fontWeight: FontWeight.w700,
                                   ),
                                 ),

@@ -5,6 +5,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 import '../fake_var.dart';
 
@@ -20,6 +21,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
+    final tokens = tokensOf(context);
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -111,7 +113,11 @@ class _ProfilePageState extends State<ProfilePage> {
             style: GoogleFonts.inter(
               fontSize: screenWidth * 0.035,
               fontWeight: FontWeight.w600, // Changed to semibold
-              color: Colors.grey[600],
+              color: wcagColor(
+                context,
+                standard: Colors.grey[600]!,
+                wcag: tokens.textMuted,
+              ),
             ),
           ),
           SizedBox(height: screenHeight * 0.02),
@@ -149,7 +155,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
                     fontWeight: FontWeight.w600, // Changed to semibold
-                    color: Colors.grey[600],
+                    color: wcagColor(
+                      context,
+                      standard: Colors.grey[600]!,
+                      wcag: tokens.textMuted,
+                    ),
                   ),
                 ),
                 Text(
@@ -157,7 +167,11 @@ class _ProfilePageState extends State<ProfilePage> {
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
                     fontWeight: FontWeight.w600, // Changed to semibold
-                    color: Colors.grey[600],
+                    color: wcagColor(
+                      context,
+                      standard: Colors.grey[600]!,
+                      wcag: tokens.textMuted,
+                    ),
                   ),
                 ),
               ],
