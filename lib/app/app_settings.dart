@@ -27,7 +27,7 @@ class AppSettings extends ChangeNotifier {
     final countryCode = prefs.getString(_localeCountryCodeKey);
 
     if (languageCode != null && languageCode.isNotEmpty) {
-      _locale = Locale(languageCode, (countryCode?.isEmpty ?? true) ? null : countryCode);
+      _locale = Locale(languageCode, countryCode != null && countryCode.isNotEmpty ? countryCode : null);
       notifyListeners();
     }
   }

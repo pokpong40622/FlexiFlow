@@ -207,6 +207,7 @@ class _MissionPageState extends State<MissionPage> {
 
     // Update status if claimed
     for (var m in missions) {
+      // TODO: Remove legacy title fallback once all persisted claimed mission titles are migrated to IDs.
       if (Globals.claimedMissions.contains(m.id) || Globals.claimedMissions.contains(m.title)) {
         m.status = MissionStatus.claimed;
       }
@@ -293,6 +294,7 @@ class _MissionPageState extends State<MissionPage> {
     int requiredLevel = 0,
   }) {
     // Override status if already claimed locally
+    // TODO: Remove legacy title fallback once all persisted claimed mission titles are migrated to IDs.
     if (Globals.claimedMissions.contains(missionId) || Globals.claimedMissions.contains(title)) {
       status = MissionStatus.claimed;
     }
