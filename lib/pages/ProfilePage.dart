@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
 
 import '../fake_var.dart';
 
@@ -182,6 +183,10 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: screenHeight * 0.013,
           ),
+          _buildTextScaleSlider(context),
+          SizedBox(
+            height: screenHeight * 0.013,
+          ),
           // Sign Out option - now with consistent styling
           Padding(
             padding: EdgeInsets.symmetric(
@@ -284,11 +289,79 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
         ),
         subtitle: Text(
-          'Higher contrast, larger text and touch targets',
+          'Higher contrast and larger touch targets',
           style: GoogleFonts.inter(
             fontSize: screenWidth * 0.03,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextScaleSlider(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final textScaleFactor = Globals.textScaleFactor;
+    final textScalePercent = (textScaleFactor * 100).round();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenHeight * 0.012,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Text size',
+                    style: GoogleFonts.inter(
+                      fontSize: screenWidth * 0.040,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  '$textScalePercent%',
+                  style: GoogleFonts.inter(
+                    fontSize: screenWidth * 0.036,
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              'Adjust text scale from 100% to 250%',
+              style: GoogleFonts.inter(
+                fontSize: screenWidth * 0.03,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            Slider(
+              value: textScaleFactor,
+              min: AppTokens.userTextScaleMin,
+              max: AppTokens.userTextScaleMax,
+              divisions: 30,
+              label: '$textScalePercent%',
+              onChanged: (value) {
+                Globals.setTextScale(value, persist: false);
+                setState(() {});
+              },
+              onChangeEnd: (value) {
+                Globals.setTextScale(value);
+              },
+            ),
+          ],
         ),
       ),
     );

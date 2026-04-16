@@ -597,7 +597,9 @@ class _StatsPageState extends State<StatsPage> {
                     children: [
                       Container(
                         width: screenWidth * 0.93240, // 1007/1125 = 0.895
-                        height: screenHeight * 0.184166, // 442/2100 = 0.210
+                        constraints: BoxConstraints(
+                          minHeight: screenHeight * 0.184166, // 442/2100 = 0.210
+                        ),
                         padding: EdgeInsets.all(screenWidth * 0.04),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -616,8 +618,10 @@ class _StatsPageState extends State<StatsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start  ,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: screenWidth * 0.02,
+                              runSpacing: screenHeight * 0.006,
                               children: [
                                 Text(
                                   'Time Spent',
@@ -627,19 +631,16 @@ class _StatsPageState extends State<StatsPage> {
                                     color: Colors.black,
                                   ),
                                 ),
-                                SizedBox(width: screenWidth * 0.038),
                                 _buildTimeFilter(
                                   'today',
                                   _selectedTimeFilter == 'today',
                                   screenWidth,
                                 ),
-                                SizedBox(width: screenWidth * 0.02),
                                 _buildTimeFilter(
                                   'week',
                                   _selectedTimeFilter == 'week',
                                   screenWidth,
                                 ),
-                                SizedBox(width: screenWidth * 0.02),
                                 _buildTimeFilter(
                                   'month',
                                   _selectedTimeFilter == 'month',
@@ -665,61 +666,83 @@ class _StatsPageState extends State<StatsPage> {
                                 ],
                               )
                             else
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.end,
+                                spacing: screenWidth * 0.03,
+                                runSpacing: screenHeight * 0.006,
                                 children: [
-                                  if (shownHour != 0) ...[
-                                    Text(
-                                      '$shownHour',
-                                      style: GoogleFonts.inter(
-                                        fontSize: screenWidth * 0.118,
-                                        fontWeight: FontWeight.w800,
-                                        color: Color(0xFF0397FD),
+                                  if (shownHour != 0)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.alphabetic,
+                                      children: [
+                                        Text(
+                                          '$shownHour',
+                                          style: GoogleFonts.inter(
+                                            fontSize: screenWidth * 0.118,
+                                            fontWeight: FontWeight.w800,
+                                            color: Color(0xFF0397FD),
+                                          ),
+                                        ),
+                                        Text(
+                                          ' hour',
+                                          style: GoogleFonts.inter(
+                                            fontSize: screenWidth * 0.06,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Text(
+                                        shownMinute.toString(),
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.118,
+                                          fontWeight: FontWeight.w800,
+                                          color: Color(0xFF0397FD),
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      ' hour ',
-                                      style: GoogleFonts.inter(
-                                        fontSize: screenWidth * 0.06,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
+                                      Text(
+                                        ' min',
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.06,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                  Text(
-                                    shownMinute.toString(),
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.118,
-                                      fontWeight: FontWeight.w800,
-                                      color: Color(0xFF0397FD),
-                                    ),
+                                    ],
                                   ),
-                                  Text(
-                                    ' min ',
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.06,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-
-
-                                  Text(
-                                    shownSecond.toString().padLeft(2, '0'),
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.118,
-                                      fontWeight: FontWeight.w800,
-                                      color: Color(0xFF0397FD),
-                                    ),
-                                  ),
-                                  Text(
-                                    ' sec',
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.06,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Text(
+                                        shownSecond.toString().padLeft(2, '0'),
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.118,
+                                          fontWeight: FontWeight.w800,
+                                          color: Color(0xFF0397FD),
+                                        ),
+                                      ),
+                                      Text(
+                                        ' sec',
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.06,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),

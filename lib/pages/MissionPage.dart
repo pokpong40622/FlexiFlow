@@ -25,70 +25,77 @@ class _MissionPageState extends State<MissionPage> {
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
-      body: Column(
-        children: [
-          Container(
-            width: screenWidth * 1,
-            height: screenHeight * 0.195,
-            color: const Color(0xFF0397FD),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: screenWidth * 0.066),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        SizedBox(height: screenHeight * 0.045),
-                        Text(
-                          'YOUR',
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w700,
-                            fontSize: screenWidth * 0.076,
-                            color: Colors.white,
-                            height: 1,
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Container(
+              width: screenWidth,
+              constraints: BoxConstraints(
+                minHeight: screenHeight * 0.195,
+              ),
+              padding: EdgeInsets.only(bottom: screenHeight * 0.012),
+              color: const Color(0xFF0397FD),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Row(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      SizedBox(width: screenWidth * 0.066),
+                      Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          SizedBox(height: screenHeight * 0.045),
+                          Text(
+                            'YOUR',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: screenWidth * 0.076,
+                              color: Colors.white,
+                              height: 1,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'MISSIONS',
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w700,
-                            fontSize: screenWidth * 0.076,
-                            color: Colors.white,
-                          ),
-                        )
-                      ],
-                    ),
-                    SizedBox(width: screenWidth * 0.108),
-                    Image.asset(
-                      'assets/goldmedal.png', // Ensure you have this asset
-                      width: screenWidth * 0.30,
-                    ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.0225),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildTab(context, 'Daily', 0),
-                    _buildTab(context, 'Weekly', 1),
-                    _buildTab(context, 'All', 2),
-                  ],
-                )
-              ],
+                          Text(
+                            'MISSIONS',
+                            style: GoogleFonts.inter(
+                              fontWeight: FontWeight.w700,
+                              fontSize: screenWidth * 0.076,
+                              color: Colors.white,
+                            ),
+                          )
+                        ],
+                      ),
+                      SizedBox(width: screenWidth * 0.108),
+                      Image.asset(
+                        'assets/goldmedal.png', // Ensure you have this asset
+                        width: screenWidth * 0.30,
+                      ),
+                    ],
+                  ),
+                  SizedBox(height: screenHeight * 0.0225),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildTab(context, 'Daily', 0),
+                      _buildTab(context, 'Weekly', 1),
+                      _buildTab(context, 'All', 2),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: screenHeight * 0.016),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: _getMissions(context),
+            SizedBox(height: screenHeight * 0.016),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: _getMissions(context),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

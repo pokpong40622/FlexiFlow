@@ -38,30 +38,36 @@ class MyApp extends StatelessWidget {
     return ValueListenableBuilder<bool>(
       valueListenable: Globals.wcagModeNotifier,
       builder: (context, wcagModeEnabled, _) {
-        return MaterialApp(
-          title: 'Motion Kit - AI Detection',
-          theme: AppTheme.build(wcagModeEnabled: wcagModeEnabled),
-          debugShowCheckedModeBanner: false,
-          builder: (context, child) {
-            final mediaQuery = MediaQuery.of(context);
-            final currentScale = mediaQuery.textScaler.scale(1.0);
-            // WCAG mode enforces a readable minimum scale while capping at a
-            // practical upper bound to preserve layout stability across screens.
+        return ValueListenableBuilder<double>(
+          valueListenable: Globals.textScaleNotifier,
+          builder: (context, textScaleFactor, __) {
             final targetScale = (wcagModeEnabled
-                ? currentScale.clamp(
-                    AppTokens.wcagTextScaleMin,
-                    AppTokens.wcagTextScaleMax,
-                  )
-                : currentScale)
+                    ? textScaleFactor.clamp(
+                        AppTokens.wcagTextScaleMin,
+                        AppTokens.userTextScaleMax,
+                      )
+                    : textScaleFactor.clamp(
+                        AppTokens.userTextScaleMin,
+                        AppTokens.userTextScaleMax,
+                      ))
                 .toDouble();
-            return MediaQuery(
-              data: mediaQuery.copyWith(
-                textScaler: TextScaler.linear(targetScale),
-              ),
-              child: child ?? const SizedBox.shrink(),
+
+            return MaterialApp(
+              title: 'Motion Kit - AI Detection',
+              theme: AppTheme.build(wcagModeEnabled: wcagModeEnabled),
+              debugShowCheckedModeBanner: false,
+              builder: (context, child) {
+                final mediaQuery = MediaQuery.of(context);
+                return MediaQuery(
+                  data: mediaQuery.copyWith(
+                    textScaler: TextScaler.linear(targetScale),
+                  ),
+                  child: child ?? const SizedBox.shrink(),
+                );
+              },
+              home: WidgetTree(),
             );
           },
-          home: WidgetTree(),
         );
       },
     );

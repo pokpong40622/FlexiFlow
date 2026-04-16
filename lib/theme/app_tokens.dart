@@ -25,10 +25,11 @@ class AppTokens {
     required this.navigationIconSize,
   });
 
+  // App-controlled text scaling range exposed in Profile settings.
+  static const double userTextScaleMin = 1.0;
+  static const double userTextScaleMax = 2.5;
   // Minimum readable baseline increase when WCAG mode is enabled.
   static const double wcagTextScaleMin = 1.1;
-  // Upper bound to preserve layout stability while still supporting larger text.
-  static const double wcagTextScaleMax = 1.6;
 
   static const AppTokens standard = AppTokens(
     scaffoldBackground: Color(0xFFFAFAFA),
@@ -52,7 +53,7 @@ class AppTokens {
     textSecondary: Color(0xFF1F1F1F),
     border: Color(0xFF4A4A4A),
     minTapTargetSize: 52,
-    bodyScale: 1.1,
+    bodyScale: 1.0,
     navigationIconSize: 32,
   );
 }
