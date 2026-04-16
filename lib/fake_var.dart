@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ExerciseType {
@@ -47,6 +48,18 @@ double expToLvl(int exp) {
 }
 
 class Globals {
+  static const String _wcagModeEnabledKey = 'wcagModeEnabled';
+  static final ValueNotifier<bool> wcagModeNotifier = ValueNotifier<bool>(false);
+
+  static bool get wcagModeEnabled => wcagModeNotifier.value;
+
+  static Future<void> setWcagMode(bool enabled) async {
+    if (wcagModeNotifier.value == enabled) return;
+    wcagModeNotifier.value = enabled;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_wcagModeEnabledKey, enabled);
+  }
+
   // Seconds spent on each
   static int get timeSpentTD {
     final now = DateTime.now();
@@ -221,6 +234,7 @@ class Globals {
 
   static Future<void> save() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_wcagModeEnabledKey, wcagModeEnabled);
     await prefs.setInt('totalStepsTD', totalStepsTD);
     await prefs.setBool('unlockedSumItUp', unlockedSumItUp);
     await prefs.setBool('isThaiIdVerified', isThaiIdVerified);
@@ -239,6 +253,7 @@ class Globals {
 
   static Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
+    wcagModeNotifier.value = prefs.getBool(_wcagModeEnabledKey) ?? false;
     totalStepsTD = prefs.getInt('totalStepsTD') ?? 0;
     unlockedSumItUp = prefs.getBool('unlockedSumItUp') ?? false;
     isThaiIdVerified = prefs.getBool('isThaiIdVerified') ?? false;
@@ -276,6 +291,7 @@ class Globals {
     await prefs.clear();
     
     // Reset to default values
+    wcagModeNotifier.value = false;
     totalStepsTD = 3246;
     isThaiIdVerified = false;
     unlockedSumItUp = false;
