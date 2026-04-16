@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:motion_kit/fake_var.dart';
 
 import 'ScorePage.dart';
@@ -16,11 +17,55 @@ class MissionPage extends StatefulWidget {
   State<MissionPage> createState() => _MissionPageState();
 }
 
+
 class _MissionPageState extends State<MissionPage> {
   int selectedButtonIndex = 0;
 
+  // Legacy mapping for backward compatibility with pre-localization persisted
+  // claimed mission titles. TODO(v2.0): remove after the migration window closes.
+  static const Map<String, String> _legacyMissionTitleToId = {
+    'First exercise of the day': 'mission_first_exercise',
+    'Complete 3 exercises': 'mission_complete_3',
+    'Walk 5,000 steps': 'mission_walk_5000',
+    'Play Perfect Match for 10 minutes': 'mission_play_perfect_match_10',
+    'Complete 10 exercises': 'mission_complete_10',
+    'Reach 200 Brain Score': 'mission_reach_200_brain_score',
+    'Exercise 5 days in a row': 'mission_exercise_5_days',
+    'Exercise 20 days in a row': 'mission_exercise_20_days',
+    'Reach Level 25': 'mission_reach_level_25',
+    'Complete 20 exercises': 'mission_complete_20',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _migrateLegacyClaimedMissions();
+  }
+
+  Future<void> _migrateLegacyClaimedMissions() async {
+    bool changed = false;
+    final updated = <String>{...Globals.claimedMissions};
+    for (final entry in _legacyMissionTitleToId.entries) {
+      if (updated.remove(entry.key)) {
+        updated.add(entry.value);
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      Globals.claimedMissions = updated;
+      await Globals.save();
+      if (mounted) setState(() {});
+    }
+  }
+
+  bool _isMissionClaimed(String id, String title) {
+    return Globals.claimedMissions.contains(id) || Globals.claimedMissions.contains(title);
+  }
+
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Scaffold(
@@ -43,7 +88,7 @@ class _MissionPageState extends State<MissionPage> {
                       children: [
                         SizedBox(height: screenHeight * 0.045),
                         Text(
-                          'YOUR',
+                          l10n.your,
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.076,
@@ -52,7 +97,7 @@ class _MissionPageState extends State<MissionPage> {
                           ),
                         ),
                         Text(
-                          'MISSIONS',
+                          l10n.missions,
                           style: GoogleFonts.inter(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.076,
@@ -73,9 +118,9 @@ class _MissionPageState extends State<MissionPage> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    _buildTab(context, 'Daily', 0),
-                    _buildTab(context, 'Weekly', 1),
-                    _buildTab(context, 'All', 2),
+                    _buildTab(context, l10n.daily, 0),
+                    _buildTab(context, l10n.weekly, 1),
+                    _buildTab(context, l10n.all, 2),
                   ],
                 )
               ],
@@ -94,17 +139,20 @@ class _MissionPageState extends State<MissionPage> {
   }
 
   List<Widget> _getMissions(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     List<MissionData> missions;
 
     final daily = [
       MissionData(
-        title: 'First exercise of the day',
+        id: 'mission_first_exercise',
+        title: l10n.missionFirstExercise,
         coins: 50,
         xp: 100,
         status: MissionStatus.claimable,
       ),
       MissionData(
-        title: 'Complete 3 exercises',
+        id: 'mission_complete_3',
+        title: l10n.missionComplete3,
         coins: 80,
         xp: 150,
         status: Globals.totalExercisesCompletedTD >= 3
@@ -114,7 +162,8 @@ class _MissionPageState extends State<MissionPage> {
         totalProgress: 3,
       ),
       MissionData(
-        title: 'Walk 5,000 steps',
+        id: 'mission_walk_5000',
+        title: l10n.missionWalk5000,
         coins: 80,
         xp: 150,
 
@@ -125,7 +174,8 @@ class _MissionPageState extends State<MissionPage> {
         totalProgress: 5000,
       ),
       MissionData(
-        title: 'Play Perfect Match for 10 minutes',
+        id: 'mission_play_perfect_match_10',
+        title: l10n.missionPlayPerfectMatch10,
         coins: 30,
         xp: 80,
         status: MissionStatus.locked,
@@ -135,7 +185,8 @@ class _MissionPageState extends State<MissionPage> {
 
     final weekly = [
       MissionData(
-        title: 'Complete 10 exercises',
+        id: 'mission_complete_10',
+        title: l10n.missionComplete10,
         coins: 80,
         xp: 150,
         status: Globals.totalExercisesCompletedWK >= 10
@@ -145,14 +196,16 @@ class _MissionPageState extends State<MissionPage> {
         totalProgress: 10,
       ),
       MissionData(
-        title: 'Reach 200 Brain Score',
+        id: 'mission_reach_200_brain_score',
+        title: l10n.missionReach200BrainScore,
         coins: 150,
         xp: 300,
         status: MissionStatus.locked,
         requiredLevel: 20,
       ),
       MissionData(
-        title: 'Exercise 5 days in a row',
+        id: 'mission_exercise_5_days',
+        title: l10n.missionExercise5Days,
         coins: 200,
         xp: 250,
         status: MissionStatus.claimed,
@@ -161,7 +214,8 @@ class _MissionPageState extends State<MissionPage> {
 
     final all = [
       MissionData(
-        title: 'Exercise 20 days in a row',
+        id: 'mission_exercise_20_days',
+        title: l10n.missionExercise20Days,
         coins: 500,
         xp: 500,
         status: MissionStatus.inProgress,
@@ -169,7 +223,8 @@ class _MissionPageState extends State<MissionPage> {
         totalProgress: 20,
       ),
       MissionData(
-        title: 'Reach Level 25',
+        id: 'mission_reach_level_25',
+        title: l10n.missionReachLevel25,
         coins: 900,
         xp: 100,
         status: MissionStatus.inProgress,
@@ -177,7 +232,8 @@ class _MissionPageState extends State<MissionPage> {
         totalProgress: 25,
       ),
       MissionData(
-        title: 'Complete 20 exercises',
+        id: 'mission_complete_20',
+        title: l10n.missionComplete20,
         coins: 300,
         xp: 300,
         status: MissionStatus.claimed,
@@ -194,7 +250,7 @@ class _MissionPageState extends State<MissionPage> {
 
     // Update status if claimed
     for (var m in missions) {
-      if (Globals.claimedMissions.contains(m.title)) {
+      if (_isMissionClaimed(m.id, m.title)) {
         m.status = MissionStatus.claimed;
       }
     }
@@ -206,6 +262,7 @@ class _MissionPageState extends State<MissionPage> {
     return missions
         .map((m) => _buildMissionItem(
               context,
+              missionId: m.id,
               title: m.title,
               coins: m.coins,
               xp: m.xp,
@@ -269,6 +326,7 @@ class _MissionPageState extends State<MissionPage> {
 
   Widget _buildMissionItem(
     BuildContext context, {
+    required String missionId,
     required String title,
     required int coins,
     required int xp,
@@ -278,7 +336,7 @@ class _MissionPageState extends State<MissionPage> {
     int requiredLevel = 0,
   }) {
     // Override status if already claimed locally
-    if (Globals.claimedMissions.contains(title)) {
+    if (_isMissionClaimed(missionId, title)) {
       status = MissionStatus.claimed;
     }
 
@@ -332,7 +390,7 @@ class _MissionPageState extends State<MissionPage> {
                 setState(() {
                   Globals.coins += coins;
                   Globals.exp += xp;
-                  Globals.claimedMissions.add(title);
+                  Globals.claimedMissions.add(missionId);
                   Globals.save();
                 });
               } else if (status == MissionStatus.inProgress &&
@@ -446,7 +504,7 @@ class _MissionPageState extends State<MissionPage> {
                                     ),
                                   ),
                                   Text(
-                                    'Lvl $requiredLevel',
+                                    AppLocalizations.of(context)!.lvlShort(requiredLevel),
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w600,
                                       fontSize: screenWidth * 0.032,
@@ -537,7 +595,7 @@ class _MissionPageState extends State<MissionPage> {
               Icon(Icons.check, color: accentColor, size: screenWidth * 0.04),
               SizedBox(width: screenWidth * 0.01),
               Text(
-                'Done',
+                AppLocalizations.of(context)!.done,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w600,
                   fontSize: screenWidth * 0.03,
@@ -568,7 +626,7 @@ class _MissionPageState extends State<MissionPage> {
             ],
           ),
           child: Text(
-            'Claim',
+            AppLocalizations.of(context)!.claim,
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w700,
               fontSize: screenWidth * 0.033,
@@ -601,6 +659,7 @@ class _MissionPageState extends State<MissionPage> {
 enum MissionStatus { claimed, claimable, inProgress, locked }
 
 class MissionData {
+  final String id;
   final String title;
   final int coins;
   final int xp;
@@ -610,6 +669,7 @@ class MissionData {
   final int requiredLevel;
 
   MissionData({
+    required this.id,
     required this.title,
     required this.coins,
     required this.xp,

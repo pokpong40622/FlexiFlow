@@ -8,6 +8,7 @@ import 'GetStarted.dart';
 import 'ShopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -40,6 +41,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -114,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Home',
+                        l10n.home,
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.065,
                           fontWeight: FontWeight.w800,
@@ -194,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       Text(
-                        'Services',
+                        l10n.services,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -218,7 +220,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                           icon: Icons.travel_explore,
-                          label: "Discover Posture",
+                          label: l10n.discoverPosture,
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
@@ -231,7 +233,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                           icon: Icons.leaderboard,
-                          label: "Leaderboard",
+                          label: l10n.leaderboard,
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
@@ -246,7 +248,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                           icon: Icons.support_agent,
-                          label: "Chatbot",
+                          label: l10n.chatbot,
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
@@ -261,7 +263,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                             icon: Icons.shopping_cart_outlined,
-                            label: "Shop",
+                            label: l10n.shop,
                             ColorCode: Color(0xFF0397FD)),
                       ),
                     ],
@@ -270,7 +272,7 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       Text(
-                        'Others',
+                        l10n.others,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -337,6 +339,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _FeedbackSummary() {
+    final l10n = AppLocalizations.of(context)!;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     return Container(
@@ -459,7 +462,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: Text(
-              'Feedback Summary',
+              l10n.feedbackSummary,
               style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 13,
@@ -474,6 +477,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _StreakWidget() {
+    final l10n = AppLocalizations.of(context)!;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -585,7 +589,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: Text(
-              'Streak',
+              l10n.streak,
               style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 13,

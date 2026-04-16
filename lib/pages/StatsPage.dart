@@ -3,8 +3,10 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:async';
 import 'dart:math';
+import 'package:intl/intl.dart';
 
 import '../fake_var.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class StatsPage extends StatefulWidget {
   StatsPage({super.key});
@@ -69,45 +71,23 @@ class _StatsPageState extends State<StatsPage> {
     super.dispose();
   }
 
-  String _formatDate(DateTime dateTime) {
-    List<String> weekdays = [
-      'Monday',
-      'Tuesday',
-      'Wednesday',
-      'Thursday',
-      'Friday',
-      'Saturday',
-      'Sunday',
-    ];
-    List<String> months = [
-      'January',
-      'February',
-      'March',
-      'April',
-      'May',
-      'June',
-      'July',
-      'August',
-      'September',
-      'October',
-      'November',
-      'December',
-    ];
-
-    String weekday = weekdays[dateTime.weekday - 1];
-    String month = months[dateTime.month - 1];
-
-    return '$weekday, ${dateTime.day} $month';
+  String _localeName(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final hasCountry = locale.countryCode != null && locale.countryCode!.isNotEmpty;
+    return hasCountry ? '${locale.languageCode}_${locale.countryCode}' : locale.languageCode;
   }
 
-  String _formatTime(DateTime dateTime) {
-    String hour = dateTime.hour.toString().padLeft(2, '0');
-    String minute = dateTime.minute.toString().padLeft(2, '0');
-    return '${dateTime.year}  $hour:$minute';
+  String _formatDate(BuildContext context, DateTime dateTime) {
+    return DateFormat('EEEE, d MMMM', _localeName(context)).format(dateTime);
+  }
+
+  String _formatTime(BuildContext context, DateTime dateTime) {
+    return DateFormat('yyyy  HH:mm', _localeName(context)).format(dateTime);
   }
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     // Screen dimensions for responsive design
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
@@ -165,7 +145,7 @@ class _StatsPageState extends State<StatsPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Stats',
+                        l10n.stats,
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.065,
                           fontWeight: FontWeight.w800,
@@ -192,7 +172,7 @@ class _StatsPageState extends State<StatsPage> {
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       Text(
-                        _formatDate(_currentDateTime),
+                        _formatDate(context, _currentDateTime),
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.w600,
@@ -200,7 +180,7 @@ class _StatsPageState extends State<StatsPage> {
                         ),
                       ),
                       Text(
-                        _formatTime(_currentDateTime),
+                        _formatTime(context, _currentDateTime),
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.w600,
@@ -229,7 +209,7 @@ class _StatsPageState extends State<StatsPage> {
                     Padding(
                       padding: EdgeInsets.only(bottom: screenHeight * 0.0140),
                       child: Text(
-                        'AI Suggestion',
+                        l10n.aiSuggestion,
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.048,
                           fontWeight: FontWeight.w700,
@@ -378,7 +358,7 @@ class _StatsPageState extends State<StatsPage> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Recent',
+                                l10n.recent,
                                 style: GoogleFonts.inter(
                                   fontSize: screenWidth * 0.048,
                                   fontWeight: FontWeight.w700,
@@ -419,7 +399,7 @@ class _StatsPageState extends State<StatsPage> {
                                         SizedBox(
                                             height: screenHeight * 0.01),
                                         Text(
-                                          'Nothing to\nshow',
+                                          l10n.nothingToShow,
                                           textAlign: TextAlign.center,
                                           style: GoogleFonts.inter(
                                             color: Colors.grey[400],
@@ -471,7 +451,7 @@ class _StatsPageState extends State<StatsPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Brain score',
+                                      l10n.brainScore,
                                       style: GoogleFonts.inter(
                                         fontSize: screenWidth * 0.048,
                                         fontWeight: FontWeight.w700,
@@ -502,7 +482,7 @@ class _StatsPageState extends State<StatsPage> {
                                                 ),
                                               ),
                                               Text(
-                                                ' pts',
+                                                ' ${l10n.pts}',
                                                 style: GoogleFonts.inter(
                                                   fontSize: screenWidth * 0.03,
                                                   color: Colors.grey[600],
@@ -541,7 +521,7 @@ class _StatsPageState extends State<StatsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Steps',
+                                  l10n.steps,
                                   style: GoogleFonts.inter(
                                     fontSize: screenWidth * 0.048,
                                     fontWeight: FontWeight.w700,
@@ -570,7 +550,7 @@ class _StatsPageState extends State<StatsPage> {
                                                 ),
                                               ),
                                               Text(
-                                                ' steps',
+                                                ' ${l10n.stepsUnit}',
                                                 style: GoogleFonts.inter(
                                                   fontSize: screenWidth * 0.035,
                                                   color: Colors.grey[600],

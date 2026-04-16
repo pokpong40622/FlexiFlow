@@ -1,11 +1,13 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
 import '../pages/HomePage.dart';
 import '../pages/MissionPage.dart';
 import '../pages/StatsPage.dart';
 import '../pages/TrainingPage.dart';
-import 'package:flutter/material.dart';
 
 class NavigationBarSet extends StatefulWidget {
-  NavigationBarSet({super.key,});
+  const NavigationBarSet({super.key});
 
   @override
   State<NavigationBarSet> createState() => _HomepageState();
@@ -14,57 +16,38 @@ class NavigationBarSet extends StatefulWidget {
 class _HomepageState extends State<NavigationBarSet> {
   int myIndex = 0;
 
-  final List<String> _pageNames = [
-    'Home',
-    'Mission',
-    'Stats',
-    'Training'
-  ];
-
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
 
-  final List<Widget> _pages = [
-    HomePage(),
-    MissionPage(onNavigateToTraining: () {
-      setState(() {
-        myIndex = 3;
-      });
-    }),
-    StatsPage(),
-    TrainingPage()
-  ];
+    final pageNames = [
+      l10n.home,
+      l10n.mission,
+      l10n.stats,
+      l10n.training,
+    ];
+
+    final pages = [
+      const HomePage(),
+      MissionPage(onNavigateToTraining: () {
+        setState(() => myIndex = 3);
+      }),
+      StatsPage(),
+      const TrainingPage(),
+    ];
 
     return Scaffold(
-      body: _pages[myIndex],
+      body: pages[myIndex],
       bottomNavigationBar: Container(
         height: 82,
-        decoration: BoxDecoration(
-          color: Color(0xFFFFFFFF),
-        ),
+        color: const Color(0xFFFFFFFF),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceAround,
           children: [
-            _buildNavItem(
-              index: 0,
-              icon: Icons.home,
-              label: _pageNames[0],
-            ),
-            _buildNavItem(
-              index: 1,
-              icon: Icons.emoji_events,
-              label: _pageNames[1], 
-            ),
-            _buildNavItem(
-              index: 2,
-              icon: Icons.bar_chart,
-              label: _pageNames[2],
-            ),
-            _buildNavItem(
-              index: 3,
-              icon: Icons.play_circle,
-              label: _pageNames[3],
-            ),
+            _buildNavItem(index: 0, icon: Icons.home, label: pageNames[0]),
+            _buildNavItem(index: 1, icon: Icons.emoji_events, label: pageNames[1]),
+            _buildNavItem(index: 2, icon: Icons.bar_chart, label: pageNames[2]),
+            _buildNavItem(index: 3, icon: Icons.play_circle, label: pageNames[3]),
           ],
         ),
       ),
@@ -78,32 +61,24 @@ class _HomepageState extends State<NavigationBarSet> {
   }) {
     final isSelected = myIndex == index;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          myIndex = index;
-        });
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 33,
-            color: isSelected ? Color(0xFF0397FD) : Color(0xFFD9D9D9),
+    return Semantics(
+      selected: isSelected,
+      button: true,
+      label: label,
+      child: InkResponse(
+        onTap: () => setState(() => myIndex = index),
+        radius: 28,
+        child: SizedBox(
+          width: 56,
+          height: 56,
+          child: Center(
+            child: Icon(
+              icon,
+              size: 33,
+              color: isSelected ? const Color(0xFF0397FD) : const Color(0xFF9CA3AF),
+            ),
           ),
-          SizedBox(height: 2),
-          
-          // if (isSelected)
-          //   Text(
-          //     label,
-          //     style: GoogleFonts.inter(
-          //       fontSize: 10,
-          //       fontWeight: FontWeight.bold, 
-          //       color: Color(0xFF0397FD),
-          //     ),
-          //   ),
-        ],
+        ),
       ),
     );
   }

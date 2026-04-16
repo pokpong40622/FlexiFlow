@@ -1,6 +1,7 @@
-import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/memberships/AuthPage.dart';
 import 'package:motion_kit/memberships/SignUpPage.dart';
 
@@ -13,18 +14,25 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   bool _obscureText = true;
-
   String? errorMessage = '';
 
   final TextEditingController _controllerEmail = TextEditingController();
   final TextEditingController _controllerPassword = TextEditingController();
 
+  @override
+  void dispose() {
+    _controllerEmail.dispose();
+    _controllerPassword.dispose();
+    super.dispose();
+  }
+
   Future<void> signInWithEmailAndPassword() async {
+    final l10n = AppLocalizations.of(context)!;
+
     try {
-      if (_controllerEmail.text.trim().isEmpty ||
-          _controllerPassword.text.trim().isEmpty) {
+      if (_controllerEmail.text.trim().isEmpty || _controllerPassword.text.trim().isEmpty) {
         setState(() {
-          errorMessage = 'Please enter both email and password';
+          errorMessage = l10n.pleaseEnterBothEmailAndPassword;
         });
         return;
       }
@@ -36,21 +44,21 @@ class _LoginPageState extends State<LoginPage> {
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-          errorMessage = 'Incorrect email or password';
+          errorMessage = l10n.incorrectEmailOrPassword;
         } else {
           errorMessage = e.message;
         }
       });
-    } catch (e) {
+    } catch (_) {
       setState(() {
-        errorMessage = 'An unexpected error occurred';
+        errorMessage = l10n.unexpectedError;
       });
     }
   }
 
   Widget _buildTextField({
     required TextEditingController controller,
-    required String hint,
+    required String label,
     required IconData icon,
     bool isPassword = false,
   }) {
@@ -71,7 +79,8 @@ class _LoginPageState extends State<LoginPage> {
         controller: controller,
         obscureText: isPassword ? _obscureText : false,
         decoration: InputDecoration(
-          hintText: hint,
+          labelText: label,
+          hintText: label,
           hintStyle: GoogleFonts.inter(
             color: Colors.grey[400],
             fontSize: 14,
@@ -80,9 +89,7 @@ class _LoginPageState extends State<LoginPage> {
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
-                    _obscureText
-                        ? Icons.visibility_off_outlined
-                        : Icons.visibility_outlined,
+                    _obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
                     color: Colors.grey[500],
                     size: 22,
                   ),
@@ -107,6 +114,7 @@ class _LoginPageState extends State<LoginPage> {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -140,14 +148,16 @@ class _LoginPageState extends State<LoginPage> {
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Image.asset(
-                    'assets/FlexiFlowLogoWhite.png',
-                    width: screenWidth * 0.25,
-                    fit: BoxFit.contain,
+                  ExcludeSemantics(
+                    child: Image.asset(
+                      'assets/FlexiFlowLogoWhite.png',
+                      width: screenWidth * 0.25,
+                      fit: BoxFit.contain,
+                    ),
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'FlexiFlow',
+                    l10n.appTitle,
                     style: GoogleFonts.inter(
                       fontSize: 32,
                       fontWeight: FontWeight.w800,
@@ -164,7 +174,7 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome Back',
+                    l10n.welcomeBack,
                     style: GoogleFonts.inter(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -173,7 +183,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Sign in to continue',
+                    l10n.signInToContinue,
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: Colors.grey[600],
@@ -181,31 +191,20 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   const SizedBox(height: 40),
-                  _buildTextField(
-                    controller: _controllerEmail,
-                    hint: 'Email',
-                    icon: Icons.email_outlined,
-                  ),
+                  _buildTextField(controller: _controllerEmail, label: l10n.email, icon: Icons.email_outlined),
                   const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _controllerPassword,
-                    hint: 'Password',
-                    icon: Icons.lock_outline,
-                    isPassword: true,
-                  ),
+                  _buildTextField(controller: _controllerPassword, label: l10n.password, icon: Icons.lock_outline, isPassword: true),
                   if (errorMessage != null && errorMessage!.isNotEmpty) ...[
                     const SizedBox(height: 16),
                     Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 8),
+                      padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.red.withOpacity(0.1),
                         borderRadius: BorderRadius.circular(8),
                       ),
                       child: Row(
                         children: [
-                          const Icon(Icons.error_outline,
-                              color: Colors.red, size: 20),
+                          const Icon(Icons.error_outline, color: Colors.red, size: 20),
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
@@ -236,7 +235,7 @@ class _LoginPageState extends State<LoginPage> {
                         shadowColor: const Color(0x4D1E88E5),
                       ),
                       child: Text(
-                        'Sign In',
+                        l10n.signIn,
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -250,24 +249,19 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account? ",
-                        style: GoogleFonts.inter(
-                            color: Colors.grey[600],
-                            fontSize: 14,
-                            fontWeight: FontWeight.w500),
+                        '${l10n.dontHaveAccount} ',
+                        style: GoogleFonts.inter(color: Colors.grey[600], fontSize: 14, fontWeight: FontWeight.w500),
                       ),
-                      GestureDetector(
+                      InkWell(
                         onTap: () {
                           Navigator.pushAndRemoveUntil(
                             context,
-                            MaterialPageRoute(
-                              builder: (context) => const SignupPage(),
-                            ),
+                            MaterialPageRoute(builder: (context) => const SignupPage()),
                             (route) => false,
                           );
                         },
                         child: Text(
-                          'Sign Up',
+                          l10n.signUp,
                           style: GoogleFonts.inter(
                             color: const Color(0xFF1E88E5),
                             fontWeight: FontWeight.w700,
