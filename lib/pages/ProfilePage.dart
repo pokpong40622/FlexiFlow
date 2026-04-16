@@ -21,10 +21,12 @@ class _ProfilePageState extends State<ProfilePage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
           SizedBox(height: screenHeight * 0.0265), // Top padding
           Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
@@ -32,14 +34,18 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Custom Back Button
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.arrow_back_ios_new, // Changed to match button style
-                    size: screenWidth * 0.065,
-                    color: Colors.black,
+                Semantics(
+                  button: true,
+                  label: 'Go back',
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_new,
+                      size: screenWidth * 0.065,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
                 Text(
@@ -172,6 +178,10 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: screenHeight * 0.013,
           ), // Added spacing between list tiles
+          _buildAccessibilityToggle(context),
+          SizedBox(
+            height: screenHeight * 0.013,
+          ),
           // Sign Out option - now with consistent styling
           Padding(
             padding: EdgeInsets.symmetric(
@@ -202,7 +212,9 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () => _showSignOutDialog(context),
             ),
           ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -239,6 +251,50 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
         onTap: onTap,
+      ),
+    );
+  }
+
+  Widget _buildAccessibilityToggle(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+      child: Semantics(
+        label: 'Use WCAG 2.2 accessible user interface',
+        hint: 'Turn on to use higher contrast, larger targets, and improved readability',
+        toggled: Globals.wcagModeEnabled,
+        child: SwitchListTile(
+          value: Globals.wcagModeEnabled,
+          onChanged: (value) async {
+            await Globals.setWcagMode(value);
+            if (!mounted) return;
+            setState(() {});
+          },
+          tileColor: const Color(0xFFFAFAFA),
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
+          contentPadding: EdgeInsets.symmetric(
+            horizontal: screenWidth * 0.04,
+            vertical: screenHeight * 0.012,
+          ),
+          title: Text(
+            'Use WCAG 2.2 accessible UI',
+            style: GoogleFonts.inter(
+              fontSize: screenWidth * 0.040,
+              fontWeight: FontWeight.w600,
+            ),
+          ),
+          subtitle: Text(
+            'Higher contrast, larger text and touch targets',
+            style: GoogleFonts.inter(
+              fontSize: screenWidth * 0.03,
+              color: Colors.grey[700],
+            ),
+          ),
+        ),
       ),
     );
   }

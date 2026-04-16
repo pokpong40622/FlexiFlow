@@ -80,14 +80,18 @@ class _HomePageState extends State<HomePage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Profile Picture with subtle styling
-                  GestureDetector(
-                  onTap: () {
-            Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ProfilePage()),
-            );
-            },
-              child: Container(
+                  Semantics(
+                    button: true,
+                    label: 'Open profile',
+                    child: InkWell(
+                      borderRadius: BorderRadius.circular(100),
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => const ProfilePage()),
+                        );
+                      },
+                      child: Container(
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       boxShadow: [
@@ -108,6 +112,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                     ),
                   ),
+                    ),
                   ),
                   // Title with improved styling
                   Column(
@@ -207,7 +212,8 @@ class _HomePageState extends State<HomePage> {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
-                      GestureDetector(
+                      _buildServiceAction(
+                        label: "Discover Posture",
                         onTap: () {
                           Navigator.push<void>(
                             context,
@@ -222,7 +228,8 @@ class _HomePageState extends State<HomePage> {
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
-                      GestureDetector(
+                      _buildServiceAction(
+                        label: "Leaderboard",
                         onTap: () {
                           Navigator.push(
                             context,
@@ -235,7 +242,8 @@ class _HomePageState extends State<HomePage> {
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
-                      GestureDetector(
+                      _buildServiceAction(
+                        label: "Chatbot",
                         onTap: () {
                           Navigator.push<void>(
                             context,
@@ -250,7 +258,8 @@ class _HomePageState extends State<HomePage> {
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
-                      GestureDetector(
+                      _buildServiceAction(
+                        label: "Shop",
                         onTap: () {
                           Navigator.push<void>(
                             context,
@@ -333,6 +342,25 @@ class _HomePageState extends State<HomePage> {
           ),
         ),
       ],
+    );
+  }
+
+  Widget _buildServiceAction({
+    required String label,
+    required Widget child,
+    required VoidCallback onTap,
+  }) {
+    return Semantics(
+      button: true,
+      label: 'Open $label',
+      child: InkWell(
+        onTap: onTap,
+        borderRadius: BorderRadius.circular(12),
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 56, minHeight: 56),
+          child: child,
+        ),
+      ),
     );
   }
 

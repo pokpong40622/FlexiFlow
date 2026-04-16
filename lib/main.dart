@@ -6,6 +6,7 @@ import 'package:motion_kit/figma/chatbot.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/GetStarted.dart';
 import 'package:motion_kit/services/step_service.dart';
+import 'package:motion_kit/theme/app_theme.dart';
 import 'package:motion_kit/views/pose_detection_screen.dart';
 import 'package:motion_kit/views/hand_detection_screen.dart';
 import 'package:motion_kit/views/hand_pose_detection_screen.dart';
@@ -33,16 +34,30 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Motion Kit - AI Detection',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      debugShowCheckedModeBanner: false,
-      // home: HomeScreen(),
-      home: WidgetTree(),
-      // home: const ChatBotPage(),
+    return ValueListenableBuilder<bool>(
+      valueListenable: Globals.wcagModeNotifier,
+      builder: (context, wcagModeEnabled, _) {
+        return MaterialApp(
+          title: 'Motion Kit - AI Detection',
+          theme: AppTheme.build(wcagModeEnabled: wcagModeEnabled),
+          debugShowCheckedModeBanner: false,
+          builder: (context, child) {
+            final mediaQuery = MediaQuery.of(context);
+            final currentScale = mediaQuery.textScaler.scale(1.0);
+            final targetScale = (wcagModeEnabled
+                ? currentScale.clamp(1.1, 1.6)
+                : currentScale)
+                .toDouble();
+            return MediaQuery(
+              data: mediaQuery.copyWith(
+                textScaler: TextScaler.linear(targetScale),
+              ),
+              child: child ?? const SizedBox.shrink(),
+            );
+          },
+          home: WidgetTree(),
+        );
+      },
     );
   }
 }

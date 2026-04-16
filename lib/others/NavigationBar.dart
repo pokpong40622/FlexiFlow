@@ -3,6 +3,7 @@ import '../pages/MissionPage.dart';
 import '../pages/StatsPage.dart';
 import '../pages/TrainingPage.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_kit/fake_var.dart';
 
 class NavigationBarSet extends StatefulWidget {
   NavigationBarSet({super.key,});
@@ -78,32 +79,42 @@ class _HomepageState extends State<NavigationBarSet> {
   }) {
     final isSelected = myIndex == index;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          myIndex = index;
-        });
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 33,
-            color: isSelected ? Color(0xFF0397FD) : Color(0xFFD9D9D9),
+    final showLabel = Globals.wcagModeEnabled || isSelected;
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: 'Go to $label tab',
+      child: InkResponse(
+        radius: 32,
+        onTap: () {
+          setState(() {
+            myIndex = index;
+          });
+        },
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minWidth: 56, minHeight: 52),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: 30,
+                color: isSelected ? const Color(0xFF0397FD) : const Color(0xFF737373),
+              ),
+              const SizedBox(height: 2),
+              if (showLabel)
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: Globals.wcagModeEnabled ? 12 : 10,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    color: isSelected ? const Color(0xFF0397FD) : const Color(0xFF424242),
+                  ),
+                ),
+            ],
           ),
-          SizedBox(height: 2),
-          
-          // if (isSelected)
-          //   Text(
-          //     label,
-          //     style: GoogleFonts.inter(
-          //       fontSize: 10,
-          //       fontWeight: FontWeight.bold, 
-          //       color: Color(0xFF0397FD),
-          //     ),
-          //   ),
-        ],
+        ),
       ),
     );
   }
