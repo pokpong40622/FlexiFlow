@@ -4,6 +4,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/app/app_settings.dart';
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/main.dart';
+import 'package:motion_kit/l10n/l10n.dart';
 import 'package:motion_kit/memberships/AuthPage.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
@@ -241,7 +242,7 @@ class _ProfilePageState extends State<ProfilePage> {
           for (final language in AppSettings.supportedLanguages)
             RadioListTile<Locale>(
               value: language.locale,
-              groupValue: settings.locale ?? const Locale('en'),
+              groupValue: settings.locale ?? L10n.defaultLocale,
               title: Text(labelForKey(language.labelKey)),
               onChanged: (value) async {
                 await settings.setLocale(value);

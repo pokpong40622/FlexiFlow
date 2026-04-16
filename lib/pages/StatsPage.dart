@@ -71,12 +71,18 @@ class _StatsPageState extends State<StatsPage> {
     super.dispose();
   }
 
+  String _localeName(BuildContext context) {
+    final locale = Localizations.localeOf(context);
+    final hasCountry = locale.countryCode != null && locale.countryCode!.isNotEmpty;
+    return hasCountry ? '${locale.languageCode}_${locale.countryCode}' : locale.languageCode;
+  }
+
   String _formatDate(BuildContext context, DateTime dateTime) {
-    return DateFormat('EEEE, d MMMM', Localizations.localeOf(context).toString()).format(dateTime);
+    return DateFormat('EEEE, d MMMM', _localeName(context)).format(dateTime);
   }
 
   String _formatTime(BuildContext context, DateTime dateTime) {
-    return DateFormat('yyyy  HH:mm', Localizations.localeOf(context).toString()).format(dateTime);
+    return DateFormat('yyyy  HH:mm', _localeName(context)).format(dateTime);
   }
 
   @override

@@ -50,13 +50,13 @@ class MyApp extends StatelessWidget {
             GlobalWidgetsLocalizations.delegate,
           ],
           localeResolutionCallback: (locale, supportedLocales) {
-            if (locale == null) return const Locale('en');
+            if (locale == null) return L10n.defaultLocale;
             for (final supported in supportedLocales) {
               if (supported.languageCode == locale.languageCode) {
                 return supported;
               }
             }
-            return const Locale('en');
+            return L10n.defaultLocale;
           },
           theme: ThemeData(
             colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0397FD)),
