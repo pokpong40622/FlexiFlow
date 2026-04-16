@@ -110,7 +110,7 @@ class _HomepageState extends State<NavigationBarSet> {
             children: [
               Icon(
                 icon,
-                size: 30,
+                size: tokens.navigationIconSize,
                 color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
               ),
               const SizedBox(height: 2),

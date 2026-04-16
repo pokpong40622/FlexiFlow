@@ -10,6 +10,7 @@ class AppTokens {
   final Color border;
   final double minTapTargetSize;
   final double bodyScale;
+  final double navigationIconSize;
 
   const AppTokens({
     required this.scaffoldBackground,
@@ -21,6 +22,7 @@ class AppTokens {
     required this.border,
     required this.minTapTargetSize,
     required this.bodyScale,
+    required this.navigationIconSize,
   });
 
   static const double wcagTextScaleMin = 1.1;
@@ -36,6 +38,7 @@ class AppTokens {
     border: Color(0xFFD9D9D9),
     minTapTargetSize: 48,
     bodyScale: 1.0,
+    navigationIconSize: 28,
   );
 
   static const AppTokens wcag = AppTokens(
@@ -48,5 +51,6 @@ class AppTokens {
     border: Color(0xFF4A4A4A),
     minTapTargetSize: 52,
     bodyScale: 1.1,
+    navigationIconSize: 32,
   );
 }
