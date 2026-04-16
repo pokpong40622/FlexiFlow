@@ -23,6 +23,9 @@ class AppTokens {
     required this.bodyScale,
   });
 
+  static const double wcagTextScaleMin = 1.1;
+  static const double wcagTextScaleMax = 1.6;
+
   static const AppTokens standard = AppTokens(
     scaffoldBackground: Color(0xFFFAFAFA),
     cardBackground: Colors.white,

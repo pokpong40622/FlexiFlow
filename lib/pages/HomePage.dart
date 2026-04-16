@@ -4,6 +4,7 @@ import 'package:motion_kit/figma/chatbot.dart';
 import 'package:motion_kit/pages/LeaderboardPage.dart';
 import 'package:motion_kit/pages/ProfilePage.dart';
 import 'package:shimmer/shimmer.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
 import 'GetStarted.dart';
 import 'ShopPage.dart';
 import 'package:flutter/material.dart';
@@ -350,6 +351,7 @@ class _HomePageState extends State<HomePage> {
     required Widget child,
     required VoidCallback onTap,
   }) {
+    final tokens = Globals.wcagModeEnabled ? AppTokens.wcag : AppTokens.standard;
     return Semantics(
       button: true,
       label: 'Open $label',
@@ -357,7 +359,10 @@ class _HomePageState extends State<HomePage> {
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 56, minHeight: 56),
+          constraints: BoxConstraints(
+            minWidth: tokens.minTapTargetSize,
+            minHeight: tokens.minTapTargetSize,
+          ),
           child: child,
         ),
       ),

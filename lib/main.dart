@@ -6,6 +6,7 @@ import 'package:motion_kit/figma/chatbot.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/GetStarted.dart';
 import 'package:motion_kit/services/step_service.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/app_theme.dart';
 import 'package:motion_kit/views/pose_detection_screen.dart';
 import 'package:motion_kit/views/hand_detection_screen.dart';
@@ -47,7 +48,10 @@ class MyApp extends StatelessWidget {
             // WCAG mode enforces a readable minimum scale while capping at a
             // practical upper bound to preserve layout stability across screens.
             final targetScale = (wcagModeEnabled
-                ? currentScale.clamp(1.1, 1.6)
+                ? currentScale.clamp(
+                    AppTokens.wcagTextScaleMin,
+                    AppTokens.wcagTextScaleMax,
+                  )
                 : currentScale)
                 .toDouble();
             return MediaQuery(

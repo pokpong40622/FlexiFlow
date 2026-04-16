@@ -4,6 +4,7 @@ import '../pages/StatsPage.dart';
 import '../pages/TrainingPage.dart';
 import 'package:flutter/material.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
 
 class NavigationBarSet extends StatefulWidget {
   NavigationBarSet({super.key,});
@@ -50,21 +51,25 @@ class _HomepageState extends State<NavigationBarSet> {
               index: 0,
               icon: Icons.home,
               label: _pageNames[0],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 1,
               icon: Icons.emoji_events,
-              label: _pageNames[1], 
+              label: _pageNames[1],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 2,
               icon: Icons.bar_chart,
               label: _pageNames[2],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 3,
               icon: Icons.play_circle,
               label: _pageNames[3],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
           ],
         ),
@@ -76,11 +81,13 @@ class _HomepageState extends State<NavigationBarSet> {
     required int index,
     required IconData icon,
     required String label,
+    required bool showPersistentLabel,
   }) {
     final isSelected = myIndex == index;
     final colorScheme = Theme.of(context).colorScheme;
 
-    final showLabel = Globals.wcagModeEnabled || isSelected;
+    final showLabel = showPersistentLabel || isSelected;
+    final tokens = Globals.wcagModeEnabled ? AppTokens.wcag : AppTokens.standard;
     return Semantics(
       button: true,
       selected: isSelected,
@@ -93,7 +100,10 @@ class _HomepageState extends State<NavigationBarSet> {
           });
         },
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 56, minHeight: 52),
+          constraints: BoxConstraints(
+            minWidth: tokens.minTapTargetSize,
+            minHeight: tokens.minTapTargetSize,
+          ),
           child: Column(
             mainAxisSize: MainAxisSize.min,
             mainAxisAlignment: MainAxisAlignment.center,

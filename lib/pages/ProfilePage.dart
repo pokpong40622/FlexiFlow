@@ -261,38 +261,33 @@ class _ProfilePageState extends State<ProfilePage> {
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
-      child: Semantics(
-        label: 'Use WCAG 2.2 accessible user interface',
-        hint: 'Turn on to use higher contrast, larger targets, and improved readability',
-        toggled: Globals.wcagModeEnabled,
-        child: SwitchListTile(
-          value: Globals.wcagModeEnabled,
-          onChanged: (value) async {
-            await Globals.setWcagMode(value);
-            if (!mounted) return;
-            setState(() {});
-          },
-          tileColor: Theme.of(context).colorScheme.surface,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
+      child: SwitchListTile(
+        value: Globals.wcagModeEnabled,
+        onChanged: (value) async {
+          await Globals.setWcagMode(value);
+          if (!mounted) return;
+          setState(() {});
+        },
+        tileColor: Theme.of(context).colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenHeight * 0.012,
+        ),
+        title: Text(
+          'Use WCAG 2.2 accessible UI',
+          style: GoogleFonts.inter(
+            fontSize: screenWidth * 0.040,
+            fontWeight: FontWeight.w600,
           ),
-          contentPadding: EdgeInsets.symmetric(
-            horizontal: screenWidth * 0.04,
-            vertical: screenHeight * 0.012,
-          ),
-          title: Text(
-            'Use WCAG 2.2 accessible UI',
-            style: GoogleFonts.inter(
-              fontSize: screenWidth * 0.040,
-              fontWeight: FontWeight.w600,
-            ),
-          ),
-          subtitle: Text(
-            'Higher contrast, larger text and touch targets',
-            style: GoogleFonts.inter(
-              fontSize: screenWidth * 0.03,
-              color: Theme.of(context).colorScheme.onSurfaceVariant,
-            ),
+        ),
+        subtitle: Text(
+          'Higher contrast, larger text and touch targets',
+          style: GoogleFonts.inter(
+            fontSize: screenWidth * 0.03,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
           ),
         ),
       ),
