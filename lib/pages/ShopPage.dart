@@ -44,6 +44,11 @@ class _ShopPageState extends State<ShopPage> {
       imagePath: 'assets/Newgamepic.png',
       items: [
         ShopItem(name: 'Unlock Wander', price: '250', imagePath: 'assets/WanderLogo.png'),
+        ShopItem(name: 'Sushiro Coupon 60B', price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
+        ShopItem(name: 'MK Restaurant 150B', price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
+        ShopItem(name: 'Momo Paradise 20% off', price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
+        ShopItem(name: 'Free major cinema ticket', price: ((220 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MAJOR.png'),
+        ShopItem(name: 'Free medium popcorn at SF', price: ((120 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/SFC.jpeg'),
       ],
     )];
 
@@ -69,11 +74,6 @@ class _ShopPageState extends State<ShopPage> {
           description: 'Exclusive deals for AIA Vitality members',
           imagePath: 'assets/card/aia_vita.png',
           items: [
-            ShopItem(name: 'Sushiro Coupon 60B', price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
-            ShopItem(name: 'MK Restaurant 150B', price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
-            ShopItem(name: 'Momo Paradise 20% off', price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
-            ShopItem(name: 'Free major cinema ticket', price: ((220 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MAJOR.png'),
-            ShopItem(name: 'Free medium popcorn at SF', price: ((120 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/SFC.jpeg'),
           ],
         ),
       ]);

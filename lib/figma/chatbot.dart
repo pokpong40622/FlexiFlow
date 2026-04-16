@@ -181,7 +181,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'FlexiFlow Assistant',
+                  'Lexi Assistant',
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
