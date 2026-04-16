@@ -25,7 +25,9 @@ class AppTokens {
     required this.navigationIconSize,
   });
 
+  // Minimum readable baseline increase when WCAG mode is enabled.
   static const double wcagTextScaleMin = 1.1;
+  // Upper bound to preserve layout stability while still supporting larger text.
   static const double wcagTextScaleMax = 1.6;
 
   static const AppTokens standard = AppTokens(
