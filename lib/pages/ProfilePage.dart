@@ -44,7 +44,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     icon: Icon(
                       Icons.arrow_back_ios_new,
                       size: screenWidth * 0.065,
-                      color: Colors.black,
+                      color: Theme.of(context).colorScheme.onSurface,
                     ),
                   ),
                 ),
@@ -272,7 +272,7 @@ class _ProfilePageState extends State<ProfilePage> {
             if (!mounted) return;
             setState(() {});
           },
-          tileColor: const Color(0xFFFAFAFA),
+          tileColor: Theme.of(context).colorScheme.surface,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
           ),
@@ -291,7 +291,7 @@ class _ProfilePageState extends State<ProfilePage> {
             'Higher contrast, larger text and touch targets',
             style: GoogleFonts.inter(
               fontSize: screenWidth * 0.03,
-              color: Colors.grey[700],
+              color: Theme.of(context).colorScheme.onSurfaceVariant,
             ),
           ),
         ),

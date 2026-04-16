@@ -44,6 +44,8 @@ class MyApp extends StatelessWidget {
           builder: (context, child) {
             final mediaQuery = MediaQuery.of(context);
             final currentScale = mediaQuery.textScaler.scale(1.0);
+            // WCAG mode enforces a readable minimum scale while capping at a
+            // practical upper bound to preserve layout stability across screens.
             final targetScale = (wcagModeEnabled
                 ? currentScale.clamp(1.1, 1.6)
                 : currentScale)

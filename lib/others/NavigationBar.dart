@@ -78,6 +78,7 @@ class _HomepageState extends State<NavigationBarSet> {
     required String label,
   }) {
     final isSelected = myIndex == index;
+    final colorScheme = Theme.of(context).colorScheme;
 
     final showLabel = Globals.wcagModeEnabled || isSelected;
     return Semantics(
@@ -100,7 +101,7 @@ class _HomepageState extends State<NavigationBarSet> {
               Icon(
                 icon,
                 size: 30,
-                color: isSelected ? const Color(0xFF0397FD) : const Color(0xFF737373),
+                color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
               ),
               const SizedBox(height: 2),
               if (showLabel)
@@ -109,7 +110,7 @@ class _HomepageState extends State<NavigationBarSet> {
                   style: TextStyle(
                     fontSize: Globals.wcagModeEnabled ? 12 : 10,
                     fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected ? const Color(0xFF0397FD) : const Color(0xFF424242),
+                    color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
                   ),
                 ),
             ],
