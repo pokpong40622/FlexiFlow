@@ -460,11 +460,20 @@ class _WanderPlayingState extends State<WanderPlaying>
 
   @override
   Widget build(BuildContext context) {
-    final screenHeight = MediaQuery.of(context).size.height;
-    final screenWidth = MediaQuery.of(context).size.width;
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final screenWidth = mediaQuery.size.width;
+    final gameplayTextScale = mediaQuery.textScaler
+        .scale(1.0)
+        .clamp(1.0, 1.15)
+        .toDouble();
+    final scopedMediaQuery =
+        mediaQuery.copyWith(textScaler: TextScaler.linear(gameplayTextScale));
 
     if (!_isGameStarted) {
-      return Scaffold(
+      return MediaQuery(
+        data: scopedMediaQuery,
+        child: Scaffold(
         backgroundColor: const Color(0xFFF8FBFA),
         body: SafeArea(
           child: Column(
@@ -555,10 +564,13 @@ class _WanderPlayingState extends State<WanderPlaying>
             ],
           ),
         ),
+        ),
       );
     }
 
-    return Scaffold(
+    return MediaQuery(
+      data: scopedMediaQuery,
+      child: Scaffold(
       backgroundColor: const Color(0xFFFFFFFF),
       body: Stack(
         children: [
@@ -724,37 +736,40 @@ class _WanderPlayingState extends State<WanderPlaying>
                                 ),
                                 color: Colors.white,
                               ),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    '$_secondsRemaining',
-                                    style: GoogleFonts.montserrat(
-                                      fontWeight: FontWeight.w800,
-                                      fontSize: screenWidth * 0.072,
-                                      color: _secondsRemaining <= 10
-                                          ? const Color(0xFFD32F2F)
-                                          : Colors.black,
-                                    ),
-                                  ),
-                                  SizedBox(width: screenWidth * 0.01),
-                                  Padding(
-                                    padding: EdgeInsets.only(top: screenHeight * 0.02),
-                                    child: Text(
-                                      'sec',
+                              child: FittedBox(
+                                fit: BoxFit.scaleDown,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    Text(
+                                      '$_secondsRemaining',
                                       style: GoogleFonts.montserrat(
                                         fontWeight: FontWeight.w800,
-                                        fontSize: screenWidth * 0.034,
-                                        color: Colors.black,
+                                        fontSize: screenWidth * 0.072,
+                                        color: _secondsRemaining <= 10
+                                            ? const Color(0xFFD32F2F)
+                                            : Colors.black,
                                       ),
                                     ),
-                                  ),
-                                  SizedBox(width: screenWidth * 0.02),
-                                  Icon(
-                                    _isPaused ? Icons.play_arrow : Icons.pause,
-                                    color: Colors.black54,
-                                  ),
-                                ],
+                                    SizedBox(width: screenWidth * 0.01),
+                                    Padding(
+                                      padding: EdgeInsets.only(top: screenHeight * 0.02),
+                                      child: Text(
+                                        'sec',
+                                        style: GoogleFonts.montserrat(
+                                          fontWeight: FontWeight.w800,
+                                          fontSize: screenWidth * 0.034,
+                                          color: Colors.black,
+                                        ),
+                                      ),
+                                    ),
+                                    SizedBox(width: screenWidth * 0.02),
+                                    Icon(
+                                      _isPaused ? Icons.play_arrow : Icons.pause,
+                                      color: Colors.black54,
+                                    ),
+                                  ],
+                                ),
                               ),
                             ),
                           ),
@@ -808,29 +823,38 @@ class _WanderPlayingState extends State<WanderPlaying>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Score',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w700,
-                      fontSize: screenWidth * 0.042,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Text(
-                    '$_score',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w800,
-                      fontSize: screenWidth * 0.11,
-                      color: const Color(0xFF0262A4),
-                      height: screenHeight * 0.00138,
-                    ),
-                  ),
-                  Text(
-                    'Pts',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w700,
-                      fontSize: screenWidth * 0.042,
-                      color: Colors.black,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Score',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth * 0.042,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          '$_score',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w800,
+                            fontSize: screenWidth * 0.11,
+                            color: const Color(0xFF0262A4),
+                            height: screenHeight * 0.00138,
+                          ),
+                        ),
+                        Text(
+                          'Pts',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth * 0.042,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -838,6 +862,7 @@ class _WanderPlayingState extends State<WanderPlaying>
             ),
           ),
         ],
+      ),
       ),
     );
   }

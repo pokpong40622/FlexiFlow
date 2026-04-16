@@ -353,10 +353,17 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final screenWidth = mediaQuery.size.width;
+    final gameplayTextScale = mediaQuery.textScaler
+        .scale(1.0)
+        .clamp(1.0, 1.15)
+        .toDouble();
 
-    return Scaffold(
+    return MediaQuery(
+      data: mediaQuery.copyWith(textScaler: TextScaler.linear(gameplayTextScale)),
+      child: Scaffold(
       backgroundColor: Color(0xFFFFFFFF),
       body: Stack(
         children: [
@@ -507,27 +514,30 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                           top: screenHeight * 0.096,
                           bottom: screenHeight * 0.0302,
                         ),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: [
-                            Text(
-                              'Name: ',
-                              style: GoogleFonts.montserrat(
-                                fontSize: screenWidth * 0.054,
-                                fontWeight: FontWeight.w800,
-                                color: Colors.white,
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Name: ',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: screenWidth * 0.054,
+                                  fontWeight: FontWeight.w800,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                            Text(
-                              '${predefinedPoses[currentPoseIndex].name}: ',
-                              style: GoogleFonts.montserrat(
-                                fontSize: screenWidth * 0.054,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
+                              Text(
+                                '${predefinedPoses[currentPoseIndex].name}: ',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: screenWidth * 0.054,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
                               ),
-                            ),
-                          ],
+                            ],
+                          ),
                         ),
                       ),
                       Row(
@@ -740,29 +750,38 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Score',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w700,
-                      fontSize: screenWidth * 0.042,
-                      color: Colors.black,
-                    ),
-                  ),
-                  Text(
-                    '$_score',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w800,
-                      fontSize: screenWidth * 0.11,
-                      color: Color(0xFF0262A4),
-                      height: screenHeight * 0.00138,
-                    ),
-                  ),
-                  Text(
-                    'Pts',
-                    style: GoogleFonts.montserrat(
-                      fontWeight: FontWeight.w700,
-                      fontSize: screenWidth * 0.042,
-                      color: Colors.black,
+                  FittedBox(
+                    fit: BoxFit.scaleDown,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Text(
+                          'Score',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth * 0.042,
+                            color: Colors.black,
+                          ),
+                        ),
+                        Text(
+                          '$_score',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w800,
+                            fontSize: screenWidth * 0.11,
+                            color: Color(0xFF0262A4),
+                            height: screenHeight * 0.00138,
+                          ),
+                        ),
+                        Text(
+                          'Pts',
+                          style: GoogleFonts.montserrat(
+                            fontWeight: FontWeight.w700,
+                            fontSize: screenWidth * 0.042,
+                            color: Colors.black,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
                 ],
@@ -770,6 +789,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -805,7 +825,6 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                         predefinedPoses[currentPoseIndex].leftGestureType &&
                     predefinedPoses[currentPoseIndex].isFlipped;
           }
-          final gesture = _gestureClassification.checkGesture(hand);
         } catch (e) {
           // Interpreter might not be ready
         }

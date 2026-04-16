@@ -18,6 +18,27 @@ import 'package:motion_kit/fake_var.dart';
 List<CameraDescription> cameras = [];
 
 Future<void> main() async {
+  // Intercept Flutter's error handling before the app runs
+  FlutterError.onError = (FlutterErrorDetails details) {
+    final exceptionString = details.exceptionAsString();
+
+    // 1. Catch the main RenderFlex error
+    if (exceptionString.contains('RenderFlex overflowed')) {
+      debugPrint('\n🚨 --- FULL RENDERFLEX OVERFLOW DETAILS --- 🚨');
+      // forceReport: true overrides Flutter's default behavior and forces
+      // the full widget tree and file location to print to the console.
+      FlutterError.dumpErrorToConsole(details, forceReport: true);
+    }
+    // 2. Silence the annoying "Another exception was thrown" spam completely
+    else if (exceptionString.contains('Another exception was thrown')) {
+      // Do nothing here. This swallows the repetitive spam.
+    }
+    // 3. Keep standard logging for other, non-layout errors (Recommended)
+    else {
+      FlutterError.presentError(details);
+    }
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
   await Globals.load(); // Load saved global variables
   await Firebase.initializeApp(

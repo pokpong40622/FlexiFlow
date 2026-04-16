@@ -97,6 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(height: screenHeight * 0.015),
           Text(
             'Pummiphach Paisanwatcharakij',
+            textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: screenWidth * 0.05,
               fontWeight: FontWeight.w600,
@@ -106,6 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(height: screenHeight * 0.005),
           Text(
             'pummiphach@gmail.com',
+            textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: screenWidth * 0.035,
               fontWeight: FontWeight.w600, // Changed to semibold

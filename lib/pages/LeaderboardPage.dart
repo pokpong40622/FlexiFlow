@@ -106,7 +106,15 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    final mediaQuery = MediaQuery.of(context);
+    final pageTextScale = mediaQuery.textScaler
+        .scale(1.0)
+        .clamp(1.0, 1.3)
+        .toDouble();
+
+    return MediaQuery(
+      data: mediaQuery.copyWith(textScaler: TextScaler.linear(pageTextScale)),
+      child: Scaffold(
       backgroundColor: backgroundLight,
       body: SafeArea(
         child: SingleChildScrollView(
@@ -141,6 +149,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             ],
           ),
         ),
+      ),
       ),
     );
   }
@@ -182,6 +191,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               child: Text(
                 'Weekly Rankings',
                 textAlign: TextAlign.center,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
                 style: GoogleFonts.splineSans(
                   fontSize: 24, // ~text-3xl
                   fontWeight: FontWeight.bold, // font-bold
@@ -307,31 +318,37 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   ),
                 ),
                 // Points
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  children: [
-                    RichText(
-                      text: TextSpan(
-                        text: '${NumberFormat('#,###').format(data['points'])} ',
-                        style: GoogleFonts.splineSans(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: 'pts',
+                Flexible(
+                  child: FittedBox(
+                    fit: BoxFit.scaleDown,
+                    alignment: Alignment.centerRight,
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        RichText(
+                          text: TextSpan(
+                            text: '${NumberFormat('#,###').format(data['points'])} ',
                             style: GoogleFonts.splineSans(
-                              fontSize: 14,
-                              fontWeight: FontWeight.w600,
-                              color: Colors.white.withValues(alpha: 0.8),
+                              fontSize: 20,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
                             ),
+                            children: [
+                              TextSpan(
+                                text: 'pts',
+                                style: GoogleFonts.splineSans(
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.white.withValues(alpha: 0.8),
+                                ),
+                              ),
+                            ],
                           ),
-                        ],
-                      ),
+                        ),
+                      ],
                     ),
-                  ],
+                  ),
                 ),
               ],
             ),
@@ -456,35 +473,41 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                         ),
                       ),
                       // Points & Icon
-                      Row(
-                        children: [
-                          RichText(
-                            text: TextSpan(
-                              text: '${NumberFormat('#,###').format(data['points'])} ',
-                              style: GoogleFonts.splineSans(
-                                fontSize: 18,
-                                fontWeight: FontWeight.bold,
-                                color: textMainColor,
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: 'pts',
+                      Flexible(
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          alignment: Alignment.centerRight,
+                          child: Row(
+                            children: [
+                              RichText(
+                                text: TextSpan(
+                                  text: '${NumberFormat('#,###').format(data['points'])} ',
                                   style: GoogleFonts.splineSans(
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                    color: mutedColor,
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                    color: textMainColor,
                                   ),
+                                  children: [
+                                    TextSpan(
+                                      text: 'pts',
+                                      style: GoogleFonts.splineSans(
+                                        fontSize: 14,
+                                        fontWeight: FontWeight.w600,
+                                        color: mutedColor,
+                                      ),
+                                    ),
+                                  ],
                                 ),
-                              ],
-                            ),
+                              ),
+                              const SizedBox(width: 8),
+                              Icon(
+                                isExpanded ? Icons.expand_less : Icons.expand_more,
+                                color: isExpanded ? primaryColor : mutedColor,
+                                size: 20,
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 8),
-                          Icon(
-                            isExpanded ? Icons.expand_less : Icons.expand_more,
-                            color: isExpanded ? primaryColor : mutedColor,
-                            size: 20,
-                          ),
-                        ],
+                        ),
                       ),
                     ],
                   ),
@@ -663,19 +686,23 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
               padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
               minimumSize: const Size(double.infinity, 56), // Full width
             ),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Icon(Icons.send, size: 20),
-                const SizedBox(width: 8),
-                Text(
-                  'Invite Friends',
-                  style: GoogleFonts.splineSans(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
+            child: FittedBox(
+              fit: BoxFit.scaleDown,
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Icon(Icons.send, size: 20),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Invite Friends',
+                    style: GoogleFonts.splineSans(
+                      fontSize: 18,
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         ],
