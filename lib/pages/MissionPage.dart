@@ -22,7 +22,7 @@ class _MissionPageState extends State<MissionPage> {
   int selectedButtonIndex = 0;
 
   // Legacy mapping for backward compatibility with pre-localization persisted
-  // claimed mission titles. Remove after migration window is complete.
+  // claimed mission titles. TODO(v2.0): remove after the migration window closes.
   static const Map<String, String> _legacyMissionTitleToId = {
     'First exercise of the day': 'mission_first_exercise',
     'Complete 3 exercises': 'mission_complete_3',
