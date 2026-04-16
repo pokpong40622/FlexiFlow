@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 import 'package:cloud_functions/cloud_functions.dart';
 import 'package:genkit/genkit.dart' hide Key;
 import 'package:genkit_google_genai/genkit_google_genai.dart';
@@ -208,16 +209,18 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
               borderRadius: BorderRadius.circular(12),
               border: Border.all(color: Colors.grey[200]!, width: 1),
             ),
-            child: IconButton(
-              icon: const Icon(
-                Icons.more_vert,
-                size: 20,
+            child: WcagTapTarget(
+              child: IconButton(
+                icon: const Icon(
+                  Icons.more_vert,
+                  size: 20,
+                ),
+                color: Colors.grey[700],
+                onPressed: () {
+                  _showOptionsMenu(context);
+                },
+                tooltip: 'More options',
               ),
-              color: Colors.grey[700],
-              onPressed: () {
-                _showOptionsMenu(context);
-              },
-              tooltip: 'More options',
             ),
           ),
         ],
@@ -633,16 +636,18 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                         width: 1,
                       ),
                     ),
-                    child: IconButton(
-                      onPressed: () {
-                        // Add attachment functionality
-                      },
-                      icon: Icon(
-                        Icons.attach_file,
-                        color: Colors.grey[600],
-                        size: 20,
+                    child: WcagTapTarget(
+                      child: IconButton(
+                        onPressed: () {
+                          // Add attachment functionality
+                        },
+                        icon: Icon(
+                          Icons.attach_file,
+                          color: Colors.grey[600],
+                          size: 20,
+                        ),
+                        tooltip: 'Attach file',
                       ),
-                      tooltip: 'Attach file',
                     ),
                   ),
                   const SizedBox(width: 12),
@@ -712,14 +717,16 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                               ]
                             : [],
                       ),
-                      child: IconButton(
-                        onPressed: _isTyping ? () => _sendMessage() : null,
-                        icon: Icon(
-                          Icons.send_rounded,
-                          color: _isTyping ? Colors.white : Colors.grey[500],
-                          size: 20,
+                      child: WcagTapTarget(
+                        child: IconButton(
+                          onPressed: _isTyping ? () => _sendMessage() : null,
+                          icon: Icon(
+                            Icons.send_rounded,
+                            color: _isTyping ? Colors.white : Colors.grey[500],
+                            size: 20,
+                          ),
+                          tooltip: 'Send message',
                         ),
-                        tooltip: 'Send message',
                       ),
                     ),
                   ),

@@ -4,6 +4,7 @@ import 'package:motion_kit/memberships/LoginPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -82,17 +83,33 @@ class _SignupPageState extends State<SignupPage> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.inter(
-            color: Colors.grey[400],
+            color: wcagColor(
+              context,
+              standard: Colors.grey[400]!,
+              wcag: tokensOf(context).textDisabled,
+            ),
             fontSize: 14,
           ),
-          prefixIcon: Icon(icon, color: Colors.grey[500], size: 22),
+          prefixIcon: Icon(
+            icon,
+            color: wcagColor(
+              context,
+              standard: Colors.grey[500]!,
+              wcag: tokensOf(context).textMuted,
+            ),
+            size: 22,
+          ),
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
                     _obscurePassword
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    color: Colors.grey[500],
+                    color: wcagColor(
+                      context,
+                      standard: Colors.grey[500]!,
+                      wcag: tokensOf(context).textMuted,
+                    ),
                     size: 22,
                   ),
                   onPressed: () {
@@ -274,7 +291,11 @@ class _SignupPageState extends State<SignupPage> {
                       Text(
                         'Already have an account? ',
                         style: GoogleFonts.inter(
-                            color: Colors.grey[600],
+                            color: wcagColor(
+                              context,
+                              standard: Colors.grey[600]!,
+                              wcag: tokensOf(context).textMuted,
+                            ),
                             fontSize: 14,
                             fontWeight: FontWeight.w500),
                       ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -31,5 +32,20 @@ void main() {
 
     expect(standardTheme.colorScheme.primary, isNot(equals(wcagTheme.colorScheme.primary)));
     expect(standardTheme.scaffoldBackgroundColor, isNot(equals(wcagTheme.scaffoldBackgroundColor)));
+  });
+
+  test('WCAG theme exposes semantic tokens and larger compact tap targets', () {
+    final standardTheme = AppTheme.build(wcagModeEnabled: false);
+    final wcagTheme = AppTheme.build(wcagModeEnabled: true);
+
+    final standardTokens = standardTheme.extension<AppTokens>();
+    final wcagTokens = wcagTheme.extension<AppTokens>();
+
+    expect(standardTokens, isNotNull);
+    expect(wcagTokens, isNotNull);
+    expect(wcagTokens!.compactTapTargetSize, greaterThan(standardTokens!.compactTapTargetSize));
+    expect(wcagTokens.compactTapTargetSize, greaterThanOrEqualTo(44));
+    expect(wcagTokens.textReward, isNot(equals(standardTokens.textReward)));
+    expect(wcagTokens.textMuted, isNot(equals(standardTokens.textMuted)));
   });
 }

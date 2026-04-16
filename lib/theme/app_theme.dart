@@ -54,6 +54,7 @@ class AppTheme {
       visualDensity: VisualDensity.adaptivePlatformDensity,
       splashFactory: InkRipple.splashFactory,
       textTheme: textTheme,
+      extensions: <ThemeExtension<dynamic>>[tokens],
     );
 
     return base.copyWith(
@@ -88,6 +89,13 @@ class AppTheme {
           textStyle: base.textTheme.labelLarge?.copyWith(
             fontWeight: FontWeight.w700,
           ),
+        ),
+      ),
+      iconButtonTheme: IconButtonThemeData(
+        style: IconButton.styleFrom(
+          minimumSize:
+              Size.square(tokens.compactTapTargetSize.clamp(24, 60).toDouble()),
+          foregroundColor: tokens.textPrimary,
         ),
       ),
       inputDecorationTheme: InputDecorationTheme(

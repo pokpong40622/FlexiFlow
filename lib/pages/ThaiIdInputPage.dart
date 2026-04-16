@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 class ThaiIdInputPage extends StatefulWidget {
   const ThaiIdInputPage({super.key});
@@ -42,6 +43,7 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final tokens = tokensOf(context);
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8FBFA),
@@ -75,7 +77,11 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                   'Please enter the numerical details exactly as they appear on your Thai National ID Card.',
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
-                    color: Colors.grey[700],
+                    color: wcagColor(
+                      context,
+                      standard: Colors.grey[700]!,
+                      wcag: tokens.textSecondary,
+                    ),
                     height: 1.4,
                   ),
                 ),
@@ -120,7 +126,13 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                       alignment: Alignment.center,
                       child: Text(
                         'Front ID Mockup Missing',
-                        style: GoogleFonts.inter(color: Colors.grey[600]),
+                        style: GoogleFonts.inter(
+                          color: wcagColor(
+                            context,
+                            standard: Colors.grey[600]!,
+                            wcag: tokens.textMuted,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -171,7 +183,13 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                       alignment: Alignment.center,
                       child: Text(
                         'Back ID Mockup Missing',
-                        style: GoogleFonts.inter(color: Colors.grey[600]),
+                        style: GoogleFonts.inter(
+                          color: wcagColor(
+                            context,
+                            standard: Colors.grey[600]!,
+                            wcag: tokens.textMuted,
+                          ),
+                        ),
                       ),
                     ),
                   ),
@@ -243,7 +261,11 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
         hintText: hintText,
         hintStyle: GoogleFonts.inter(
           fontSize: 14,
-          color: Colors.grey[400],
+          color: wcagColor(
+            context,
+            standard: Colors.grey[400]!,
+            wcag: tokensOf(context).textDisabled,
+          ),
         ),
         filled: true,
         fillColor: Colors.white,
@@ -251,11 +273,23 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
         contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!),
+          borderSide: BorderSide(
+            color: wcagColor(
+              context,
+              standard: Colors.grey[300]!,
+              wcag: tokensOf(context).borderDisabled,
+            ),
+          ),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.grey[300]!),
+          borderSide: BorderSide(
+            color: wcagColor(
+              context,
+              standard: Colors.grey[300]!,
+              wcag: tokensOf(context).borderDisabled,
+            ),
+          ),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -270,4 +304,3 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
     );
   }
 }
-

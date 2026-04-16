@@ -6,6 +6,7 @@ import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
 import 'package:motion_kit/services/gesture_classification.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 import '../services/hand_landmarker_service.dart';
 import '../views/painters/hand_painter.dart';
 import '../views/embedded_camera_view.dart';
@@ -356,7 +357,11 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.04,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey[600],
+                            color: wcagColor(
+                              context,
+                              standard: Colors.grey[600]!,
+                              wcag: tokensOf(context).textMuted,
+                            ),
                           ),
                         ),
                         SizedBox(height: screenHeight * 0.06),
@@ -373,7 +378,11 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.035,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey[600],
+                            color: wcagColor(
+                              context,
+                              standard: Colors.grey[600]!,
+                              wcag: tokensOf(context).textMuted,
+                            ),
                             fontStyle: FontStyle.italic,
                           ),
                           textAlign: TextAlign.center,
@@ -547,7 +556,9 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                         children: [
                           GestureDetector(
                             onTap: _isPaused ? _resumeGame : _pauseGame,
-                            child: Container(
+                            child: WcagTapTarget(
+                              compact: false,
+                              child: Container(
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
                               decoration: const BoxDecoration(
@@ -595,12 +606,15 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                                   ],
                                 ),
                               ),
+                              ),
                             ),
                           ),
                           // Exit button
                           GestureDetector(
                             onTap: _endGame, // Use _endGame or Navigator.pop directly? _endGame saves data.
-                            child: Container(
+                            child: WcagTapTarget(
+                              compact: false,
+                              child: Container(
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
                               decoration: const BoxDecoration(
@@ -614,6 +628,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                                 Icons.exit_to_app_outlined,
                                 size: screenWidth * 0.072,
                                 color: Colors.white,
+                              ),
                               ),
                             ),
                           ),

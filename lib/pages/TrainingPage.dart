@@ -7,6 +7,7 @@ import 'package:intl/intl.dart';
 import 'package:motion_kit/games/PerfectMatchPlaying.dart'; // Import for date formatting
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/games/WanderPlaying.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 import '../games/MathgamePlaying.dart';
 
@@ -580,6 +581,7 @@ class _TrainingPageState extends State<TrainingPage> {
   // Creates swipeable schedule items with specific colors and delete functionality
   Widget _buildScheduleItem(String time, String event, bool completed,
       int index, double screenWidth) {
+    final tokens = tokensOf(context);
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -648,7 +650,13 @@ class _TrainingPageState extends State<TrainingPage> {
                 style: GoogleFonts.inter(
                   fontSize: 14,
                   fontWeight: FontWeight.w700,
-                  color: completed ? Colors.grey : const Color(0xFF1565C0),
+                  color: completed
+                      ? wcagColor(
+                          context,
+                          standard: Colors.grey,
+                          wcag: tokens.textDisabled,
+                        )
+                      : const Color(0xFF1565C0),
                 ),
               ),
             ),
@@ -660,9 +668,21 @@ class _TrainingPageState extends State<TrainingPage> {
                 style: GoogleFonts.inter(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: completed ? Colors.grey.shade400 : Colors.black87,
+                  color: completed
+                      ? wcagColor(
+                          context,
+                          standard: Colors.grey.shade400,
+                          wcag: tokens.textDisabled,
+                        )
+                      : Colors.black87,
                   decoration: completed ? TextDecoration.lineThrough : null,
-                  decorationColor: Colors.grey.shade400,
+                  decorationColor: completed
+                      ? wcagColor(
+                          context,
+                          standard: Colors.grey.shade400,
+                          wcag: tokens.textDisabled,
+                        )
+                      : null,
                 ),
                 maxLines: 2,
                 overflow: TextOverflow.ellipsis,
@@ -670,39 +690,46 @@ class _TrainingPageState extends State<TrainingPage> {
             ),
             const SizedBox(width: 12),
             // Checkbox
-            GestureDetector(
-              onTap: () {
-                setState(() {
-                  // Ensure the list exists before trying to update an item
-                  if (Globals.schedules[selectedDate] != null &&
-                      index < Globals.schedules[selectedDate]!.length) {
-                    Globals.schedules[selectedDate]![index]['completed'] =
-                        !completed;
-                    Globals.save(); // Save after toggling completion
-                  }
-                });
-              },
-              child: AnimatedContainer(
-                duration: const Duration(milliseconds: 200),
-                width: 28,
-                height: 28,
-                decoration: BoxDecoration(
-                  color: completed ? const Color(0xFF0397FD) : Colors.transparent,
-                  borderRadius: BorderRadius.circular(8),
-                  border: Border.all(
-                    color: completed
-                        ? const Color(0xFF0397FD)
-                        : Colors.grey.shade300,
-                    width: 2,
+            WcagTapTarget(
+              child: GestureDetector(
+                onTap: () {
+                  setState(() {
+                    // Ensure the list exists before trying to update an item
+                    if (Globals.schedules[selectedDate] != null &&
+                        index < Globals.schedules[selectedDate]!.length) {
+                      Globals.schedules[selectedDate]![index]['completed'] =
+                          !completed;
+                      Globals.save(); // Save after toggling completion
+                    }
+                  });
+                },
+                child: AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  width: 28,
+                  height: 28,
+                  decoration: BoxDecoration(
+                    color:
+                        completed ? const Color(0xFF0397FD) : Colors.transparent,
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: completed
+                          ? const Color(0xFF0397FD)
+                          : wcagColor(
+                              context,
+                              standard: Colors.grey.shade300,
+                              wcag: tokens.borderDisabled,
+                            ),
+                      width: 2,
+                    ),
                   ),
+                  child: completed
+                      ? const Icon(
+                          Icons.check,
+                          color: Colors.white,
+                          size: 20,
+                        )
+                      : null,
                 ),
-                child: completed
-                    ? const Icon(
-                        Icons.check,
-                        color: Colors.white,
-                        size: 20,
-                      )
-                    : null,
               ),
             ),
           ],

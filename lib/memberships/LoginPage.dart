@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motion_kit/memberships/AuthPage.dart';
 import 'package:motion_kit/memberships/SignUpPage.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -73,17 +74,33 @@ class _LoginPageState extends State<LoginPage> {
         decoration: InputDecoration(
           hintText: hint,
           hintStyle: GoogleFonts.inter(
-            color: Colors.grey[400],
+            color: wcagColor(
+              context,
+              standard: Colors.grey[400]!,
+              wcag: tokensOf(context).textDisabled,
+            ),
             fontSize: 14,
           ),
-          prefixIcon: Icon(icon, color: Colors.grey[500], size: 22),
+          prefixIcon: Icon(
+            icon,
+            color: wcagColor(
+              context,
+              standard: Colors.grey[500]!,
+              wcag: tokensOf(context).textMuted,
+            ),
+            size: 22,
+          ),
           suffixIcon: isPassword
               ? IconButton(
                   icon: Icon(
                     _obscureText
                         ? Icons.visibility_off_outlined
                         : Icons.visibility_outlined,
-                    color: Colors.grey[500],
+                    color: wcagColor(
+                      context,
+                      standard: Colors.grey[500]!,
+                      wcag: tokensOf(context).textMuted,
+                    ),
                     size: 22,
                   ),
                   onPressed: () {
@@ -176,7 +193,11 @@ class _LoginPageState extends State<LoginPage> {
                     'Sign in to continue',
                     style: GoogleFonts.inter(
                       fontSize: 16,
-                      color: Colors.grey[600],
+                      color: wcagColor(
+                        context,
+                        standard: Colors.grey[600]!,
+                        wcag: tokensOf(context).textMuted,
+                      ),
                       fontWeight: FontWeight.w500,
                     ),
                   ),
@@ -252,7 +273,11 @@ class _LoginPageState extends State<LoginPage> {
                       Text(
                         "Don't have an account? ",
                         style: GoogleFonts.inter(
-                            color: Colors.grey[600],
+                            color: wcagColor(
+                              context,
+                              standard: Colors.grey[600]!,
+                              wcag: tokensOf(context).textMuted,
+                            ),
                             fontSize: 14,
                             fontWeight: FontWeight.w500),
                       ),

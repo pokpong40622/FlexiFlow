@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:motion_kit/theme/wcag_utils.dart';
 
 import '../fake_var.dart';
 import '../pages/ScorePage.dart';
@@ -548,7 +549,11 @@ class _WanderPlayingState extends State<WanderPlaying>
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.04,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey[700],
+                            color: wcagColor(
+                              context,
+                              standard: Colors.grey[700]!,
+                              wcag: tokensOf(context).textSecondary,
+                            ),
                             height: 1.4,
                           ),
                           textAlign: TextAlign.center,
@@ -726,7 +731,9 @@ class _WanderPlayingState extends State<WanderPlaying>
                         children: [
                           GestureDetector(
                             onTap: _isPaused ? _resumeGame : _pauseGame,
-                            child: Container(
+                            child: WcagTapTarget(
+                              compact: false,
+                              child: Container(
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
                               decoration: const BoxDecoration(
@@ -771,11 +778,14 @@ class _WanderPlayingState extends State<WanderPlaying>
                                   ],
                                 ),
                               ),
+                              ),
                             ),
                           ),
                           GestureDetector(
                             onTap: _endGame,
-                            child: Container(
+                            child: WcagTapTarget(
+                              compact: false,
+                              child: Container(
                               height: screenHeight * 0.07616,
                               width: screenWidth * 0.4515,
                               decoration: const BoxDecoration(
@@ -789,6 +799,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                                 Icons.exit_to_app_outlined,
                                 size: screenWidth * 0.072,
                                 color: Colors.white,
+                              ),
                               ),
                             ),
                           ),
