@@ -111,10 +111,8 @@ class _StatsPageState extends State<StatsPage> {
     final mediaQuery = MediaQuery.of(context);
     final screenWidth = mediaQuery.size.width;
     final screenHeight = mediaQuery.size.height;
-    final pageTextScale = mediaQuery.textScaler
-        .scale(1.0)
-        .clamp(1.0, 1.3)
-        .toDouble();
+    final pageTextScale =
+        mediaQuery.textScaler.scale(1.0).clamp(1.0, 1.3).toDouble();
 
     int shownSecond = 0;
     int shownMinute = 0;
@@ -201,31 +199,38 @@ class _StatsPageState extends State<StatsPage> {
                   ),
                   SizedBox(width: screenWidth * 0.02),
                   Flexible(
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      crossAxisAlignment: CrossAxisAlignment.end,
-                      children: [
-                        Text(
-                          _formatDate(_currentDateTime),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.04,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
+                    child: Align(
+                      alignment: Alignment.centerRight,
+                      child: FittedBox(
+                        fit: BoxFit.scaleDown,
+                        alignment: Alignment.centerRight,
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            Text(
+                              _formatDate(_currentDateTime),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontSize: screenWidth * 0.04,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                            Text(
+                              _formatTime(_currentDateTime),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: GoogleFonts.inter(
+                                fontSize: screenWidth * 0.04,
+                                fontWeight: FontWeight.w600,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ],
                         ),
-                        Text(
-                          _formatTime(_currentDateTime),
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.04,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black,
-                          ),
-                        ),
-                      ],
+                      ),
                     ),
                   ),
                 ],
@@ -294,14 +299,15 @@ class _StatsPageState extends State<StatsPage> {
                           Expanded(
                             child: _isAISuggestionLoading
                                 ? Column(
-                                    crossAxisAlignment: CrossAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
-                                      _buildSkeleton(
-                                          screenWidth * 0.5, screenWidth * 0.04),
+                                      _buildSkeleton(screenWidth * 0.5,
+                                          screenWidth * 0.04),
                                       SizedBox(height: screenWidth * 0.02),
-                                      _buildSkeleton(
-                                          screenWidth * 0.3, screenWidth * 0.04),
+                                      _buildSkeleton(screenWidth * 0.3,
+                                          screenWidth * 0.04),
                                     ],
                                   )
                                 : AnimatedSwitcher(
@@ -309,23 +315,29 @@ class _StatsPageState extends State<StatsPage> {
                                     switchInCurve: Curves.easeInOut,
                                     switchOutCurve: Curves.easeInOut,
                                     duration: const Duration(milliseconds: 400),
-                                    layoutBuilder: (Widget? currentChild, List<Widget> previousChildren) {
+                                    layoutBuilder: (Widget? currentChild,
+                                        List<Widget> previousChildren) {
                                       return Stack(
                                         alignment: Alignment.centerLeft,
                                         children: <Widget>[
                                           ...previousChildren,
-                                          if (currentChild != null) currentChild,
+                                          if (currentChild != null)
+                                            currentChild,
                                         ],
                                       );
                                     },
-                                    transitionBuilder: (Widget child, Animation<double> animation) {
-                                      final bool isNewText = (child.key as ValueKey<int>).value == _currentSuggestionIndex;
+                                    transitionBuilder: (Widget child,
+                                        Animation<double> animation) {
+                                      final bool isNewText =
+                                          (child.key as ValueKey<int>).value ==
+                                              _currentSuggestionIndex;
                                       return ClipRect(
                                         child: FadeTransition(
                                           opacity: animation,
                                           child: SlideTransition(
                                             position: Tween<Offset>(
-                                              begin: Offset(0.0, isNewText ? -1.0 : 1.0),
+                                              begin: Offset(
+                                                  0.0, isNewText ? -1.0 : 1.0),
                                               end: Offset.zero,
                                             ).animate(animation),
                                             child: child,
@@ -334,7 +346,8 @@ class _StatsPageState extends State<StatsPage> {
                                       );
                                     },
                                     child: RichText(
-                                      key: ValueKey<int>(_currentSuggestionIndex),
+                                      key: ValueKey<int>(
+                                          _currentSuggestionIndex),
                                       text: TextSpan(
                                         style: GoogleFonts.inter(
                                           fontSize: screenWidth * 0.04,
@@ -412,16 +425,16 @@ class _StatsPageState extends State<StatsPage> {
                                   child: Column(
                                     children: [
                                       Expanded(
-                                          child:
-                                              _buildSkeleton(double.infinity, double.infinity)),
+                                          child: _buildSkeleton(double.infinity,
+                                              double.infinity)),
                                       SizedBox(height: screenHeight * 0.008),
                                       Expanded(
-                                          child:
-                                              _buildSkeleton(double.infinity, double.infinity)),
+                                          child: _buildSkeleton(double.infinity,
+                                              double.infinity)),
                                       SizedBox(height: screenHeight * 0.008),
                                       Expanded(
-                                          child:
-                                              _buildSkeleton(double.infinity, double.infinity)),
+                                          child: _buildSkeleton(double.infinity,
+                                              double.infinity)),
                                     ],
                                   ),
                                 )
@@ -437,8 +450,7 @@ class _StatsPageState extends State<StatsPage> {
                                           size: screenWidth * 0.12,
                                           color: Colors.grey[400],
                                         ),
-                                        SizedBox(
-                                            height: screenHeight * 0.01),
+                                        SizedBox(height: screenHeight * 0.01),
                                         Text(
                                           'Nothing to\nshow',
                                           textAlign: TextAlign.center,
@@ -453,8 +465,7 @@ class _StatsPageState extends State<StatsPage> {
                                   ),
                                 )
                               else
-                                ..._buildRecentTiles(
-                                    screenWidth, screenHeight),
+                                ..._buildRecentTiles(screenWidth, screenHeight),
                             ],
                           ),
                         ),
@@ -487,58 +498,52 @@ class _StatsPageState extends State<StatsPage> {
                             child: Column(
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
-                                Row(
-                                  mainAxisAlignment:
-                                      MainAxisAlignment.spaceBetween,
-                                  children: [
-                                    Text(
-                                      'Brain score',
-                                      style: GoogleFonts.inter(
-                                        fontSize: screenWidth * 0.048,
-                                        fontWeight: FontWeight.w700,
-                                        color: Colors.black,
-                                      ),
-                                    ),
-                                  ],
+                                Text(
+                                  'Brain score',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: screenWidth * 0.048,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black,
+                                  ),
                                 ),
                                 Expanded(
                                   child: Center(
                                     child: _isLoading
-                                        ? _buildSkeleton(
-                                            screenWidth * 0.25, screenWidth * 0.08)
-                                            : FittedBox(
-                                                fit: BoxFit.scaleDown,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.baseline,
-                                                  textBaseline:
-                                                      TextBaseline.alphabetic,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      '${Globals.brainScore}',
-                                                      style: GoogleFonts.inter(
-                                                        fontSize:
-                                                            screenWidth * 0.08,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        color: Color(0xFF0397FD),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      ' pts',
-                                                      style: GoogleFonts.inter(
-                                                        fontSize:
-                                                            screenWidth * 0.03,
-                                                        color: Colors.grey[600],
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ],
+                                        ? _buildSkeleton(screenWidth * 0.25,
+                                            screenWidth * 0.08)
+                                        : FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.baseline,
+                                              textBaseline:
+                                                  TextBaseline.alphabetic,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${Globals.brainScore}',
+                                                  style: GoogleFonts.inter(
+                                                    fontSize:
+                                                        screenWidth * 0.08,
+                                                    fontWeight: FontWeight.w800,
+                                                    color: Color(0xFF0397FD),
+                                                  ),
                                                 ),
-                                              ),
+                                                Text(
+                                                  ' pts',
+                                                  style: GoogleFonts.inter(
+                                                    fontSize:
+                                                        screenWidth * 0.03,
+                                                    color: Colors.grey[600],
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ],
@@ -579,41 +584,39 @@ class _StatsPageState extends State<StatsPage> {
                                 Expanded(
                                   child: Center(
                                     child: _isLoading
-                                        ? _buildSkeleton(
-                                            screenWidth * 0.25, screenWidth * 0.08)
-                                            : FittedBox(
-                                                fit: BoxFit.scaleDown,
-                                                child: Row(
-                                                  crossAxisAlignment:
-                                                      CrossAxisAlignment.baseline,
-                                                  textBaseline:
-                                                      TextBaseline.alphabetic,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: [
-                                                    Text(
-                                                      '${Globals.totalStepsTD}',
-                                                      style: GoogleFonts.inter(
-                                                        fontSize:
-                                                            screenWidth * 0.08,
-                                                        fontWeight:
-                                                            FontWeight.w800,
-                                                        color: Color(0xFF0397FD),
-                                                      ),
-                                                    ),
-                                                    Text(
-                                                      ' steps',
-                                                      style: GoogleFonts.inter(
-                                                        fontSize:
-                                                            screenWidth * 0.035,
-                                                        color: Colors.grey[600],
-                                                        fontWeight:
-                                                            FontWeight.w600,
-                                                      ),
-                                                    ),
-                                                  ],
+                                        ? _buildSkeleton(screenWidth * 0.25,
+                                            screenWidth * 0.08)
+                                        : FittedBox(
+                                            fit: BoxFit.scaleDown,
+                                            child: Row(
+                                              crossAxisAlignment:
+                                                  CrossAxisAlignment.baseline,
+                                              textBaseline:
+                                                  TextBaseline.alphabetic,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.center,
+                                              children: [
+                                                Text(
+                                                  '${Globals.totalStepsTD}',
+                                                  style: GoogleFonts.inter(
+                                                    fontSize:
+                                                        screenWidth * 0.08,
+                                                    fontWeight: FontWeight.w800,
+                                                    color: Color(0xFF0397FD),
+                                                  ),
                                                 ),
-                                              ),
+                                                Text(
+                                                  ' steps',
+                                                  style: GoogleFonts.inter(
+                                                    fontSize:
+                                                        screenWidth * 0.035,
+                                                    color: Colors.grey[600],
+                                                    fontWeight: FontWeight.w600,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
                                   ),
                                 ),
                               ],
@@ -633,7 +636,8 @@ class _StatsPageState extends State<StatsPage> {
                       Container(
                         width: screenWidth * 0.93240, // 1007/1125 = 0.895
                         constraints: BoxConstraints(
-                          minHeight: screenHeight * 0.184166, // 442/2100 = 0.210
+                          minHeight:
+                              screenHeight * 0.184166, // 442/2100 = 0.210
                         ),
                         padding: EdgeInsets.all(screenWidth * 0.04),
                         decoration: BoxDecoration(
@@ -651,7 +655,7 @@ class _StatsPageState extends State<StatsPage> {
                         ),
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
-                          mainAxisAlignment: MainAxisAlignment.start  ,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           children: [
                             Wrap(
                               crossAxisAlignment: WrapCrossAlignment.center,
@@ -683,7 +687,9 @@ class _StatsPageState extends State<StatsPage> {
                                 ),
                               ],
                             ),
-                            SizedBox(height: screenHeight * 0.018,),
+                            SizedBox(
+                              height: screenHeight * 0.018,
+                            ),
                             if (_isLoading || _isTimeFilterLoading)
                               Row(
                                 children: [
@@ -803,7 +809,7 @@ class _StatsPageState extends State<StatsPage> {
             _selectedTimeFilter = text;
             _isTimeFilterLoading = true;
           });
-          
+
           Future.delayed(Duration(milliseconds: 500), () {
             if (mounted) {
               setState(() {
@@ -860,8 +866,8 @@ class _StatsPageState extends State<StatsPage> {
       if (i > 0) tiles.add(SizedBox(height: screenHeight * 0.008));
       tiles.add(
         Expanded(
-          child: _buildRecentExerciseTile(
-              exercises[i], screenWidth, screenHeight),
+          child:
+              _buildRecentExerciseTile(exercises[i], screenWidth, screenHeight),
         ),
       );
     }
@@ -916,15 +922,29 @@ class _StatsPageState extends State<StatsPage> {
               alignment: Alignment.bottomLeft,
               child: Padding(
                 padding: EdgeInsets.all(screenWidth * 0.035),
-                child: Builder(
-                  builder: (context) {
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
                     final mq = MediaQuery.of(context);
-                    final tileScale = mq.textScaler
+                    final bool isCompactTile = constraints.maxHeight < 72;
+                    final double tileScale = mq.textScaler
                         .scale(1.0)
-                        .clamp(1.0, 1.15)
+                        .clamp(1.0, isCompactTile ? 1.0 : 1.1)
                         .toDouble();
+                    final double titleSize = isCompactTile
+                        ? screenWidth * 0.032
+                        : screenWidth * 0.035;
+                    final double metaSize = isCompactTile
+                        ? screenWidth * 0.025
+                        : screenWidth * 0.028;
+                    final double iconSize = isCompactTile
+                        ? screenWidth * 0.026
+                        : screenWidth * 0.03;
+                    final double titleSpacing = isCompactTile ? 2 : 4;
+                    final double rowSpacing = isCompactTile ? 1 : 3;
+
                     return MediaQuery(
-                      data: mq.copyWith(textScaler: TextScaler.linear(tileScale)),
+                      data:
+                          mq.copyWith(textScaler: TextScaler.linear(tileScale)),
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -933,21 +953,23 @@ class _StatsPageState extends State<StatsPage> {
                           Text(
                             _exerciseLabel(exercise.type),
                             style: GoogleFonts.inter(
-                              fontSize: screenWidth * 0.035,
+                              fontSize: titleSize,
                               fontWeight: FontWeight.w700,
                               color: Colors.black87,
                             ),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
-                          SizedBox(height: screenHeight * 0.005),
+                          SizedBox(height: titleSpacing),
 
                           // Time Row
                           Row(
                             children: [
-                              Icon(Icons.access_time_rounded,
-                                  size: screenWidth * 0.03,
-                                  color: Colors.grey[800]),
+                              Icon(
+                                Icons.access_time_rounded,
+                                size: iconSize,
+                                color: Colors.grey[800],
+                              ),
                               SizedBox(width: 4),
                               Expanded(
                                 child: Text(
@@ -955,7 +977,7 @@ class _StatsPageState extends State<StatsPage> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
-                                    fontSize: screenWidth * 0.028,
+                                    fontSize: metaSize,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.grey[800],
                                   ),
@@ -964,14 +986,16 @@ class _StatsPageState extends State<StatsPage> {
                             ],
                           ),
 
-                          SizedBox(height: screenHeight * 0.002),
+                          SizedBox(height: rowSpacing),
 
                           // Score Row
                           Row(
                             children: [
-                              Icon(Icons.emoji_events_rounded,
-                                  size: screenWidth * 0.03,
-                                  color: Colors.grey[800]),
+                              Icon(
+                                Icons.emoji_events_rounded,
+                                size: iconSize,
+                                color: Colors.grey[800],
+                              ),
                               SizedBox(width: 4),
                               Expanded(
                                 child: Text(
@@ -979,7 +1003,7 @@ class _StatsPageState extends State<StatsPage> {
                                   maxLines: 1,
                                   overflow: TextOverflow.ellipsis,
                                   style: GoogleFonts.inter(
-                                    fontSize: screenWidth * 0.028,
+                                    fontSize: metaSize,
                                     fontWeight: FontWeight.w600,
                                     color: Colors.grey[800],
                                   ),
@@ -999,8 +1023,6 @@ class _StatsPageState extends State<StatsPage> {
       ),
     );
   }
-
-
 
   String _exerciseLabel(ExerciseType type) {
     switch (type) {
