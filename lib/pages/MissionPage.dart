@@ -17,8 +17,49 @@ class MissionPage extends StatefulWidget {
   State<MissionPage> createState() => _MissionPageState();
 }
 
+
 class _MissionPageState extends State<MissionPage> {
   int selectedButtonIndex = 0;
+
+  static const Map<String, String> _legacyMissionTitleToId = {
+    'First exercise of the day': 'mission_first_exercise',
+    'Complete 3 exercises': 'mission_complete_3',
+    'Walk 5,000 steps': 'mission_walk_5000',
+    'Play Perfect Match for 10 minutes': 'mission_play_perfect_match_10',
+    'Complete 10 exercises': 'mission_complete_10',
+    'Reach 200 Brain Score': 'mission_reach_200_brain_score',
+    'Exercise 5 days in a row': 'mission_exercise_5_days',
+    'Exercise 20 days in a row': 'mission_exercise_20_days',
+    'Reach Level 25': 'mission_reach_level_25',
+    'Complete 20 exercises': 'mission_complete_20',
+  };
+
+  @override
+  void initState() {
+    super.initState();
+    _migrateLegacyClaimedMissions();
+  }
+
+  Future<void> _migrateLegacyClaimedMissions() async {
+    bool changed = false;
+    final updated = <String>{...Globals.claimedMissions};
+    for (final entry in _legacyMissionTitleToId.entries) {
+      if (updated.remove(entry.key)) {
+        updated.add(entry.value);
+        changed = true;
+      }
+    }
+
+    if (changed) {
+      Globals.claimedMissions = updated;
+      await Globals.save();
+      if (mounted) setState(() {});
+    }
+  }
+
+  bool _isMissionClaimed(String id, String title) {
+    return Globals.claimedMissions.contains(id) || Globals.claimedMissions.contains(title);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -207,8 +248,7 @@ class _MissionPageState extends State<MissionPage> {
 
     // Update status if claimed
     for (var m in missions) {
-      // TODO: Remove legacy title fallback once all persisted claimed mission titles are migrated to IDs.
-      if (Globals.claimedMissions.contains(m.id) || Globals.claimedMissions.contains(m.title)) {
+      if (_isMissionClaimed(m.id, m.title)) {
         m.status = MissionStatus.claimed;
       }
     }
@@ -294,8 +334,7 @@ class _MissionPageState extends State<MissionPage> {
     int requiredLevel = 0,
   }) {
     // Override status if already claimed locally
-    // TODO: Remove legacy title fallback once all persisted claimed mission titles are migrated to IDs.
-    if (Globals.claimedMissions.contains(missionId) || Globals.claimedMissions.contains(title)) {
+    if (_isMissionClaimed(missionId, title)) {
       status = MissionStatus.claimed;
     }
 

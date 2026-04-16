@@ -72,11 +72,11 @@ class _StatsPageState extends State<StatsPage> {
   }
 
   String _formatDate(BuildContext context, DateTime dateTime) {
-    return DateFormat('EEEE, d MMMM', Localizations.localeOf(context).toLanguageTag()).format(dateTime);
+    return DateFormat('EEEE, d MMMM', Localizations.localeOf(context).toString()).format(dateTime);
   }
 
   String _formatTime(BuildContext context, DateTime dateTime) {
-    return DateFormat('yyyy  HH:mm', Localizations.localeOf(context).toLanguageTag()).format(dateTime);
+    return DateFormat('yyyy  HH:mm', Localizations.localeOf(context).toString()).format(dateTime);
   }
 
   @override
