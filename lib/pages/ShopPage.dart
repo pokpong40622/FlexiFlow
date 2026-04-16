@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ShopPage extends StatefulWidget {
   const ShopPage({super.key});
@@ -106,7 +105,6 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -153,7 +151,7 @@ class _ShopPageState extends State<ShopPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        l10n.shop,
+                        'Shop',
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.065,
                           fontWeight: FontWeight.w800,
@@ -389,7 +387,7 @@ class _ShopPageState extends State<ShopPage> {
                   ),
                   child: Center(
                     child: Text(
-                      l10n.back,
+                      'Back',
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -408,7 +406,6 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Widget _buildRequestItem(double screenWidth) {
-    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         _showRequestDialog(context);
@@ -432,7 +429,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
             const SizedBox(height: 12),
             Text(
-              l10n.request,
+              'Request',
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 color: const Color(0xFF8B8B8B),
@@ -441,7 +438,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
             const SizedBox(height: 4),
             Text(
-              l10n.moreItemsComingSoon,
+              'More items coming soon',
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w500,
@@ -456,7 +453,6 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   void _showRequestDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     double screenWidth = MediaQuery.of(context).size.width;
     TextEditingController requestController = TextEditingController();
 
@@ -479,7 +475,7 @@ class _ShopPageState extends State<ShopPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  l10n.requestItem,
+                  'Request Item',
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.w700,
@@ -488,7 +484,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 SizedBox(height: screenWidth * 0.04),
                 Text(
-                  l10n.requestItemPrompt,
+                  'What would you like to see in the shop?',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
@@ -499,7 +495,7 @@ class _ShopPageState extends State<ShopPage> {
                 TextField(
                   controller: requestController,
                   decoration: InputDecoration(
-                    hintText: l10n.enterItemName,
+                    hintText: 'Enter item name...',
                     filled: true,
                     fillColor: Colors.grey[100],
                     border: OutlineInputBorder(
@@ -529,7 +525,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           child: Center(
                             child: Text(
-                              l10n.cancel,
+                              'Cancel',
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w600,
@@ -558,7 +554,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           child: Center(
                             child: Text(
-                              l10n.submit,
+                              'Submit',
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w600,
@@ -580,7 +576,6 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   void _showThankYouDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     double screenWidth = MediaQuery.of(context).size.width;
 
     showDialog(
@@ -608,7 +603,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 SizedBox(height: screenWidth * 0.04),
                 Text(
-                  l10n.thankYou,
+                  'Thank You!',
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.w700,
@@ -617,7 +612,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 SizedBox(height: screenWidth * 0.02),
                 Text(
-                  l10n.requestReceived,
+                  'We have received your request.',
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
@@ -638,7 +633,7 @@ class _ShopPageState extends State<ShopPage> {
                     ),
                     child: Center(
                       child: Text(
-                        l10n.close,
+                        'Close',
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.w600,
@@ -867,7 +862,6 @@ class _ShopPageState extends State<ShopPage> {
 
   void _showBuyConfirmationDialog(
       BuildContext context, String itemName, String itemPrice) {
-    final l10n = AppLocalizations.of(context)!;
     double screenWidth = MediaQuery.of(context).size.width;
 
     showDialog(
@@ -922,7 +916,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           child: Center(
                             child: Text(
-                              l10n.cancel,
+                              'Cancel',
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w600,

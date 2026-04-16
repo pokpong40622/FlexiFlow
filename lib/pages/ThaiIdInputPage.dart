@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
 
@@ -16,15 +15,14 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
   final TextEditingController _backIdController = TextEditingController();
 
   void _submit() {
-    final l10n = AppLocalizations.of(context)!;
-
     if (_formKey.currentState!.validate()) {
+      // Logic for submitting the ID goes here
       Globals.isThaiIdVerified = true;
       Globals.save();
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
           content: Text(
-            l10n.thaiIdSuccessfullyVerified,
+            'Thai ID successfully verified',
             style: GoogleFonts.inter(fontWeight: FontWeight.w600),
           ),
           backgroundColor: Colors.green,
@@ -43,7 +41,6 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
@@ -57,7 +54,7 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
         ),
         centerTitle: true,
         title: Text(
-          l10n.idVerification,
+          'ID Verification',
           style: GoogleFonts.montserrat(
             fontSize: screenWidth * 0.05,
             fontWeight: FontWeight.bold,
@@ -75,7 +72,7 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
               children: [
                 const SizedBox(height: 20),
                 Text(
-                  l10n.thaiIdInstruction,
+                  'Please enter the numerical details exactly as they appear on your Thai National ID Card.',
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
                     color: Colors.grey[700],
@@ -83,8 +80,10 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                   ),
                 ),
                 const SizedBox(height: 30),
+
+                // Front ID Section
                 Text(
-                  l10n.frontIdNumber,
+                  'Front ID Number',
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
                     fontSize: screenWidth * 0.04,
@@ -98,8 +97,12 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                   maxLength: 13,
                   keyboardType: TextInputType.number,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return l10n.pleaseEnterFrontId;
-                    if (value.length != 13) return l10n.frontIdMustBe13Digits;
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your front ID number';
+                    }
+                    if (value.length != 13) {
+                      return 'Front ID must be 13 digits';
+                    }
                     return null;
                   },
                 ),
@@ -116,15 +119,18 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                       color: Colors.grey[300],
                       alignment: Alignment.center,
                       child: Text(
-                        l10n.frontIdMockupMissing,
+                        'Front ID Mockup Missing',
                         style: GoogleFonts.inter(color: Colors.grey[600]),
                       ),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 30),
+
+                // Back ID Section
                 Text(
-                  l10n.backLaserCode,
+                  'Back Laser Code',
                   style: GoogleFonts.inter(
                     fontWeight: FontWeight.w600,
                     fontSize: screenWidth * 0.04,
@@ -138,10 +144,15 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                   maxLength: 12,
                   textCapitalization: TextCapitalization.characters,
                   validator: (value) {
-                    if (value == null || value.isEmpty) return l10n.pleaseEnterBackLaserCode;
-                    if (value.length != 12) return l10n.laserCodeMustBe12Chars;
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your back ID laser code';
+                    }
+                    if (value.length != 12) {
+                      return 'Laser code must be 12 characters';
+                    }
+                    // Optional regex check for 2 letters and 10 numbers
                     if (!RegExp(r'^[A-Za-z]{2}\d{10}$').hasMatch(value)) {
-                      return l10n.laserCodePatternError;
+                      return 'Must be 2 letters followed by 10 digits';
                     }
                     return null;
                   },
@@ -159,25 +170,39 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
                       color: Colors.grey[300],
                       alignment: Alignment.center,
                       child: Text(
-                        l10n.backIdMockupMissing,
+                        'Back ID Mockup Missing',
                         style: GoogleFonts.inter(color: Colors.grey[600]),
                       ),
                     ),
                   ),
                 ),
+
                 const SizedBox(height: 40),
-                SizedBox(
-                  width: double.infinity,
-                  height: 56,
-                  child: ElevatedButton(
-                    onPressed: _submit,
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0397FD),
-                      foregroundColor: Colors.white,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
+
+                // Submit Button
+                GestureDetector(
+                  onTap: _submit,
+                  child: Container(
+                    width: double.infinity,
+                    height: 56,
+                    decoration: BoxDecoration(
+                      gradient: const LinearGradient(
+                        colors: [Color(0xFF0397FD), Color(0xFF0262A4)],
+                        begin: Alignment.centerLeft,
+                        end: Alignment.centerRight,
+                      ),
+                      borderRadius: BorderRadius.circular(16),
+                      boxShadow: [
+                        BoxShadow(
+                          color: const Color(0xFF0397FD).withOpacity(0.3),
+                          blurRadius: 10,
+                          offset: const Offset(0, 4),
+                        ),
+                      ],
                     ),
+                    alignment: Alignment.center,
                     child: Text(
-                      l10n.verifyId,
+                      'Verify ID',
                       style: GoogleFonts.montserrat(
                         fontSize: 16,
                         fontWeight: FontWeight.w700,
@@ -245,3 +270,4 @@ class _ThaiIdInputPageState extends State<ThaiIdInputPage> {
     );
   }
 }
+

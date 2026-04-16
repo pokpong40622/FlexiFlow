@@ -1,13 +1,11 @@
-import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:google_fonts/google_fonts.dart';
-import 'package:motion_kit/app/app_settings.dart';
-import 'package:motion_kit/fake_var.dart';
-import 'package:motion_kit/main.dart';
-import 'package:motion_kit/l10n/l10n.dart';
 import 'package:motion_kit/memberships/AuthPage.dart';
+//import 'package:motion_kit/memberships/widget_tree.dart';
+import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
+
+import '../fake_var.dart';
 
 class ProfilePage extends StatefulWidget {
   const ProfilePage({super.key});
@@ -19,9 +17,6 @@ class ProfilePage extends StatefulWidget {
 class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-    final settings = AppSettingsScope.of(context);
-
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
 
@@ -30,39 +25,48 @@ class _ProfilePageState extends State<ProfilePage> {
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          SizedBox(height: screenHeight * 0.0265),
+          SizedBox(height: screenHeight * 0.0265), // Top padding
           Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                IconButton(
-                  onPressed: () => Navigator.pop(context),
-                  icon: Icon(
-                    Icons.arrow_back_ios_new,
+                // Custom Back Button
+                GestureDetector(
+                  onTap: () {
+                    Navigator.pop(context);
+                  },
+                  child: Icon(
+                    Icons.arrow_back_ios_new, // Changed to match button style
                     size: screenWidth * 0.065,
                     color: Colors.black,
                   ),
                 ),
                 Text(
-                  l10n.profile,
+                  'Profile',
                   style: GoogleFonts.inter(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
                     fontSize: screenWidth * 0.054,
                   ),
                 ),
-                SizedBox(width: screenWidth * 0.06),
+                SizedBox(
+                  width: screenWidth * 0.06,
+                ), // Placeholder for alignment
               ],
             ),
           ),
-          SizedBox(height: screenHeight * 0.03),
+          SizedBox(
+            height: screenHeight * 0.03,
+          ), // Space between header and profile pic
           Stack(
             alignment: Alignment.bottomRight,
             children: [
               CircleAvatar(
                 radius: screenWidth * 0.12,
-                backgroundImage: const AssetImage('assets/FlexiFlowProfilePic.png'),
+                backgroundImage: const AssetImage(
+                  'assets/FlexiFlowProfilePic.png',
+                ),
               ),
               Positioned(
                 bottom: 0,
@@ -75,7 +79,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     border: Border.all(color: Colors.grey[300]!, width: 1),
                   ),
                   child: Icon(
-                    Icons.edit,
+                    Icons.edit, // Edit icon for profile picture
                     size: screenWidth * 0.04,
                     color: Colors.grey[700],
                   ),
@@ -97,7 +101,7 @@ class _ProfilePageState extends State<ProfilePage> {
             'pummiphach@gmail.com',
             style: GoogleFonts.inter(
               fontSize: screenWidth * 0.035,
-              fontWeight: FontWeight.w600,
+              fontWeight: FontWeight.w600, // Changed to semibold
               color: Colors.grey[600],
             ),
           ),
@@ -118,7 +122,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   width: (screenWidth - (screenWidth * 0.16)) * (Globals.leftoverExp / Globals.requiredExp),
                   height: 12,
                   decoration: BoxDecoration(
-                    color: const Color(0xFF0397FD),
+                    color: const Color(0xFF0397FD), // Specific blue color
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
@@ -132,10 +136,10 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  l10n.lvlShort(Globals.level),
+                  'Lvl ${Globals.level}',
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w600, // Changed to semibold
                     color: Colors.grey[600],
                   ),
                 ),
@@ -143,7 +147,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   '${Globals.leftoverExp}/${Globals.requiredExp} XP',
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w600, // Changed to semibold
                     color: Colors.grey[600],
                   ),
                 ),
@@ -151,24 +155,30 @@ class _ProfilePageState extends State<ProfilePage> {
             ),
           ),
           SizedBox(height: screenHeight * 0.035),
-          _buildProfileOption(context, l10n.editPersonalInformation, () => _showResetDialog(context)),
-          SizedBox(height: screenHeight * 0.013),
-          _buildProfileOption(context, l10n.language, () => _showLanguageDialog(context, settings)),
-          SizedBox(height: screenHeight * 0.013),
-          _buildProfileOption(context, l10n.feedback, () {
-            ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text(l10n.feedbackComingSoon)),
-            );
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const ThaiIdInputPage()),
-            );
+
+          _buildProfileOption(context, 'Edit personal information', () => _showResetDialog(context)),
+          SizedBox(
+            height: screenHeight * 0.013,
+          ), // Added spacing between list tiles
+          _buildProfileOption(context, 'Feedback', () {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text('Feedback option coming soon!'))
+                );
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => ThaiIdInputPage()),
+              );
           }),
-          SizedBox(height: screenHeight * 0.013),
+          SizedBox(
+            height: screenHeight * 0.013,
+          ), // Added spacing between list tiles
+          // Sign Out option - now with consistent styling
           Padding(
-            padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+            padding: EdgeInsets.symmetric(
+              horizontal: screenWidth * 0.0425,
+            ), // Consistent padding
             child: ListTile(
-              tileColor: const Color(0xFFFAFAFA),
+              tileColor: Color(0xFFFAFAFA),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -177,14 +187,18 @@ class _ProfilePageState extends State<ProfilePage> {
                 vertical: screenHeight * 0.0142,
               ),
               title: Text(
-                l10n.signOut,
+                'Sign Out',
                 style: GoogleFonts.inter(
                   fontSize: screenWidth * 0.042,
                   fontWeight: FontWeight.w600,
                   color: Colors.red,
                 ),
               ),
-              trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.red),
+              trailing: Icon(
+                Icons.arrow_forward_ios,
+                size: 16,
+                color: Colors.red,
+              ),
               onTap: () => _showSignOutDialog(context),
             ),
           ),
@@ -193,15 +207,23 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  Widget _buildProfileOption(BuildContext context, String title, VoidCallback onTap) {
+  // Helper method to build profile options
+  Widget _buildProfileOption(
+      BuildContext context,
+      String title,
+      VoidCallback onTap,
+      ) {
     double screenWidth = MediaQuery.of(context).size.width;
-    double screenHeight = MediaQuery.of(context).size.height;
+    double screenHeight = MediaQuery.of(
+      context,
+    ).size.height; // Get screenHeight here
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
       child: ListTile(
-        tileColor: const Color(0xFFFAFAFA),
+        tileColor: Color(0xFFFAFAFA), // Set tile color
         shape: RoundedRectangleBorder(
+          // Apply border radius
           borderRadius: BorderRadius.circular(8),
         ),
         contentPadding: EdgeInsets.symmetric(
@@ -215,70 +237,34 @@ class _ProfilePageState extends State<ProfilePage> {
             fontWeight: FontWeight.w600,
           ),
         ),
-        trailing: const Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
+        trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
         onTap: onTap,
       ),
     );
   }
 
-  void _showLanguageDialog(BuildContext context, AppSettings settings) {
-    final l10n = AppLocalizations.of(context)!;
-
-    String labelForKey(String key) {
-      switch (key) {
-        case 'languageThai':
-          return l10n.languageThai;
-        case 'languageEnglish':
-        default:
-          return l10n.languageEnglish;
-      }
-    }
-
-    showDialog(
-      context: context,
-      builder: (context) => SimpleDialog(
-        title: Text(l10n.languageSelectorTitle),
-        children: [
-          for (final language in AppSettings.supportedLanguages)
-            RadioListTile<Locale>(
-              value: language.locale,
-              groupValue: settings.locale ?? L10n.defaultLocale,
-              title: Text(labelForKey(language.labelKey)),
-              onChanged: (value) async {
-                await settings.setLocale(value);
-                if (context.mounted) {
-                  Navigator.pop(context);
-                }
-              },
-            ),
-        ],
-      ),
-    );
-  }
-
+  // Dialog for sign out confirmation
   void _showSignOutDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.signOut),
-        content: Text(l10n.signOutConfirm),
+        title: Text('Sign Out'),
+        content: Text('Are you sure you want to sign out?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
+            child: Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
               await Auth().signOut();
-              if (!context.mounted) return;
               Navigator.pushAndRemoveUntil(
                 context,
-                MaterialPageRoute(builder: (context) => const WidgetTree()),
+                MaterialPageRoute(builder: (context) => WidgetTree()),
                 (route) => false,
               );
             },
-            child: Text(l10n.yes),
+            child: Text('Yes'),
           ),
         ],
       ),
@@ -286,28 +272,26 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _showResetDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
-
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l10n.resetProgress),
-        content: Text(l10n.resetProgressConfirm),
+        title: Text('Reset Progress'),
+        content: Text('Are you sure you want to reset all progress? This cannot be undone.'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(l10n.cancel),
+            child: Text('Cancel'),
           ),
           TextButton(
             onPressed: () async {
               await Globals.reset();
-              setState(() {});
+              setState(() {}); // Update the UI
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(l10n.allProgressReset)),
+                SnackBar(content: Text('All progress has been reset.'))
               );
             },
-            child: Text(l10n.reset, style: const TextStyle(color: Colors.red)),
+            child: Text('Reset', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),

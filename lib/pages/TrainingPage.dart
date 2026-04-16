@@ -9,7 +9,6 @@ import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/games/WanderPlaying.dart';
 
 import '../games/MathgamePlaying.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class TimeInputFormatter extends TextInputFormatter {
   @override
@@ -112,7 +111,6 @@ class _TrainingPageState extends State<TrainingPage> {
 
   @override
   Widget build(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
@@ -182,7 +180,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        l10n.shop,
+                        'Unlock in Shop',
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           color: Colors.white70,
@@ -276,7 +274,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        l10n.training,
+                        'Training',
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.065,
                           fontWeight: FontWeight.w800,
@@ -324,7 +322,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    l10n.games,
+                    'Games',
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.w700,
                       fontSize: screenWidth * 0.054,
@@ -381,7 +379,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        l10n.days,
+                        'Days',
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -406,7 +404,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        l10n.toDoList,
+                        'To Do List',
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -431,7 +429,7 @@ class _TrainingPageState extends State<TrainingPage> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                l10n.add,
+                                'Add',
                                 style: GoogleFonts.inter(
                                   color: Colors.white,
                                   fontSize: 12,
@@ -460,7 +458,7 @@ class _TrainingPageState extends State<TrainingPage> {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  l10n.noTasksForToday,
+                                  'No tasks for today',
                                   style: GoogleFonts.inter(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -469,7 +467,7 @@ class _TrainingPageState extends State<TrainingPage> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  l10n.tapAddToCreateSchedule,
+                                  'Tap "Add" to create a schedule',
                                   style: GoogleFonts.inter(
                                     fontSize: 12,
                                     color: Colors.grey.shade400,
@@ -582,7 +580,6 @@ class _TrainingPageState extends State<TrainingPage> {
   // Creates swipeable schedule items with specific colors and delete functionality
   Widget _buildScheduleItem(String time, String event, bool completed,
       int index, double screenWidth) {
-    final l10n = AppLocalizations.of(context)!;
     return Dismissible(
       key: UniqueKey(),
       direction: DismissDirection.endToStart,
@@ -716,7 +713,6 @@ class _TrainingPageState extends State<TrainingPage> {
 
   // Shows dialog for adding new events to selected day
   void _showAddEventDialog(BuildContext context) {
-    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) {
@@ -724,7 +720,7 @@ class _TrainingPageState extends State<TrainingPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            l10n.addEvent,
+            'Add Event',
             style: GoogleFonts.inter(fontWeight: FontWeight.bold),
           ),
           content: Column(
@@ -742,7 +738,7 @@ class _TrainingPageState extends State<TrainingPage> {
               TextField(
                 controller: timeController,
                 decoration: InputDecoration(
-                  labelText: l10n.timeLabel,
+                  labelText: 'Time (HH:MM)',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -757,7 +753,7 @@ class _TrainingPageState extends State<TrainingPage> {
               TextField(
                 controller: eventController,
                 decoration: InputDecoration(
-                  labelText: l10n.eventDescription,
+                  labelText: 'Event Description',
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -773,7 +769,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 Navigator.of(context).pop();
               },
               child: Text(
-                l10n.cancel,
+                'Cancel',
                 style: GoogleFonts.inter(color: Colors.grey),
               ),
             ),
@@ -807,7 +803,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 }
               },
               child: Text(
-                l10n.addEvent,
+                'Add Event',
                 style: GoogleFonts.inter(fontWeight: FontWeight.w600),
               ),
             ),
