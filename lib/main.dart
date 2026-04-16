@@ -1,143 +1,92 @@
-import 'package:flutter/material.dart';
 import 'package:camera/camera.dart';
-import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
-import 'package:motion_kit/Others/NavigationBar.dart';
-import 'package:motion_kit/figma/chatbot.dart';
-import 'package:motion_kit/memberships/widget_tree.dart';
-import 'package:motion_kit/pages/GetStarted.dart';
-import 'package:motion_kit/services/step_service.dart';
-import 'package:motion_kit/views/pose_detection_screen.dart';
-import 'package:motion_kit/views/hand_detection_screen.dart';
-import 'package:motion_kit/views/hand_pose_detection_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'firebase_options.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:motion_kit/app/app_settings.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/l10n/l10n.dart';
+import 'package:motion_kit/memberships/widget_tree.dart';
+import 'package:motion_kit/services/step_service.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+
+import 'firebase_options.dart';
 
 List<CameraDescription> cameras = [];
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Globals.load(); // Load saved global variables
+  await Globals.load();
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
-  // Initialize cameras
   cameras = await availableCameras();
   await StepService().init();
-  
-  runApp(const MyApp());
+
+  final appSettings = AppSettings();
+  await appSettings.load();
+
+  runApp(MyApp(settings: appSettings));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  final AppSettings settings;
 
-  @override  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Motion Kit - AI Detection',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      debugShowCheckedModeBanner: false,
-      // home: HomeScreen(),
-      home: WidgetTree(),
-      // home: const ChatBotPage(),
+  const MyApp({super.key, required this.settings});
+
+  @override
+  Widget build(BuildContext context) {
+    return AnimatedBuilder(
+      animation: settings,
+      builder: (context, _) {
+        return MaterialApp(
+          title: 'FlexiFlow',
+          debugShowCheckedModeBanner: false,
+          locale: settings.locale,
+          supportedLocales: L10n.supportedLocales,
+          localizationsDelegates: const [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+          ],
+          localeResolutionCallback: (locale, supportedLocales) {
+            if (locale == null) return const Locale('en');
+            for (final supported in supportedLocales) {
+              if (supported.languageCode == locale.languageCode) {
+                return supported;
+              }
+            }
+            return const Locale('en');
+          },
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF0397FD)),
+            useMaterial3: true,
+            visualDensity: VisualDensity.adaptivePlatformDensity,
+          ),
+          home: AppSettingsScope(settings: settings, child: const WidgetTree()),
+        );
+      },
     );
   }
 }
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class AppSettingsScope extends InheritedWidget {
+  final AppSettings settings;
+
+  const AppSettingsScope({
+    super.key,
+    required this.settings,
+    required super.child,
+  });
+
+  static AppSettings of(BuildContext context) {
+    final scope = context.dependOnInheritedWidgetOfExactType<AppSettingsScope>();
+    if (scope == null) {
+      throw StateError('AppSettingsScope not found in context');
+    }
+    return scope.settings;
+  }
 
   @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: const Text('Motion Kit'),
-        centerTitle: true,
-      ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.accessibility_new,
-              size: 100,
-              color: Colors.deepPurple,
-            ),
-            const SizedBox(height: 30),
-            const Text(
-              'AI Motion Detection',
-              style: TextStyle(
-                fontSize: 24,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-            const SizedBox(height: 20),
-            const Text(
-              'Detect and track human poses and hand gestures in real-time',
-              textAlign: TextAlign.center,
-              style: TextStyle(
-                fontSize: 16,
-                color: Colors.grey,
-              ),
-            ),
-            const SizedBox(height: 50),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => PoseDetectorView(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.accessibility_new),
-              label: const Text('Start Pose Detection'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 15),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HandDetectorView(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.back_hand),
-              label: const Text('Start Hand Detection'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
-                textStyle: const TextStyle(fontSize: 18),
-              ),
-            ),
-            const SizedBox(height: 20),
-            ElevatedButton.icon(
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => HandPoseDetectorView(),
-                  ),
-                );
-              },
-              icon: const Icon(Icons.gesture),
-              label: const Text('Hand & Pose Detection'),
-              style: ElevatedButton.styleFrom(
-                padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
-                textStyle: const TextStyle(fontSize: 18),
-                backgroundColor: Colors.deepPurple.shade100,
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
+  bool updateShouldNotify(AppSettingsScope oldWidget) => oldWidget.settings != settings;
 }
