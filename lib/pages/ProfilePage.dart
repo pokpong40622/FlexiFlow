@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
 
 import '../fake_var.dart';
 
@@ -21,10 +22,12 @@ class _ProfilePageState extends State<ProfilePage> {
     double screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Colors.white,
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.center,
-        children: [
+      backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
           SizedBox(height: screenHeight * 0.0265), // Top padding
           Padding(
             padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
@@ -32,14 +35,18 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 // Custom Back Button
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: Icon(
-                    Icons.arrow_back_ios_new, // Changed to match button style
-                    size: screenWidth * 0.065,
-                    color: Colors.black,
+                Semantics(
+                  button: true,
+                  label: 'Go back',
+                  child: IconButton(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    icon: Icon(
+                      Icons.arrow_back_ios_new,
+                      size: screenWidth * 0.065,
+                      color: Theme.of(context).colorScheme.onSurface,
+                    ),
                   ),
                 ),
                 Text(
@@ -90,6 +97,7 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(height: screenHeight * 0.015),
           Text(
             'Pummiphach Paisanwatcharakij',
+            textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: screenWidth * 0.05,
               fontWeight: FontWeight.w600,
@@ -99,6 +107,7 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(height: screenHeight * 0.005),
           Text(
             'pummiphach@gmail.com',
+            textAlign: TextAlign.center,
             style: GoogleFonts.inter(
               fontSize: screenWidth * 0.035,
               fontWeight: FontWeight.w600, // Changed to semibold
@@ -172,6 +181,14 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: screenHeight * 0.013,
           ), // Added spacing between list tiles
+          _buildAccessibilityToggle(context),
+          SizedBox(
+            height: screenHeight * 0.013,
+          ),
+          _buildTextScaleSlider(context),
+          SizedBox(
+            height: screenHeight * 0.013,
+          ),
           // Sign Out option - now with consistent styling
           Padding(
             padding: EdgeInsets.symmetric(
@@ -202,7 +219,9 @@ class _ProfilePageState extends State<ProfilePage> {
               onTap: () => _showSignOutDialog(context),
             ),
           ),
-        ],
+            ],
+          ),
+        ),
       ),
     );
   }
@@ -239,6 +258,113 @@ class _ProfilePageState extends State<ProfilePage> {
         ),
         trailing: Icon(Icons.arrow_forward_ios, size: 16, color: Colors.black),
         onTap: onTap,
+      ),
+    );
+  }
+
+  Widget _buildAccessibilityToggle(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+      child: SwitchListTile(
+        value: Globals.wcagModeEnabled,
+        onChanged: (value) async {
+          await Globals.setWcagMode(value);
+          if (!mounted) return;
+          setState(() {});
+        },
+        tileColor: Theme.of(context).colorScheme.surface,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8),
+        ),
+        contentPadding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenHeight * 0.012,
+        ),
+        title: Text(
+          'Use WCAG 2.2 accessible UI',
+          style: GoogleFonts.inter(
+            fontSize: screenWidth * 0.040,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+        subtitle: Text(
+          'Higher contrast and larger touch targets',
+          style: GoogleFonts.inter(
+            fontSize: screenWidth * 0.03,
+            color: Theme.of(context).colorScheme.onSurfaceVariant,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildTextScaleSlider(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final textScaleFactor = Globals.textScaleFactor;
+    final textScalePercent = (textScaleFactor * 100).round();
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenHeight * 0.012,
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              children: [
+                Expanded(
+                  child: Text(
+                    'Text size',
+                    style: GoogleFonts.inter(
+                      fontSize: screenWidth * 0.040,
+                      fontWeight: FontWeight.w600,
+                    ),
+                  ),
+                ),
+                Text(
+                  '$textScalePercent%',
+                  style: GoogleFonts.inter(
+                    fontSize: screenWidth * 0.036,
+                    fontWeight: FontWeight.w700,
+                    color: Theme.of(context).colorScheme.primary,
+                  ),
+                ),
+              ],
+            ),
+            Text(
+              'Adjust text scale from 100% to 250%',
+              style: GoogleFonts.inter(
+                fontSize: screenWidth * 0.03,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
+              ),
+            ),
+            Slider(
+              value: textScaleFactor,
+              min: AppTokens.userTextScaleMin,
+              max: AppTokens.userTextScaleMax,
+              divisions: 30,
+              label: '$textScalePercent%',
+              onChanged: (value) {
+                Globals.setTextScale(value, persist: false);
+                setState(() {});
+              },
+              onChangeEnd: (value) {
+                Globals.setTextScale(value);
+              },
+            ),
+          ],
+        ),
       ),
     );
   }

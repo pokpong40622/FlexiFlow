@@ -32,7 +32,6 @@ double governmentPPD = 6.5;
 double aiaPPD = 4.5;
 
 class _ShopPageState extends State<ShopPage> {
-  String _selectedCategory = 'Recommended'; //Selected recommended or all
   int _selectedCardIndex = 0;
   late PageController _pageController;
 
@@ -105,10 +104,17 @@ class _ShopPageState extends State<ShopPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final screenWidth = mediaQuery.size.width;
+    final pageTextScale = mediaQuery.textScaler
+        .scale(1.0)
+        .clamp(1.0, 1.3)
+        .toDouble();
 
-    return Scaffold(
+    return MediaQuery(
+      data: mediaQuery.copyWith(textScaler: TextScaler.linear(pageTextScale)),
+      child: Scaffold(
       backgroundColor: const Color(0xFFF8F8F8),
       appBar: PreferredSize(
         preferredSize: Size.fromHeight(screenHeight * 0.12),
@@ -147,48 +153,57 @@ class _ShopPageState extends State<ShopPage> {
                         fit: BoxFit.contain,
                       ),
                     ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Shop',
-                        style: GoogleFonts.inter(
-                          fontSize: screenWidth * 0.065,
-                          fontWeight: FontWeight.w800,
-                          color: const Color(0xFF2C2C2C),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      Container(
-                        height: 2,
-                        width: screenWidth * 0.1,
-                        decoration: BoxDecoration(
-                          gradient: const LinearGradient(
-                            colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
+                  Expanded(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        Text(
+                          'Shop',
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: screenWidth * 0.065,
+                            fontWeight: FontWeight.w800,
+                            color: const Color(0xFF2C2C2C),
+                            letterSpacing: 0.5,
                           ),
-                          borderRadius: BorderRadius.circular(2),
                         ),
-                      ),
-                    ],
+                        Container(
+                          height: 2,
+                          width: screenWidth * 0.1,
+                          decoration: BoxDecoration(
+                            gradient: const LinearGradient(
+                              colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                              begin: Alignment.centerLeft,
+                              end: Alignment.centerRight,
+                            ),
+                            borderRadius: BorderRadius.circular(2),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  Row(
-                    children: [
-                      Image.asset(
-                        'assets/CoinsLogo.png',
-                        width: screenWidth * 0.084,
+                  Flexible(
+                    child: FittedBox(
+                      fit: BoxFit.scaleDown,
+                      child: Row(
+                        children: [
+                          Image.asset(
+                            'assets/CoinsLogo.png',
+                            width: screenWidth * 0.084,
+                          ),
+                          SizedBox(width: screenWidth * 0.016),
+                          Text(
+                            '${Globals.coins}',
+                            style: GoogleFonts.inter(
+                              fontSize: screenWidth * 0.06,
+                              fontWeight: FontWeight.w700,
+                              color: const Color(0xFFF6B647),
+                            ),
+                          ),
+                        ],
                       ),
-                      SizedBox(width: screenWidth * 0.016),
-                      Text(
-                        '${Globals.coins}',
-                        style: GoogleFonts.inter(
-                          fontSize: screenWidth * 0.06,
-                          fontWeight: FontWeight.w700,
-                          color: const Color(0xFFF6B647),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ],
               ),
@@ -401,6 +416,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
           ),
         ],
+      ),
       ),
     );
   }
@@ -749,113 +765,132 @@ class _ShopPageState extends State<ShopPage> {
     required String ItemLabel,
     required String ItemPrice,
   }) {
-    double screenWidth = MediaQuery.of(context).size.width;
-    
-    return Container(
-      decoration: BoxDecoration(
-        color: Colors.white,
-        borderRadius: BorderRadius.circular(20),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.05),
-            blurRadius: 10,
-            offset: const Offset(0, 4),
-          ),
-        ],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Expanded(
-            flex: 3,
-            child: Container(
-              padding: const EdgeInsets.all(16),
-              decoration: const BoxDecoration(
-                color: Color(0xFFF5F7FA),
-                borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-              ),
-              child: Image.asset(ItemPic, fit: BoxFit.contain),
+    final mediaQuery = MediaQuery.of(context);
+    final tileTextScale = mediaQuery.textScaler
+        .scale(1.0)
+        .clamp(1.0, 1.2)
+        .toDouble();
+
+    return MediaQuery(
+      data: mediaQuery.copyWith(textScaler: TextScaler.linear(tileTextScale)),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(20),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 10,
+              offset: const Offset(0, 4),
             ),
-          ),
-          Expanded(
-            flex: 2,
-            child: Padding(
-              padding: const EdgeInsets.all(8),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        ItemLabel,
-                        maxLines: 2,
-                        overflow: TextOverflow.ellipsis,
-                        textAlign: TextAlign.center,
-                        style: GoogleFonts.inter(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 13,
-                          color: const Color(0xFF2C2C2C),
-                          height: 1.2,
+          ],
+        ),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Expanded(
+              flex: 2,
+              child: Container(
+                padding: const EdgeInsets.all(16),
+                decoration: const BoxDecoration(
+                  color: Color(0xFFF5F7FA),
+                  borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+                ),
+                child: Image.asset(ItemPic, fit: BoxFit.contain),
+              ),
+            ),
+            Expanded(
+              flex: 3,
+              child: Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Flexible(
+                      child: Center(
+                        child: Text(
+                          ItemLabel,
+                          maxLines: 2,
+                          overflow: TextOverflow.ellipsis,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            fontWeight: FontWeight.w600,
+                            fontSize: 13,
+                            color: const Color(0xFF2C2C2C),
+                            height: 1.2,
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                  GestureDetector(
-                    onTap: () {
-                      _showBuyConfirmationDialog(context, ItemLabel, ItemPrice);
-                    },
-                    child: Container(
-                      height: 36,
-                      decoration: BoxDecoration(
-                        gradient: const LinearGradient(
-                          colors: [Color(0xFF0397FD), Color(0xFF0277BD)],
+                    const SizedBox(height: 6),
+                    GestureDetector(
+                      onTap: () {
+                        _showBuyConfirmationDialog(context, ItemLabel, ItemPrice);
+                      },
+                      child: Container(
+                        height: 40,
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF0397FD), Color(0xFF0277BD)],
+                          ),
+                          borderRadius: BorderRadius.circular(10),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF0397FD).withOpacity(0.2),
+                              blurRadius: 4,
+                              offset: const Offset(0, 2),
+                            ),
+                          ],
                         ),
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF0397FD).withOpacity(0.2),
-                            blurRadius: 4,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Text(
-                            'Buy',
-                            style: GoogleFonts.inter(
-                              fontSize: 13,
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
+                        child: Center(
+                          child: FittedBox(
+                            fit: BoxFit.scaleDown,
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  'Buy',
+                                  style: GoogleFonts.inter(
+                                    fontSize: 13,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                const SizedBox(width: 8),
+                                Container(
+                                  width: 1,
+                                  height: 16,
+                                  color: Colors.white.withOpacity(0.3),
+                                ),
+                                const SizedBox(width: 8),
+                                Text(
+                                  ItemPrice,
+                                  style: GoogleFonts.inter(
+                                    fontSize: 14,
+                                    color: const Color(0xFFFFD54F),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                const SizedBox(width: 4),
+                                Image.asset(
+                                  'assets/CoinsLogo.png',
+                                  width: 14,
+                                  height: 14,
+                                ),
+                              ],
                             ),
                           ),
-                          const SizedBox(width: 8),
-                          Container(width: 1, height: 16, color: Colors.white.withOpacity(0.3)),
-                          const SizedBox(width: 8),
-                          Text(
-                            ItemPrice,
-                            style: GoogleFonts.inter(
-                              fontSize: 14,
-                              color: const Color(0xFFFFD54F),
-                              fontWeight: FontWeight.w700,
-                            ),
-                          ),
-                          const SizedBox(width: 4),
-                          Image.asset(
-                            'assets/CoinsLogo.png',
-                            width: 14,
-                            height: 14,
-                          ),
-                        ],
+                        ),
                       ),
                     ),
-                  ),
-                ],
+                  ],
+                ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }

@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'dart:math';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 enum ExerciseType {
@@ -47,6 +48,42 @@ double expToLvl(int exp) {
 }
 
 class Globals {
+  static const String _wcagModeEnabledKey = 'wcagModeEnabled';
+  static const String _textScaleFactorKey = 'textScaleFactor';
+  static const double textScaleMin = 1.0;
+  static const double textScaleMax = 2.5;
+  static const double _defaultTextScale = 1.0;
+  static final ValueNotifier<bool> wcagModeNotifier = ValueNotifier<bool>(false);
+  static final ValueNotifier<double> textScaleNotifier =
+      ValueNotifier<double>(_defaultTextScale);
+
+  static bool get wcagModeEnabled => wcagModeNotifier.value;
+  static double get textScaleFactor => textScaleNotifier.value;
+
+  static double _normalizeTextScale(double scale) {
+    if (scale.isNaN || scale.isInfinite) return _defaultTextScale;
+    return scale.clamp(textScaleMin, textScaleMax).toDouble();
+  }
+
+  static Future<void> setWcagMode(bool enabled) async {
+    if (wcagModeNotifier.value == enabled) return;
+    wcagModeNotifier.value = enabled;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_wcagModeEnabledKey, enabled);
+  }
+
+  static Future<void> setTextScale(double scale, {bool persist = true}) async {
+    final normalized = _normalizeTextScale(scale);
+    if ((textScaleNotifier.value - normalized).abs() > 0.0001) {
+      textScaleNotifier.value = normalized;
+    }
+
+    if (!persist) return;
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setDouble(_textScaleFactorKey, normalized);
+  }
+
   // Seconds spent on each
   static int get timeSpentTD {
     final now = DateTime.now();
@@ -221,6 +258,8 @@ class Globals {
 
   static Future<void> save() async {
     final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool(_wcagModeEnabledKey, wcagModeEnabled);
+    await prefs.setDouble(_textScaleFactorKey, textScaleFactor);
     await prefs.setInt('totalStepsTD', totalStepsTD);
     await prefs.setBool('unlockedSumItUp', unlockedSumItUp);
     await prefs.setBool('isThaiIdVerified', isThaiIdVerified);
@@ -239,6 +278,11 @@ class Globals {
 
   static Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
+    wcagModeNotifier.value = prefs.getBool(_wcagModeEnabledKey) ?? false;
+    final storedTextScale = prefs.getDouble(_textScaleFactorKey) ??
+        (prefs.getInt(_textScaleFactorKey)?.toDouble()) ??
+        _defaultTextScale;
+    textScaleNotifier.value = _normalizeTextScale(storedTextScale);
     totalStepsTD = prefs.getInt('totalStepsTD') ?? 0;
     unlockedSumItUp = prefs.getBool('unlockedSumItUp') ?? false;
     isThaiIdVerified = prefs.getBool('isThaiIdVerified') ?? false;
@@ -276,6 +320,8 @@ class Globals {
     await prefs.clear();
     
     // Reset to default values
+    wcagModeNotifier.value = false;
+    textScaleNotifier.value = _defaultTextScale;
     totalStepsTD = 3246;
     isThaiIdVerified = false;
     unlockedSumItUp = false;

@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
 
-import 'ScorePage.dart';
-
 class MissionPage extends StatefulWidget {
   final VoidCallback? onNavigateToTraining;
 
@@ -21,74 +19,97 @@ class _MissionPageState extends State<MissionPage> {
 
   @override
   Widget build(BuildContext context) {
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-    return Scaffold(
+    final mediaQuery = MediaQuery.of(context);
+    final screenHeight = mediaQuery.size.height;
+    final screenWidth = mediaQuery.size.width;
+    final pageTextScale = mediaQuery.textScaler
+        .scale(1.0)
+        .clamp(1.0, 1.35)
+        .toDouble();
+
+    return MediaQuery(
+      data: mediaQuery.copyWith(textScaler: TextScaler.linear(pageTextScale)),
+      child: Scaffold(
       backgroundColor: const Color(0xFFFAFAFA),
-      body: Column(
-        children: [
-          Container(
-            width: screenWidth * 1,
-            height: screenHeight * 0.195,
-            color: const Color(0xFF0397FD),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    SizedBox(width: screenWidth * 0.066),
-                    Column(
+      body: SafeArea(
+        bottom: false,
+        child: Column(
+          children: [
+            Container(
+              width: screenWidth,
+              constraints: BoxConstraints(
+                minHeight: screenHeight * 0.195,
+              ),
+              padding: EdgeInsets.only(bottom: screenHeight * 0.012),
+              color: const Color(0xFF0397FD),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Padding(
+                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.066),
+                    child: Row(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        SizedBox(height: screenHeight * 0.045),
-                        Text(
-                          'YOUR',
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w700,
-                            fontSize: screenWidth * 0.076,
-                            color: Colors.white,
-                            height: 1,
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              SizedBox(height: screenHeight * 0.045),
+                              Text(
+                                'YOUR',
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: screenWidth * 0.076,
+                                  color: Colors.white,
+                                  height: 1,
+                                ),
+                              ),
+                              Text(
+                                'MISSIONS',
+                                style: GoogleFonts.inter(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: screenWidth * 0.076,
+                                  color: Colors.white,
+                                ),
+                              )
+                            ],
                           ),
                         ),
-                        Text(
-                          'MISSIONS',
-                          style: GoogleFonts.inter(
-                            fontWeight: FontWeight.w700,
-                            fontSize: screenWidth * 0.076,
-                            color: Colors.white,
+                        SizedBox(width: screenWidth * 0.02),
+                        Flexible(
+                          child: Image.asset(
+                            'assets/goldmedal.png',
+                            width: screenWidth * 0.25,
+                            fit: BoxFit.contain,
                           ),
-                        )
+                        ),
                       ],
                     ),
-                    SizedBox(width: screenWidth * 0.108),
-                    Image.asset(
-                      'assets/goldmedal.png', // Ensure you have this asset
-                      width: screenWidth * 0.30,
-                    ),
-                  ],
-                ),
-                SizedBox(height: screenHeight * 0.0225),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    _buildTab(context, 'Daily', 0),
-                    _buildTab(context, 'Weekly', 1),
-                    _buildTab(context, 'All', 2),
-                  ],
-                )
-              ],
+                  ),
+                  SizedBox(height: screenHeight * 0.0225),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      _buildTab(context, 'Daily', 0),
+                      _buildTab(context, 'Weekly', 1),
+                      _buildTab(context, 'All', 2),
+                    ],
+                  )
+                ],
+              ),
             ),
-          ),
-          SizedBox(height: screenHeight * 0.016),
-          Expanded(
-            child: ListView(
-              padding: EdgeInsets.zero,
-              children: _getMissions(context),
+            SizedBox(height: screenHeight * 0.016),
+            Expanded(
+              child: ListView(
+                padding: EdgeInsets.zero,
+                children: _getMissions(context),
+              ),
             ),
-          ),
-        ],
+          ],
+        ),
+      ),
       ),
     );
   }
@@ -244,10 +265,13 @@ class _MissionPageState extends State<MissionPage> {
         children: [
           Container(
             width: tabWidth,
-            height: 30,
+            constraints: const BoxConstraints(minHeight: 30),
             alignment: Alignment.topCenter,
+            padding: const EdgeInsets.symmetric(vertical: 4),
             child: Text(
               title,
+              maxLines: 1,
+              overflow: TextOverflow.ellipsis,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 fontSize: MediaQuery.of(context).size.width * 0.037,
@@ -384,6 +408,8 @@ class _MissionPageState extends State<MissionPage> {
                           children: [
                             Text(
                               title,
+                              maxLines: 2,
+                              overflow: TextOverflow.ellipsis,
                               style: GoogleFonts.inter(
                                 fontWeight: FontWeight.w600,
                                 fontSize: screenWidth * 0.038,
@@ -396,14 +422,16 @@ class _MissionPageState extends State<MissionPage> {
                               ),
                             ),
                             SizedBox(height: screenHeight * 0.005),
-                            Row(
+                            Wrap(
+                              spacing: screenWidth * 0.012,
+                              runSpacing: screenHeight * 0.004,
+                              crossAxisAlignment: WrapCrossAlignment.center,
                               children: [
                                 Image.asset(
                                   'assets/CoinsLogo.png',
                                   width: screenWidth * 0.045,
                                   height: screenWidth * 0.045,
                                 ),
-                                SizedBox(width: screenWidth * 0.012),
                                 Text(
                                   '+$coins',
                                   style: GoogleFonts.inter(

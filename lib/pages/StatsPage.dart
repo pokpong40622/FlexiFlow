@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:shimmer/shimmer.dart';
 import 'dart:async';
-import 'dart:math';
 
 import '../fake_var.dart';
 
@@ -109,8 +108,13 @@ class _StatsPageState extends State<StatsPage> {
   @override
   Widget build(BuildContext context) {
     // Screen dimensions for responsive design
-    final screenWidth = MediaQuery.of(context).size.width;
-    final screenHeight = MediaQuery.of(context).size.height;
+    final mediaQuery = MediaQuery.of(context);
+    final screenWidth = mediaQuery.size.width;
+    final screenHeight = mediaQuery.size.height;
+    final pageTextScale = mediaQuery.textScaler
+        .scale(1.0)
+        .clamp(1.0, 1.3)
+        .toDouble();
 
     int shownSecond = 0;
     int shownMinute = 0;
@@ -133,7 +137,9 @@ class _StatsPageState extends State<StatsPage> {
     return Scaffold(
       backgroundColor: Color(0xFFFAFAFA),
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(screenHeight * 0.12),
+        preferredSize: Size.fromHeight(
+          screenHeight * (0.12 + ((pageTextScale - 1.0) * 0.08)),
+        ),
         child: Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -161,53 +167,66 @@ class _StatsPageState extends State<StatsPage> {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   // Title with improved styling
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Text(
-                        'Stats',
-                        style: GoogleFonts.inter(
-                          fontSize: screenWidth * 0.065,
-                          fontWeight: FontWeight.w800,
-                          color: Color(0xFF2C2C2C),
-                          letterSpacing: 0.5,
-                        ),
-                      ),
-                      Container(
-                        height: 2,
-                        width: screenWidth * 0.1,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
-                            begin: Alignment.centerLeft,
-                            end: Alignment.centerRight,
+                  Expanded(
+                    child: Align(
+                      alignment: Alignment.centerLeft,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            'Stats',
+                            style: GoogleFonts.inter(
+                              fontSize: screenWidth * 0.065,
+                              fontWeight: FontWeight.w800,
+                              color: Color(0xFF2C2C2C),
+                              letterSpacing: 0.5,
+                            ),
                           ),
-                          borderRadius: BorderRadius.circular(2),
-                        ),
+                          Container(
+                            height: 2,
+                            width: screenWidth * 0.1,
+                            decoration: BoxDecoration(
+                              gradient: LinearGradient(
+                                colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                                begin: Alignment.centerLeft,
+                                end: Alignment.centerRight,
+                              ),
+                              borderRadius: BorderRadius.circular(2),
+                            ),
+                          ),
+                        ],
                       ),
-                    ],
+                    ),
                   ),
-                  Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Text(
-                        _formatDate(_currentDateTime),
-                        style: GoogleFonts.inter(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                  SizedBox(width: screenWidth * 0.02),
+                  Flexible(
+                    child: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Text(
+                          _formatDate(_currentDateTime),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                      Text(
-                        _formatTime(_currentDateTime),
-                        style: GoogleFonts.inter(
-                          fontSize: screenWidth * 0.04,
-                          fontWeight: FontWeight.w600,
-                          color: Colors.black,
+                        Text(
+                          _formatTime(_currentDateTime),
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: GoogleFonts.inter(
+                            fontSize: screenWidth * 0.04,
+                            fontWeight: FontWeight.w600,
+                            color: Colors.black,
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -239,7 +258,9 @@ class _StatsPageState extends State<StatsPage> {
                     ),
                     Container(
                       width: screenWidth * 0.933333,
-                      height: screenHeight * 0.0991666,
+                      constraints: BoxConstraints(
+                        minHeight: screenHeight * 0.0991666,
+                      ),
                       padding: EdgeInsets.all(screenWidth * 0.04),
                       decoration: BoxDecoration(
                         color: Colors.white,
@@ -485,32 +506,39 @@ class _StatsPageState extends State<StatsPage> {
                                     child: _isLoading
                                         ? _buildSkeleton(
                                             screenWidth * 0.25, screenWidth * 0.08)
-                                        : Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.baseline,
-                                            textBaseline:
-                                                TextBaseline.alphabetic,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '${Globals.brainScore}',
-                                                style: GoogleFonts.inter(
-                                                  fontSize: screenWidth * 0.08,
-                                                  fontWeight: FontWeight.w800,
-                                                  color: Color(0xFF0397FD),
+                                            : FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.baseline,
+                                                  textBaseline:
+                                                      TextBaseline.alphabetic,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      '${Globals.brainScore}',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize:
+                                                            screenWidth * 0.08,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color: Color(0xFF0397FD),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      ' pts',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize:
+                                                            screenWidth * 0.03,
+                                                        color: Colors.grey[600],
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              Text(
-                                                ' pts',
-                                                style: GoogleFonts.inter(
-                                                  fontSize: screenWidth * 0.03,
-                                                  color: Colors.grey[600],
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
                                   ),
                                 ),
                               ],
@@ -553,32 +581,39 @@ class _StatsPageState extends State<StatsPage> {
                                     child: _isLoading
                                         ? _buildSkeleton(
                                             screenWidth * 0.25, screenWidth * 0.08)
-                                        : Row(
-                                            crossAxisAlignment:
-                                                CrossAxisAlignment.baseline,
-                                            textBaseline:
-                                                TextBaseline.alphabetic,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.center,
-                                            children: [
-                                              Text(
-                                                '${Globals.totalStepsTD}',
-                                                style: GoogleFonts.inter(
-                                                  fontSize: screenWidth * 0.08,
-                                                  fontWeight: FontWeight.w800,
-                                                  color: Color(0xFF0397FD),
+                                            : FittedBox(
+                                                fit: BoxFit.scaleDown,
+                                                child: Row(
+                                                  crossAxisAlignment:
+                                                      CrossAxisAlignment.baseline,
+                                                  textBaseline:
+                                                      TextBaseline.alphabetic,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      '${Globals.totalStepsTD}',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize:
+                                                            screenWidth * 0.08,
+                                                        fontWeight:
+                                                            FontWeight.w800,
+                                                        color: Color(0xFF0397FD),
+                                                      ),
+                                                    ),
+                                                    Text(
+                                                      ' steps',
+                                                      style: GoogleFonts.inter(
+                                                        fontSize:
+                                                            screenWidth * 0.035,
+                                                        color: Colors.grey[600],
+                                                        fontWeight:
+                                                            FontWeight.w600,
+                                                      ),
+                                                    ),
+                                                  ],
                                                 ),
                                               ),
-                                              Text(
-                                                ' steps',
-                                                style: GoogleFonts.inter(
-                                                  fontSize: screenWidth * 0.035,
-                                                  color: Colors.grey[600],
-                                                  fontWeight: FontWeight.w600,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
                                   ),
                                 ),
                               ],
@@ -597,7 +632,9 @@ class _StatsPageState extends State<StatsPage> {
                     children: [
                       Container(
                         width: screenWidth * 0.93240, // 1007/1125 = 0.895
-                        height: screenHeight * 0.184166, // 442/2100 = 0.210
+                        constraints: BoxConstraints(
+                          minHeight: screenHeight * 0.184166, // 442/2100 = 0.210
+                        ),
                         padding: EdgeInsets.all(screenWidth * 0.04),
                         decoration: BoxDecoration(
                           color: Colors.white,
@@ -616,8 +653,10 @@ class _StatsPageState extends State<StatsPage> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           mainAxisAlignment: MainAxisAlignment.start  ,
                           children: [
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.start,
+                            Wrap(
+                              crossAxisAlignment: WrapCrossAlignment.center,
+                              spacing: screenWidth * 0.02,
+                              runSpacing: screenHeight * 0.006,
                               children: [
                                 Text(
                                   'Time Spent',
@@ -627,19 +666,16 @@ class _StatsPageState extends State<StatsPage> {
                                     color: Colors.black,
                                   ),
                                 ),
-                                SizedBox(width: screenWidth * 0.038),
                                 _buildTimeFilter(
                                   'today',
                                   _selectedTimeFilter == 'today',
                                   screenWidth,
                                 ),
-                                SizedBox(width: screenWidth * 0.02),
                                 _buildTimeFilter(
                                   'week',
                                   _selectedTimeFilter == 'week',
                                   screenWidth,
                                 ),
-                                SizedBox(width: screenWidth * 0.02),
                                 _buildTimeFilter(
                                   'month',
                                   _selectedTimeFilter == 'month',
@@ -665,61 +701,83 @@ class _StatsPageState extends State<StatsPage> {
                                 ],
                               )
                             else
-                              Row(
-                                crossAxisAlignment: CrossAxisAlignment.baseline,
-                                textBaseline: TextBaseline.alphabetic,
+                              Wrap(
+                                crossAxisAlignment: WrapCrossAlignment.end,
+                                spacing: screenWidth * 0.03,
+                                runSpacing: screenHeight * 0.006,
                                 children: [
-                                  if (shownHour != 0) ...[
-                                    Text(
-                                      '$shownHour',
-                                      style: GoogleFonts.inter(
-                                        fontSize: screenWidth * 0.118,
-                                        fontWeight: FontWeight.w800,
-                                        color: Color(0xFF0397FD),
+                                  if (shownHour != 0)
+                                    Row(
+                                      mainAxisSize: MainAxisSize.min,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.baseline,
+                                      textBaseline: TextBaseline.alphabetic,
+                                      children: [
+                                        Text(
+                                          '$shownHour',
+                                          style: GoogleFonts.inter(
+                                            fontSize: screenWidth * 0.118,
+                                            fontWeight: FontWeight.w800,
+                                            color: Color(0xFF0397FD),
+                                          ),
+                                        ),
+                                        Text(
+                                          ' hour',
+                                          style: GoogleFonts.inter(
+                                            fontSize: screenWidth * 0.06,
+                                            color: Colors.black,
+                                            fontWeight: FontWeight.w600,
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Text(
+                                        shownMinute.toString(),
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.118,
+                                          fontWeight: FontWeight.w800,
+                                          color: Color(0xFF0397FD),
+                                        ),
                                       ),
-                                    ),
-                                    Text(
-                                      ' hour ',
-                                      style: GoogleFonts.inter(
-                                        fontSize: screenWidth * 0.06,
-                                        color: Colors.black,
-                                        fontWeight: FontWeight.w600,
+                                      Text(
+                                        ' min',
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.06,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
                                       ),
-                                    ),
-                                  ],
-                                  Text(
-                                    shownMinute.toString(),
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.118,
-                                      fontWeight: FontWeight.w800,
-                                      color: Color(0xFF0397FD),
-                                    ),
+                                    ],
                                   ),
-                                  Text(
-                                    ' min ',
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.06,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                    ),
-                                  ),
-
-
-                                  Text(
-                                    shownSecond.toString().padLeft(2, '0'),
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.118,
-                                      fontWeight: FontWeight.w800,
-                                      color: Color(0xFF0397FD),
-                                    ),
-                                  ),
-                                  Text(
-                                    ' sec',
-                                    style: GoogleFonts.inter(
-                                      fontSize: screenWidth * 0.06,
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.w600,
-                                    ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.min,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.baseline,
+                                    textBaseline: TextBaseline.alphabetic,
+                                    children: [
+                                      Text(
+                                        shownSecond.toString().padLeft(2, '0'),
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.118,
+                                          fontWeight: FontWeight.w800,
+                                          color: Color(0xFF0397FD),
+                                        ),
+                                      ),
+                                      Text(
+                                        ' sec',
+                                        style: GoogleFonts.inter(
+                                          fontSize: screenWidth * 0.06,
+                                          color: Colors.black,
+                                          fontWeight: FontWeight.w600,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 ],
                               ),
@@ -858,59 +916,81 @@ class _StatsPageState extends State<StatsPage> {
               alignment: Alignment.bottomLeft,
               child: Padding(
                 padding: EdgeInsets.all(screenWidth * 0.035),
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    // Game Name
-                    Text(
-                      _exerciseLabel(exercise.type),
-                      style: GoogleFonts.inter(
-                        fontSize: screenWidth * 0.035,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black87,
-                      ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                    ),
-                    SizedBox(height: screenHeight * 0.005),
-                    
-                    // Time Row
-                    Row(
-                      children: [
-                        Icon(Icons.access_time_rounded,
-                            size: screenWidth * 0.03, color: Colors.grey[800]),
-                        SizedBox(width: 4),
-                        Text(
-                          timeLabel,
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.028,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[800],
+                child: Builder(
+                  builder: (context) {
+                    final mq = MediaQuery.of(context);
+                    final tileScale = mq.textScaler
+                        .scale(1.0)
+                        .clamp(1.0, 1.15)
+                        .toDouble();
+                    return MediaQuery(
+                      data: mq.copyWith(textScaler: TextScaler.linear(tileScale)),
+                      child: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          // Game Name
+                          Text(
+                            _exerciseLabel(exercise.type),
+                            style: GoogleFonts.inter(
+                              fontSize: screenWidth * 0.035,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
                           ),
-                        ),
-                      ],
-                    ),
+                          SizedBox(height: screenHeight * 0.005),
 
-                    SizedBox(height: screenHeight * 0.002),
-                    
-                    // Score Row
-                    Row(
-                      children: [
-                        Icon(Icons.emoji_events_rounded,
-                            size: screenWidth * 0.03, color: Colors.grey[800]),
-                        SizedBox(width: 4),
-                        Text(
-                          '${exercise.score} pts',
-                          style: GoogleFonts.inter(
-                            fontSize: screenWidth * 0.028,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.grey[800],
+                          // Time Row
+                          Row(
+                            children: [
+                              Icon(Icons.access_time_rounded,
+                                  size: screenWidth * 0.03,
+                                  color: Colors.grey[800]),
+                              SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  timeLabel,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: screenWidth * 0.028,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                              ),
+                            ],
                           ),
-                        ),
-                      ],
-                    ),
-                  ],
+
+                          SizedBox(height: screenHeight * 0.002),
+
+                          // Score Row
+                          Row(
+                            children: [
+                              Icon(Icons.emoji_events_rounded,
+                                  size: screenWidth * 0.03,
+                                  color: Colors.grey[800]),
+                              SizedBox(width: 4),
+                              Expanded(
+                                child: Text(
+                                  '${exercise.score} pts',
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: GoogleFonts.inter(
+                                    fontSize: screenWidth * 0.028,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.grey[800],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             ),

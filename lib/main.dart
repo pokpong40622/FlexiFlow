@@ -6,6 +6,8 @@ import 'package:motion_kit/figma/chatbot.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/GetStarted.dart';
 import 'package:motion_kit/services/step_service.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
+import 'package:motion_kit/theme/app_theme.dart';
 import 'package:motion_kit/views/pose_detection_screen.dart';
 import 'package:motion_kit/views/hand_detection_screen.dart';
 import 'package:motion_kit/views/hand_pose_detection_screen.dart';
@@ -16,6 +18,27 @@ import 'package:motion_kit/fake_var.dart';
 List<CameraDescription> cameras = [];
 
 Future<void> main() async {
+  // Intercept Flutter's error handling before the app runs
+  FlutterError.onError = (FlutterErrorDetails details) {
+    final exceptionString = details.exceptionAsString();
+
+    // 1. Catch the main RenderFlex error
+    if (exceptionString.contains('RenderFlex overflowed')) {
+      debugPrint('\n🚨 --- FULL RENDERFLEX OVERFLOW DETAILS --- 🚨');
+      // forceReport: true overrides Flutter's default behavior and forces
+      // the full widget tree and file location to print to the console.
+      FlutterError.dumpErrorToConsole(details, forceReport: true);
+    }
+    // 2. Silence the annoying "Another exception was thrown" spam completely
+    else if (exceptionString.contains('Another exception was thrown')) {
+      // Do nothing here. This swallows the repetitive spam.
+    }
+    // 3. Keep standard logging for other, non-layout errors (Recommended)
+    else {
+      FlutterError.presentError(details);
+    }
+  };
+
   WidgetsFlutterBinding.ensureInitialized();
   await Globals.load(); // Load saved global variables
   await Firebase.initializeApp(
@@ -33,16 +56,41 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Motion Kit - AI Detection',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
-        useMaterial3: true,
-      ),
-      debugShowCheckedModeBanner: false,
-      // home: HomeScreen(),
-      home: WidgetTree(),
-      // home: const ChatBotPage(),
+    return ValueListenableBuilder<bool>(
+      valueListenable: Globals.wcagModeNotifier,
+      builder: (context, wcagModeEnabled, _) {
+        return ValueListenableBuilder<double>(
+          valueListenable: Globals.textScaleNotifier,
+          builder: (context, textScaleFactor, __) {
+            final targetScale = (wcagModeEnabled
+                    ? textScaleFactor.clamp(
+                        AppTokens.wcagTextScaleMin,
+                        AppTokens.userTextScaleMax,
+                      )
+                    : textScaleFactor.clamp(
+                        AppTokens.userTextScaleMin,
+                        AppTokens.userTextScaleMax,
+                      ))
+                .toDouble();
+
+            return MaterialApp(
+              title: 'Motion Kit - AI Detection',
+              theme: AppTheme.build(wcagModeEnabled: wcagModeEnabled),
+              debugShowCheckedModeBanner: false,
+              builder: (context, child) {
+                final mediaQuery = MediaQuery.of(context);
+                return MediaQuery(
+                  data: mediaQuery.copyWith(
+                    textScaler: TextScaler.linear(targetScale),
+                  ),
+                  child: child ?? const SizedBox.shrink(),
+                );
+              },
+              home: WidgetTree(),
+            );
+          },
+        );
+      },
     );
   }
 }

@@ -3,6 +3,8 @@ import '../pages/MissionPage.dart';
 import '../pages/StatsPage.dart';
 import '../pages/TrainingPage.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/theme/app_tokens.dart';
 
 class NavigationBarSet extends StatefulWidget {
   NavigationBarSet({super.key,});
@@ -49,21 +51,25 @@ class _HomepageState extends State<NavigationBarSet> {
               index: 0,
               icon: Icons.home,
               label: _pageNames[0],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 1,
               icon: Icons.emoji_events,
-              label: _pageNames[1], 
+              label: _pageNames[1],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 2,
               icon: Icons.bar_chart,
               label: _pageNames[2],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 3,
               icon: Icons.play_circle,
               label: _pageNames[3],
+              showPersistentLabel: Globals.wcagModeEnabled,
             ),
           ],
         ),
@@ -75,35 +81,51 @@ class _HomepageState extends State<NavigationBarSet> {
     required int index,
     required IconData icon,
     required String label,
+    required bool showPersistentLabel,
   }) {
     final isSelected = myIndex == index;
+    final colorScheme = Theme.of(context).colorScheme;
 
-    return GestureDetector(
-      onTap: () {
-        setState(() {
-          myIndex = index;
-        });
-      },
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            size: 33,
-            color: isSelected ? Color(0xFF0397FD) : Color(0xFFD9D9D9),
+    final showLabel = showPersistentLabel || isSelected;
+    final tokens = Globals.wcagModeEnabled ? AppTokens.wcag : AppTokens.standard;
+    return Semantics(
+      button: true,
+      selected: isSelected,
+      label: 'Go to $label tab',
+      child: InkResponse(
+        radius: 32,
+        onTap: () {
+          setState(() {
+            myIndex = index;
+          });
+        },
+        child: ConstrainedBox(
+          constraints: BoxConstraints(
+            minWidth: tokens.minTapTargetSize,
+            minHeight: tokens.minTapTargetSize,
           ),
-          SizedBox(height: 2),
-          
-          // if (isSelected)
-          //   Text(
-          //     label,
-          //     style: GoogleFonts.inter(
-          //       fontSize: 10,
-          //       fontWeight: FontWeight.bold, 
-          //       color: Color(0xFF0397FD),
-          //     ),
-          //   ),
-        ],
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(
+                icon,
+                size: tokens.navigationIconSize,
+                color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+              ),
+              const SizedBox(height: 2),
+              if (showLabel)
+                Text(
+                  label,
+                  style: TextStyle(
+                    fontSize: Globals.wcagModeEnabled ? 12 : 10,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
+                    color: isSelected ? colorScheme.primary : colorScheme.onSurfaceVariant,
+                  ),
+                ),
+            ],
+          ),
+        ),
       ),
     );
   }

@@ -65,161 +65,172 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
-      body: AnimatedBuilder(
-        animation: _controller,
-        builder: (context, child) {
-          return Column(
-            children: [
-              // Curved Blue Header
-              ClipPath(
-                clipper: HeaderClipper(),
-                child: Container(
-                  height: MediaQuery.of(context).size.height * 0.41,
-                  width: double.infinity,
-                  color: const Color(0xFF0096FF),
-                  child: Center(
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 20.0),
-                      child: Transform.scale(
-                        scale: _scaleAnimation.value,
-                        child: Container(
-                          padding: const EdgeInsets.all(25.0),
-                          decoration: const BoxDecoration(
-                            color: Colors.white,
-                            shape: BoxShape.circle,
-                          ),
-                          child: Image.asset(
-                            'assets/trophy.png',
-                            width: 130,
-                            fit: BoxFit.contain,
+      body: SafeArea(
+        child: AnimatedBuilder(
+          animation: _controller,
+          builder: (context, child) {
+            return LayoutBuilder(
+              builder: (context, constraints) {
+                return SingleChildScrollView(
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(minHeight: constraints.maxHeight),
+                    child: Column(
+                      children: [
+                        // Curved Blue Header
+                        ClipPath(
+                          clipper: HeaderClipper(),
+                          child: Container(
+                            height: MediaQuery.of(context).size.height * 0.41,
+                            width: double.infinity,
+                            color: const Color(0xFF0096FF),
+                            child: Center(
+                              child: Padding(
+                                padding: const EdgeInsets.only(top: 20.0),
+                                child: Transform.scale(
+                                  scale: _scaleAnimation.value,
+                                  child: Container(
+                                    padding: const EdgeInsets.all(25.0),
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      shape: BoxShape.circle,
+                                    ),
+                                    child: Image.asset(
+                                      'assets/trophy.png',
+                                      width: 130,
+                                      fit: BoxFit.contain,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ),
                           ),
                         ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
 
-              const SizedBox(height: 40),
+                        const SizedBox(height: 40),
 
-              Opacity(
-                opacity: _opacityAnimation.value,
-                child: Text(
-                  'Congrats!  You score',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-
-              const SizedBox(height: 4),
-
-              // Score Row - Centering the score
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.baseline,
-                textBaseline: TextBaseline.alphabetic,
-                children: [
-                  // This SizedBox helps offset the "points" text
-                  // to keep the number exactly in the center of the screen
-                  const SizedBox(width: 60),
-                  Text(
-                    '${_scoreAnimation.value}',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 110,
-                      fontWeight: FontWeight.w800,
-                      color: const Color(0xFF005DAE),
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  SizedBox(
-                    width: 60, // Match the offset width
-                    child: Opacity(
-                      opacity: _opacityAnimation.value,
-                      child: Text(
-                        'points',
-                        style: GoogleFonts.montserrat(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
-                          color: Colors.black,
+                        Opacity(
+                          opacity: _opacityAnimation.value,
+                          child: Text(
+                            'Congrats!  You score',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                          ),
                         ),
-                      ),
+
+                        const SizedBox(height: 4),
+
+                        // Score Row - Centering the score
+                        FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            crossAxisAlignment: CrossAxisAlignment.baseline,
+                            textBaseline: TextBaseline.alphabetic,
+                            children: [
+                              // This SizedBox helps offset the "points" text
+                              // to keep the number exactly in the center of the screen
+                              const SizedBox(width: 60),
+                              Text(
+                                '${_scoreAnimation.value}',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 110,
+                                  fontWeight: FontWeight.w800,
+                                  color: const Color(0xFF005DAE),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              SizedBox(
+                                width: 60, // Match the offset width
+                                child: Opacity(
+                                  opacity: _opacityAnimation.value,
+                                  child: Text(
+                                    'points',
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 16,
+                                      fontWeight: FontWeight.w700,
+                                      color: Colors.black,
+                                    ),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                        Opacity(
+                          opacity: _opacityAnimation.value,
+                          child: Text(
+                            'in ${widget.timeSpent} seconds',
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 24,
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // High Score - Positioned just above the button
+                        Padding(
+                          padding: const EdgeInsets.only(right: 20),
+                          child: Align(
+                            alignment: Alignment.centerRight,
+                            child: Text(
+                              'High score: ${widget.highScore}',
+                              style: GoogleFonts.montserrat(
+                                fontSize: 20,
+                                fontWeight: FontWeight.w700,
+                                color: Colors.black,
+                              ),
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(
+                          height: 8,
+                        ),
+                        // Back Button - Wide with minimal side padding
+                        Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 6, 16, 24),
+                          child: SizedBox(
+                            width: double.infinity,
+                            height: 68,
+                            child: ElevatedButton(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: const Color(0xFF0096FF),
+                                elevation: 0,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(12),
+                                ),
+                              ),
+                              child: Text(
+                                'Back',
+                                style: GoogleFonts.montserrat(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w700,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                ],
-              ),
-
-              Opacity(
-                opacity: _opacityAnimation.value,
-                child: Text(
-                  'in ${widget.timeSpent} seconds',
-                  style: GoogleFonts.montserrat(
-                    fontSize: 24,
-                    fontWeight: FontWeight.w600,
-                    color: Colors.black,
-                  ),
-                ),
-              ),
-
-              const Spacer(),
-
-              // High Score - Positioned just above the button
-              Padding(
-                padding: const EdgeInsets.only(right: 20),
-                child: Align(
-                  alignment: Alignment.centerRight,
-                  child: Text(
-                    'High score: ${widget.highScore}',
-                    style: GoogleFonts.montserrat(
-                      fontSize: 20,
-                      fontWeight: FontWeight.w700,
-                      color: Colors.black,
-                    ),
-                  ),
-                ),
-              ),
-
-              const SizedBox(
-                height: 8,
-              ), // Minimal gap between high score and button
-              // Back Button - Wide with minimal side padding
-              Padding(
-                padding: const EdgeInsets.fromLTRB(
-                  16,
-                  6,
-                  16,
-                  24,
-                ), // Low horizontal padding (16)
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 68,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: const Color(0xFF0096FF),
-                      elevation: 0,
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                    child: Text(
-                      'Back',
-                      style: GoogleFonts.montserrat(
-                        fontSize: 18,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.white,
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            ],
-          );
-        },
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }
