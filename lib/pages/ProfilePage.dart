@@ -6,6 +6,8 @@ import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:motion_kit/l10n/app_language.dart';
 
 import '../fake_var.dart';
 
@@ -22,6 +24,7 @@ class _ProfilePageState extends State<ProfilePage> {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     final tokens = tokensOf(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
@@ -39,7 +42,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 // Custom Back Button
                 Semantics(
                   button: true,
-                  label: 'Go back',
+                  label: l10n.goBack,
                   child: IconButton(
                     onPressed: () {
                       Navigator.pop(context);
@@ -52,7 +55,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   ),
                 ),
                 Text(
-                  'Profile',
+                  l10n.profileTitle,
                   style: GoogleFonts.inter(
                     color: Colors.black,
                     fontWeight: FontWeight.w800,
@@ -151,7 +154,7 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'Lvl ${Globals.level}',
+                  '${l10n.levelShort} ${Globals.level}',
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
                     fontWeight: FontWeight.w600, // Changed to semibold
@@ -179,13 +182,13 @@ class _ProfilePageState extends State<ProfilePage> {
           ),
           SizedBox(height: screenHeight * 0.035),
 
-          _buildProfileOption(context, 'Edit personal information', () => _showResetDialog(context)),
+          _buildProfileOption(context, l10n.profileEditPersonalInfo, () => _showResetDialog(context)),
           SizedBox(
             height: screenHeight * 0.013,
           ), // Added spacing between list tiles
-          _buildProfileOption(context, 'Feedback', () {
+          _buildProfileOption(context, l10n.profileFeedback, () {
               ScaffoldMessenger.of(context).showSnackBar(
-                  SnackBar(content: Text('Feedback option coming soon!'))
+                  SnackBar(content: Text(l10n.profileFeedbackComingSoon))
                 );
               Navigator.push(
                 context,
@@ -195,6 +198,10 @@ class _ProfilePageState extends State<ProfilePage> {
           SizedBox(
             height: screenHeight * 0.013,
           ), // Added spacing between list tiles
+          _buildLanguageSelector(context),
+          SizedBox(
+            height: screenHeight * 0.013,
+          ),
           _buildAccessibilityToggle(context),
           SizedBox(
             height: screenHeight * 0.013,
@@ -218,7 +225,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 vertical: screenHeight * 0.0142,
               ),
               title: Text(
-                'Sign Out',
+                l10n.profileSignOut,
                 style: GoogleFonts.inter(
                   fontSize: screenWidth * 0.042,
                   fontWeight: FontWeight.w600,
@@ -279,6 +286,7 @@ class _ProfilePageState extends State<ProfilePage> {
   Widget _buildAccessibilityToggle(BuildContext context) {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
@@ -298,14 +306,14 @@ class _ProfilePageState extends State<ProfilePage> {
           vertical: screenHeight * 0.012,
         ),
         title: Text(
-          'Use WCAG 2.2 accessible UI',
+          l10n.useWcag,
           style: GoogleFonts.inter(
             fontSize: screenWidth * 0.040,
             fontWeight: FontWeight.w600,
           ),
         ),
         subtitle: Text(
-          'Higher contrast and larger touch targets',
+          l10n.useWcagSubtitle,
           style: GoogleFonts.inter(
             fontSize: screenWidth * 0.03,
             color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -320,6 +328,7 @@ class _ProfilePageState extends State<ProfilePage> {
     final screenHeight = MediaQuery.of(context).size.height;
     final textScaleFactor = Globals.textScaleFactor;
     final textScalePercent = (textScaleFactor * 100).round();
+    final l10n = AppLocalizations.of(context)!;
 
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
@@ -339,7 +348,7 @@ class _ProfilePageState extends State<ProfilePage> {
               children: [
                 Expanded(
                   child: Text(
-                    'Text size',
+                    l10n.textSize,
                     style: GoogleFonts.inter(
                       fontSize: screenWidth * 0.040,
                       fontWeight: FontWeight.w600,
@@ -357,7 +366,7 @@ class _ProfilePageState extends State<ProfilePage> {
               ],
             ),
             Text(
-              'Adjust text scale from 100% to 250%',
+              l10n.adjustTextScale,
               style: GoogleFonts.inter(
                 fontSize: screenWidth * 0.03,
                 color: Theme.of(context).colorScheme.onSurfaceVariant,
@@ -385,15 +394,16 @@ class _ProfilePageState extends State<ProfilePage> {
 
   // Dialog for sign out confirmation
   void _showSignOutDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Sign Out'),
-        content: Text('Are you sure you want to sign out?'),
+        title: Text(l10n.confirmSignOutTitle),
+        content: Text(l10n.confirmSignOutMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -404,7 +414,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 (route) => false,
               );
             },
-            child: Text('Yes'),
+            child: Text(l10n.yes),
           ),
         ],
       ),
@@ -412,15 +422,16 @@ class _ProfilePageState extends State<ProfilePage> {
   }
 
   void _showResetDialog(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text('Reset Progress'),
-        content: Text('Are you sure you want to reset all progress? This cannot be undone.'),
+        title: Text(l10n.resetProgressTitle),
+        content: Text(l10n.resetProgressMessage),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text('Cancel'),
+            child: Text(l10n.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -428,12 +439,63 @@ class _ProfilePageState extends State<ProfilePage> {
               setState(() {}); // Update the UI
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text('All progress has been reset.'))
+                SnackBar(content: Text(l10n.progressResetDone))
               );
             },
-            child: Text('Reset', style: TextStyle(color: Colors.red)),
+            child: Text(l10n.reset, style: TextStyle(color: Colors.red)),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLanguageSelector(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final screenHeight = MediaQuery.of(context).size.height;
+    final l10n = AppLocalizations.of(context)!;
+
+    return Padding(
+      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.0425),
+      child: Container(
+        decoration: BoxDecoration(
+          color: Theme.of(context).colorScheme.surface,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        padding: EdgeInsets.symmetric(
+          horizontal: screenWidth * 0.04,
+          vertical: screenHeight * 0.012,
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: Text(
+                l10n.languageSetting,
+                style: GoogleFonts.inter(
+                  fontSize: screenWidth * 0.040,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
+            ),
+            DropdownButton<String>(
+              value: Globals.locale.languageCode,
+              onChanged: (value) async {
+                if (value == null) return;
+                await Globals.setLanguageCode(value);
+                if (!mounted) return;
+                setState(() {});
+              },
+              items: AppLanguage.supportedLanguages.map((language) {
+                final label = language.code == 'th'
+                    ? l10n.thaiLanguage
+                    : l10n.englishLanguage;
+                return DropdownMenuItem<String>(
+                  value: language.code,
+                  child: Text(label),
+                );
+              }).toList(),
+            ),
+          ],
+        ),
       ),
     );
   }

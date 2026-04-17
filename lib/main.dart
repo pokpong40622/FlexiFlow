@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:motion_kit/Others/NavigationBar.dart';
@@ -8,6 +9,8 @@ import 'package:motion_kit/pages/GetStarted.dart';
 import 'package:motion_kit/services/step_service.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/app_theme.dart';
+import 'package:motion_kit/l10n/app_language.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:motion_kit/views/pose_detection_screen.dart';
 import 'package:motion_kit/views/hand_detection_screen.dart';
 import 'package:motion_kit/views/hand_pose_detection_screen.dart';
@@ -56,37 +59,50 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
   @override  Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: Globals.wcagModeNotifier,
-      builder: (context, wcagModeEnabled, _) {
-        return ValueListenableBuilder<double>(
-          valueListenable: Globals.textScaleNotifier,
-          builder: (context, textScaleFactor, __) {
-            final targetScale = (wcagModeEnabled
-                    ? textScaleFactor.clamp(
-                        AppTokens.wcagTextScaleMin,
-                        AppTokens.userTextScaleMax,
-                      )
-                    : textScaleFactor.clamp(
-                        AppTokens.userTextScaleMin,
-                        AppTokens.userTextScaleMax,
-                      ))
-                .toDouble();
+    return ValueListenableBuilder<Locale>(
+      valueListenable: Globals.localeNotifier,
+      builder: (context, appLocale, _) {
+        return ValueListenableBuilder<bool>(
+          valueListenable: Globals.wcagModeNotifier,
+          builder: (context, wcagModeEnabled, __) {
+            return ValueListenableBuilder<double>(
+              valueListenable: Globals.textScaleNotifier,
+              builder: (context, textScaleFactor, ___) {
+                final targetScale = (wcagModeEnabled
+                        ? textScaleFactor.clamp(
+                            AppTokens.wcagTextScaleMin,
+                            AppTokens.userTextScaleMax,
+                          )
+                        : textScaleFactor.clamp(
+                            AppTokens.userTextScaleMin,
+                            AppTokens.userTextScaleMax,
+                          ))
+                    .toDouble();
 
-            return MaterialApp(
-              title: 'Motion Kit - AI Detection',
-              theme: AppTheme.build(wcagModeEnabled: wcagModeEnabled),
-              debugShowCheckedModeBanner: false,
-              builder: (context, child) {
-                final mediaQuery = MediaQuery.of(context);
-                return MediaQuery(
-                  data: mediaQuery.copyWith(
-                    textScaler: TextScaler.linear(targetScale),
-                  ),
-                  child: child ?? const SizedBox.shrink(),
+                return MaterialApp(
+                  locale: appLocale,
+                  supportedLocales: AppLanguage.supportedLocales,
+                  localizationsDelegates: const [
+                    AppLocalizations.delegate,
+                    GlobalMaterialLocalizations.delegate,
+                    GlobalWidgetsLocalizations.delegate,
+                    GlobalCupertinoLocalizations.delegate,
+                  ],
+                  onGenerateTitle: (context) => AppLocalizations.of(context)!.appTitle,
+                  theme: AppTheme.build(wcagModeEnabled: wcagModeEnabled),
+                  debugShowCheckedModeBanner: false,
+                  builder: (context, child) {
+                    final mediaQuery = MediaQuery.of(context);
+                    return MediaQuery(
+                      data: mediaQuery.copyWith(
+                        textScaler: TextScaler.linear(targetScale),
+                      ),
+                      child: child ?? const SizedBox.shrink(),
+                    );
+                  },
+                  home: WidgetTree(),
                 );
               },
-              home: WidgetTree(),
             );
           },
         );

@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:motion_kit/games/PerfectMatchPlaying.dart'; // Import for date formatting
@@ -114,6 +115,7 @@ class _TrainingPageState extends State<TrainingPage> {
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
 
     final List<Widget> slideItems = [
       GestureDetector(
@@ -171,7 +173,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       ),
                       SizedBox(height: 8),
                       Text(
-                        'LOCKED',
+                        l10n.locked,
                         style: GoogleFonts.montserrat(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -181,7 +183,7 @@ class _TrainingPageState extends State<TrainingPage> {
                       ),
                       SizedBox(height: 4),
                       Text(
-                        'Unlock in Shop',
+                        l10n.unlockInShop,
                         style: GoogleFonts.inter(
                           fontSize: 12,
                           color: Colors.white70,
@@ -275,7 +277,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Training',
+                        l10n.trainingTitle,
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.065,
                           fontWeight: FontWeight.w800,
@@ -323,7 +325,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
                   Text(
-                    'Games',
+                    l10n.games,
                     style: GoogleFonts.inter(
                       fontWeight: FontWeight.w700,
                       fontSize: screenWidth * 0.054,
@@ -380,7 +382,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     children: [
                       Text(
-                        'Days',
+                        l10n.days,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -405,7 +407,7 @@ class _TrainingPageState extends State<TrainingPage> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'To Do List',
+                        l10n.todoList,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -430,7 +432,7 @@ class _TrainingPageState extends State<TrainingPage> {
                               ),
                               SizedBox(width: 4),
                               Text(
-                                'Add',
+                                l10n.add,
                                 style: GoogleFonts.inter(
                                   color: Colors.white,
                                   fontSize: 12,
@@ -459,7 +461,7 @@ class _TrainingPageState extends State<TrainingPage> {
                                 ),
                                 const SizedBox(height: 16),
                                 Text(
-                                  'No tasks for today',
+                                  l10n.noTasksForToday,
                                   style: GoogleFonts.inter(
                                     fontSize: 16,
                                     fontWeight: FontWeight.w500,
@@ -468,7 +470,7 @@ class _TrainingPageState extends State<TrainingPage> {
                                 ),
                                 const SizedBox(height: 8),
                                 Text(
-                                  'Tap "Add" to create a schedule',
+                                  l10n.tapAddToCreateSchedule,
                                   style: GoogleFonts.inter(
                                     fontSize: 12,
                                     color: Colors.grey.shade400,
@@ -514,8 +516,10 @@ class _TrainingPageState extends State<TrainingPage> {
         selectedDate.year == date.year;
 
     String day = date.day.toString();
-    String weekday =
-        DateFormat('EEE').format(date); // Formats to 'Mon', 'Tue', etc.
+    String weekday = DateFormat(
+      'EEE',
+      Localizations.localeOf(context).toLanguageTag(),
+    ).format(date);
 
     return GestureDetector(
       onTap: () {
@@ -609,7 +613,11 @@ class _TrainingPageState extends State<TrainingPage> {
           setState(() {});
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text('Event "${dismissedItem['event']}" deleted'),
+              content: Text(
+                AppLocalizations.of(context)!.eventDeleted(
+                  dismissedItem['event'],
+                ),
+              ),
               duration: const Duration(seconds: 2),
               behavior: SnackBarBehavior.floating,
               shape: RoundedRectangleBorder(
@@ -747,7 +755,7 @@ class _TrainingPageState extends State<TrainingPage> {
           shape:
               RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Text(
-            'Add Event',
+            AppLocalizations.of(context)!.addEvent,
             style: GoogleFonts.inter(fontWeight: FontWeight.bold),
           ),
           content: Column(
@@ -755,7 +763,10 @@ class _TrainingPageState extends State<TrainingPage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                DateFormat('EEEE, MMM d').format(selectedDate),
+                DateFormat(
+                  'EEEE, MMM d',
+                  Localizations.localeOf(context).toLanguageTag(),
+                ).format(selectedDate),
                 style: GoogleFonts.inter(
                   color: Colors.grey,
                   fontSize: 14,
@@ -765,7 +776,7 @@ class _TrainingPageState extends State<TrainingPage> {
               TextField(
                 controller: timeController,
                 decoration: InputDecoration(
-                  labelText: 'Time (HH:MM)',
+                  labelText: AppLocalizations.of(context)!.timeHhMm,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -780,7 +791,7 @@ class _TrainingPageState extends State<TrainingPage> {
               TextField(
                 controller: eventController,
                 decoration: InputDecoration(
-                  labelText: 'Event Description',
+                  labelText: AppLocalizations.of(context)!.eventDescription,
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(12),
                   ),
@@ -796,7 +807,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 Navigator.of(context).pop();
               },
               child: Text(
-                'Cancel',
+                AppLocalizations.of(context)!.cancel,
                 style: GoogleFonts.inter(color: Colors.grey),
               ),
             ),
@@ -830,7 +841,7 @@ class _TrainingPageState extends State<TrainingPage> {
                 }
               },
               child: Text(
-                'Add Event',
+                AppLocalizations.of(context)!.addEvent,
                 style: GoogleFonts.inter(fontWeight: FontWeight.w600),
               ),
             ),

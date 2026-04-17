@@ -1,7 +1,8 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:motion_kit/l10n/app_language.dart';
 
 enum ExerciseType {
   PerfectMatch,
@@ -50,15 +51,19 @@ double expToLvl(int exp) {
 class Globals {
   static const String _wcagModeEnabledKey = 'wcagModeEnabled';
   static const String _textScaleFactorKey = 'textScaleFactor';
+  static const String _languageCodeKey = 'languageCode';
   static const double textScaleMin = 1.0;
   static const double textScaleMax = 2.5;
   static const double _defaultTextScale = 1.0;
   static final ValueNotifier<bool> wcagModeNotifier = ValueNotifier<bool>(false);
   static final ValueNotifier<double> textScaleNotifier =
       ValueNotifier<double>(_defaultTextScale);
+  static final ValueNotifier<Locale> localeNotifier =
+      ValueNotifier<Locale>(AppLanguage.defaultLocale);
 
   static bool get wcagModeEnabled => wcagModeNotifier.value;
   static double get textScaleFactor => textScaleNotifier.value;
+  static Locale get locale => localeNotifier.value;
 
   static double _normalizeTextScale(double scale) {
     if (scale.isNaN || scale.isInfinite) return _defaultTextScale;
@@ -82,6 +87,19 @@ class Globals {
 
     final prefs = await SharedPreferences.getInstance();
     await prefs.setDouble(_textScaleFactorKey, normalized);
+  }
+
+  static Future<void> setLanguage(Locale nextLocale) async {
+    final code = AppLanguage.codeFromLocale(nextLocale);
+    final resolvedLocale = AppLanguage.localeFromCode(code);
+    if (localeNotifier.value.languageCode == resolvedLocale.languageCode) return;
+    localeNotifier.value = resolvedLocale;
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setString(_languageCodeKey, code);
+  }
+
+  static Future<void> setLanguageCode(String code) async {
+    await setLanguage(AppLanguage.localeFromCode(code));
   }
 
   // Seconds spent on each
@@ -260,6 +278,10 @@ class Globals {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setBool(_wcagModeEnabledKey, wcagModeEnabled);
     await prefs.setDouble(_textScaleFactorKey, textScaleFactor);
+    await prefs.setString(
+      _languageCodeKey,
+      AppLanguage.codeFromLocale(localeNotifier.value),
+    );
     await prefs.setInt('totalStepsTD', totalStepsTD);
     await prefs.setBool('unlockedSumItUp', unlockedSumItUp);
     await prefs.setBool('isThaiIdVerified', isThaiIdVerified);
@@ -283,6 +305,8 @@ class Globals {
         (prefs.getInt(_textScaleFactorKey)?.toDouble()) ??
         _defaultTextScale;
     textScaleNotifier.value = _normalizeTextScale(storedTextScale);
+    localeNotifier.value =
+        AppLanguage.localeFromCode(prefs.getString(_languageCodeKey));
     totalStepsTD = prefs.getInt('totalStepsTD') ?? 0;
     unlockedSumItUp = prefs.getBool('unlockedSumItUp') ?? false;
     isThaiIdVerified = prefs.getBool('isThaiIdVerified') ?? false;
@@ -322,6 +346,7 @@ class Globals {
     // Reset to default values
     wcagModeNotifier.value = false;
     textScaleNotifier.value = _defaultTextScale;
+    localeNotifier.value = AppLanguage.defaultLocale;
     totalStepsTD = 3246;
     isThaiIdVerified = false;
     unlockedSumItUp = false;
