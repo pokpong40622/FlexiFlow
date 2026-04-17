@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
-import 'package:cloud_functions/cloud_functions.dart';
-import 'package:genkit/genkit.dart' hide Key;
-import 'package:genkit_google_genai/genkit_google_genai.dart';
+import 'package:google_generative_ai/google_generative_ai.dart' as google_ai;
 import '../fake_var.dart';
 
 class ChatBotPage extends StatefulWidget {
@@ -13,38 +12,87 @@ class ChatBotPage extends StatefulWidget {
   _ChatBotPageState createState() => _ChatBotPageState();
 }
 
-List<String> suggestions = [
-  "What is FlexiFlow?",
-  "How much time should I spend?",
-  "How can I improve my flexibility?",
-  "What are the benefits of FlexiFlow?",
-  "Can you suggest a routine for me?",
-  "How do I track my progress?",
-  "What should I do if I feel pain?",
-  "How often should I practice?",
-  "What equipment do I need?",
-  "Can you help me with a specific pose?",
-  "What are the common mistakes in FlexiFlow?",
-  "How can I stay motivated?",
-  "What is the best time to practice?",
-  "How can I incorporate FlexiFlow into my daily routine?",
-];
-
-class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin {
+class _ChatBotPageState extends State<ChatBotPage>
+    with TickerProviderStateMixin {
   final TextEditingController _controller = TextEditingController();
   final List<Map<String, dynamic>> _messages = [];
   bool _isTyping = false;
   bool _isBotTyping = false;
-  List<String> randomSuggestions = List.from(suggestions)..shuffle();
+  List<String> randomSuggestions = [];
+  Locale? _lastLocale;
   late AnimationController _fadeController;
   late Animation<double> _fadeAnimation;
-  late Genkit ai;
+  late google_ai.GenerativeModel _model;
 
   @override
   void initState() {
     super.initState();
-    ai = Genkit(plugins: [googleAI()]);
-    randomSuggestions = randomSuggestions.take(4).toList();
+    // Convert seconds to a more human-readable format (minutes)
+    final timeSpentTodayMin = (Globals.timeSpentTD / 60).floor();
+    final timeSpentWeeklyMin = (Globals.timeSpentWK / 60).floor();
+    final timeSpentMonthlyMin = (Globals.timeSpentMH / 60).floor();
+    final unlockedSumItUpStr = Globals.unlockedSumItUp ? 'Yes' : 'No';
+
+    final userDataContext = '''
+[User Profile & Current Progress]
+- App Usage Today: $timeSpentTodayMin minutes
+- App Usage This Week: $timeSpentWeeklyMin minutes
+- App Usage This Month: $timeSpentMonthlyMin minutes
+- Daily Steps Today: ${Globals.totalStepsTD} steps
+- Current Daily Streak: ${Globals.streak} days
+- Currency (Coins): ${Globals.coins}
+- Experience (Exp): ${Globals.exp} (Current Level: ${Globals.level})
+- Brain Score: ${Globals.brainScore}
+- 'Sum It Up' Game Unlocked: $unlockedSumItUpStr
+
+*(System Note: Use this background context to playfully encourage the user and personalize recommendations. Do not recite these exact stats back to the user unless directly relevant to their question.)*
+''';
+    _model = google_ai.GenerativeModel(
+      model: 'gemini-2.5-flash',
+      apiKey: "AIzaSyDgsAKMeDN3q4rxrXuu9jqUKAz4njKLIyY",
+      systemInstruction: google_ai.Content.system(
+          '''You are Lexi, the official AI Cognitive Coach and Support Assistant for FlexiFlow. FlexiFlow is an EdTech application dedicated to improving cognitive function, enhancing mental flexibility, and promoting brain health to help delay or manage cognitive decline, such as dementia.
+
+Your tone is empathetic, encouraging, professional, and accessible. You are speaking to users who may be older adults, caregivers, or individuals looking to proactively train their brains. You must be patient, clear, and easy to understand. Do not use overly complex medical jargon unless you immediately explain it.
+
+Core Knowledge Base about the FlexiFlow App
+
+What is FlexiFlow: FlexiFlow is a cognitive training app that uses interactive games and routines to improve working memory, executive function, and cognitive flexibility.
+
+Time Commitment: We recommend spending 15 to 20 minutes a day on FlexiFlow for optimal brain health benefits.
+
+Improving Flexibility: Flexibility in FlexiFlow refers to cognitive flexibility, the brain's ability to switch between thinking about two different concepts. Users improve this by playing our shifting-logic puzzles.
+
+Benefits: Regular use helps build cognitive reserve, sharpens focus, improves daily memory recall, and provides a fun, stimulating workout for the brain.
+
+Tracking Progress: Users can view their daily streaks, accuracy scores, and cognitive growth charts in the Progress tab of the app.
+
+Equipment Needed: Just a smartphone, tablet, or computer. No extra equipment is required.
+
+Behavioral Guidelines and Guardrails
+
+Handling Routines: If a user asks for a routine, ask them about their current energy level and suggest a specific short sequence of FlexiFlow brain games. For example, let them start with a 5-minute memory recall warmup, followed by a 10-minute pattern recognition game.
+
+Handling Pain or Frustration: If a user expresses feeling mental fatigue, brain pain, or frustration, be deeply empathetic. Advise them to take a break, hydrate, and remind them that cognitive growth happens during rest. If they express actual physical pain or severe medical distress, advise them to stop using the device and consult a healthcare professional immediately.
+
+Motivation: If a user is unmotivated, remind them of the reasons to play. Mention that just like physical exercise, brain training takes time to show results. Celebrate small wins.
+
+No Hallucinations: Do not invent features that FlexiFlow does not have. If a user asks a question about a feature you do not know about, politely state that you are still learning and direct them to the human support team.
+
+Language Adaptability: If the user speaks in Thai, seamlessly switch to polite, encouraging Thai using polite particles appropriately.
+
+Interaction Format
+
+Always greet the user warmly if it is the start of a conversation.
+
+Keep responses concise, usually under 3 to 4 short paragraphs.
+
+Do not use bullet points or markdown formatting in your responses, use plain text only.
+
+End your response with a gentle, encouraging question to keep the user engaged, such as asking if they would like to start a 5-minute warmup game now.
+
+$userDataContext'''),
+    );
     _controller.addListener(_onTextChanged);
     _fadeController = AnimationController(
       duration: const Duration(milliseconds: 300),
@@ -56,6 +104,18 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
     _fadeController.forward();
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    final locale = Localizations.localeOf(context);
+    if (_lastLocale != locale) {
+      _lastLocale = locale;
+      final l10n = AppLocalizations.of(context)!;
+      final localizedSuggestions = _localizedSuggestions(l10n)..shuffle();
+      randomSuggestions = localizedSuggestions.take(4).toList();
+    }
+  }
+
   void _onTextChanged() {
     setState(() {
       _isTyping = _controller.text.isNotEmpty;
@@ -65,6 +125,7 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
   Future<void> _sendMessage([String? customMessage]) async {
     final message = customMessage ?? _controller.text;
     if (message.isNotEmpty) {
+      final l10n = AppLocalizations.of(context)!;
       setState(() {
         _messages.add({
           'text': message,
@@ -75,42 +136,43 @@ class _ChatBotPageState extends State<ChatBotPage> with TickerProviderStateMixin
         _isTyping = false;
         _isBotTyping = true;
       });
-      
+
       try {
-        final userDataContext = '''
-User Data Context:
-Weekly Time Spent: ${Globals.timeSpentWK} seconds
-Today's Time Spent: ${Globals.timeSpentTD} seconds
-Monthly Time Spent: ${Globals.timeSpentMH} seconds
-Today's Steps: ${Globals.totalStepsTD}
-Current Streak: ${Globals.streak} days
-Coins: ${Globals.coins}
-Exp: ${Globals.exp} (Level ${Globals.level})
-Brain Score: ${Globals.brainScore}
-Sum It Up Unlocked: ${Globals.unlockedSumItUp}
-''';
 
-        final requestPrompt = '$userDataContext\n\nUser Question: $message';
-        final response = await ai.generate(
-          model: googleAI.gemini('gemini-2.5-flash'),
-          prompt: requestPrompt,
-        );
+        final requestPrompt = '$message';
+        final stream = _model
+            .generateContentStream([google_ai.Content.text(requestPrompt)]);
 
-        if (mounted) {
-          setState(() {
-            _messages.add({
-              'text': response.text ?? 'No response',
-              'isUser': false,
-              'timestamp': DateTime.now(),
+        print('Started stream requesting...');
+        int? messageIndex;
+
+        await for (final chunk in stream) {
+          print(
+              'Received chunk: "${chunk.text}" (length: ${chunk?.text?.length ?? 0})');
+          if (!mounted) break;
+          if (chunk.text != null && chunk.text!.isNotEmpty) {
+            setState(() {
+              if (_isBotTyping) {
+                _isBotTyping = false;
+                messageIndex = _messages.length;
+                _messages.add({
+                  'text': chunk.text,
+                  'isUser': false,
+                  'timestamp': DateTime.now(),
+                });
+              } else if (messageIndex != null) {
+                _messages[messageIndex!]['text'] += chunk.text;
+              }
             });
-            _isBotTyping = false;
-          });
+          }
         }
+        print('Stream finished.');
       } catch (e) {
+        print('Error in stream: $e');
         if (mounted) {
           setState(() {
             _messages.add({
-              'text': "Sorry, I'm having trouble connecting to the assistant. Please try again later.\nError: $e",
+              'text': l10n.chatbotConnectionError(e.toString()),
               'isUser': false,
               'timestamp': DateTime.now(),
             });
@@ -131,6 +193,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       appBar: AppBar(
         elevation: 0,
@@ -144,7 +207,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
           ),
           color: Colors.grey[700],
           onPressed: () => Navigator.pop(context),
-          tooltip: 'Back',
+          tooltip: l10n.goBack,
         ),
         title: Row(
           mainAxisSize: MainAxisSize.min,
@@ -182,7 +245,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Lexi Assistant',
+                  l10n.chatbotTitleLexiAssistant,
                   style: GoogleFonts.inter(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -190,7 +253,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                   ),
                 ),
                 Text(
-                  'Always here to help',
+                  l10n.chatbotSubtitleAlwaysHere,
                   style: GoogleFonts.inter(
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
@@ -219,7 +282,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                 onPressed: () {
                   _showOptionsMenu(context);
                 },
-                tooltip: 'More options',
+                tooltip: l10n.chatbotMoreOptions,
               ),
             ),
           ),
@@ -247,9 +310,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
         child: Column(
           children: [
             Expanded(
-              child: _messages.isEmpty
-                  ? _buildEmptyState()
-                  : _buildChatList(),
+              child: _messages.isEmpty ? _buildEmptyState() : _buildChatList(),
             ),
             _buildInputArea(),
           ],
@@ -259,6 +320,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
   }
 
   Widget _buildEmptyState() {
+    final l10n = AppLocalizations.of(context)!;
     return FadeTransition(
       opacity: _fadeAnimation,
       child: SingleChildScrollView(
@@ -272,8 +334,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
               child: Container(
                 decoration: BoxDecoration(
                   shape: BoxShape.circle,
-                  boxShadow: [
-                  ],
+                  boxShadow: [],
                 ),
                 child: CircleAvatar(
                   radius: 90,
@@ -291,7 +352,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
             ),
             const SizedBox(height: 16),
             Text(
-              'How can we help you?',
+              l10n.chatbotHowCanWeHelp,
               style: GoogleFonts.montserrat(
                 fontSize: 24,
                 fontWeight: FontWeight.bold,
@@ -316,7 +377,9 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
         alignment: WrapAlignment.center,
         children: randomSuggestions.map((suggestion) {
           return TweenAnimationBuilder<double>(
-            duration: Duration(milliseconds: 300 + (randomSuggestions.indexOf(suggestion) * 100)),
+            duration: Duration(
+                milliseconds:
+                    300 + (randomSuggestions.indexOf(suggestion) * 100)),
             tween: Tween<double>(begin: 0.0, end: 1.0),
             curve: Curves.elasticOut,
             builder: (context, value, child) {
@@ -353,7 +416,8 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                         _sendMessage(suggestion);
                       },
                       child: Container(
-                        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: 20, vertical: 12),
                         child: Text(
                           suggestion,
                           style: GoogleFonts.inter(
@@ -411,7 +475,8 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
             child: Container(
               margin: const EdgeInsets.only(bottom: 16),
               child: Row(
-                mainAxisAlignment: isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
+                mainAxisAlignment:
+                    isUser ? MainAxisAlignment.end : MainAxisAlignment.start,
                 crossAxisAlignment: CrossAxisAlignment.end,
                 children: [
                   if (!isUser) ...[
@@ -467,7 +532,8 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                           ),
                         ],
                       ),
-                      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 16, vertical: 12),
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
@@ -601,6 +667,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
   }
 
   Widget _buildInputArea() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       decoration: BoxDecoration(
         color: Colors.white,
@@ -646,7 +713,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                           color: Colors.grey[600],
                           size: 20,
                         ),
-                        tooltip: 'Attach file',
+                        tooltip: l10n.chatbotAttachFile,
                       ),
                     ),
                   ),
@@ -680,7 +747,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                             vertical: 14.0,
                           ),
                           border: InputBorder.none,
-                          hintText: "Ask us....",
+                          hintText: l10n.chatbotInputHint,
                           hintStyle: GoogleFonts.inter(
                             color: Colors.grey[500],
                             fontSize: 16,
@@ -710,7 +777,8 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                         boxShadow: _isTyping
                             ? [
                                 BoxShadow(
-                                  color: const Color(0xFF0397FD).withOpacity(0.3),
+                                  color:
+                                      const Color(0xFF0397FD).withOpacity(0.3),
                                   blurRadius: 8,
                                   offset: const Offset(0, 4),
                                 ),
@@ -725,7 +793,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                             color: _isTyping ? Colors.white : Colors.grey[500],
                             size: 20,
                           ),
-                          tooltip: 'Send message',
+                          tooltip: l10n.chatbotSendMessage,
                         ),
                       ),
                     ),
@@ -740,21 +808,23 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
   }
 
   String _formatTime(DateTime timestamp) {
+    final l10n = AppLocalizations.of(context)!;
     final now = DateTime.now();
     final difference = now.difference(timestamp);
-    
+
     if (difference.inMinutes < 1) {
-      return 'Just now';
+      return l10n.chatbotJustNow;
     } else if (difference.inMinutes < 60) {
-      return '${difference.inMinutes}m ago';
+      return l10n.chatbotMinutesAgo('${difference.inMinutes}');
     } else if (difference.inHours < 24) {
-      return '${difference.inHours}h ago';
+      return l10n.chatbotHoursAgo('${difference.inHours}');
     } else {
       return '${timestamp.day}/${timestamp.month}';
     }
   }
 
   void _showOptionsMenu(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     showModalBottomSheet(
       context: context,
       backgroundColor: Colors.transparent,
@@ -793,7 +863,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                 ),
               ),
               title: Text(
-                'Clear Chat History',
+                l10n.chatbotClearChatHistory,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w500,
                 ),
@@ -817,7 +887,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
                 ),
               ),
               title: Text(
-                'Help & Support',
+                l10n.chatbotHelpSupport,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w500,
                 ),
@@ -835,6 +905,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
   }
 
   void _clearChatHistory() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -842,20 +913,20 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
           borderRadius: BorderRadius.circular(16),
         ),
         title: Text(
-          'Clear Chat History',
+          l10n.chatbotClearChatHistory,
           style: GoogleFonts.inter(
             fontWeight: FontWeight.bold,
           ),
         ),
         content: Text(
-          'Are you sure you want to clear all chat messages? This action cannot be undone.',
+          l10n.chatbotClearHistoryConfirm,
           style: GoogleFonts.inter(),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
             child: Text(
-              'Cancel',
+              l10n.cancel,
               style: GoogleFonts.inter(
                 color: Colors.grey[600],
               ),
@@ -876,7 +947,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
               ),
             ),
             child: Text(
-              'Clear',
+              l10n.chatbotClear,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w500,
               ),
@@ -888,6 +959,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
   }
 
   void _showHelpDialog() {
+    final l10n = AppLocalizations.of(context)!;
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
@@ -910,7 +982,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
             ),
             const SizedBox(width: 12),
             Text(
-              'Help & Tips',
+              l10n.chatbotHelpTipsTitle,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.bold,
               ),
@@ -922,18 +994,18 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'How to get the best results:',
+              l10n.chatbotHelpTipsHeader,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w600,
                 color: Colors.grey[800],
               ),
             ),
             const SizedBox(height: 12),
-            _buildHelpItem('💬', 'Ask specific questions about FlexiFlow exercises'),
-            _buildHelpItem('🎯', 'Request personalized workout routines'),
-            _buildHelpItem('📝', 'Get tips on proper form and technique'),
-            _buildHelpItem('⏰', 'Ask about workout schedules and timing'),
-            _buildHelpItem('🔄', 'Use the suggestion chips for quick questions'),
+            _buildHelpItem('💬', l10n.chatbotHelpTipSpecificQuestions),
+            _buildHelpItem('🎯', l10n.chatbotHelpTipPersonalizedRoutine),
+            _buildHelpItem('📝', l10n.chatbotHelpTipFormTechnique),
+            _buildHelpItem('⏰', l10n.chatbotHelpTipSchedules),
+            _buildHelpItem('🔄', l10n.chatbotHelpTipSuggestionChips),
           ],
         ),
         actions: [
@@ -947,7 +1019,7 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
               ),
             ),
             child: Text(
-              'Got it!',
+              l10n.chatbotGotIt,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w500,
               ),
@@ -956,6 +1028,25 @@ Sum It Up Unlocked: ${Globals.unlockedSumItUp}
         ],
       ),
     );
+  }
+
+  List<String> _localizedSuggestions(AppLocalizations l10n) {
+    return [
+      l10n.chatbotSuggestion1,
+      l10n.chatbotSuggestion2,
+      l10n.chatbotSuggestion3,
+      l10n.chatbotSuggestion4,
+      l10n.chatbotSuggestion5,
+      l10n.chatbotSuggestion6,
+      l10n.chatbotSuggestion7,
+      l10n.chatbotSuggestion8,
+      l10n.chatbotSuggestion9,
+      l10n.chatbotSuggestion10,
+      l10n.chatbotSuggestion11,
+      l10n.chatbotSuggestion12,
+      l10n.chatbotSuggestion13,
+      l10n.chatbotSuggestion14,
+    ];
   }
 
   Widget _buildHelpItem(String emoji, String text) {

@@ -3,6 +3,7 @@ import '../pages/MissionPage.dart';
 import '../pages/StatsPage.dart';
 import '../pages/TrainingPage.dart';
 import 'package:flutter/material.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 
@@ -16,15 +17,15 @@ class NavigationBarSet extends StatefulWidget {
 class _HomepageState extends State<NavigationBarSet> {
   int myIndex = 0;
 
-  final List<String> _pageNames = [
-    'Home',
-    'Mission',
-    'Stats',
-    'Training'
-  ];
-
   @override
   Widget build(BuildContext context) {
+  final l10n = AppLocalizations.of(context)!;
+  final pageNames = [
+    l10n.navHome,
+    l10n.navMission,
+    l10n.navStats,
+    l10n.navTraining,
+  ];
 
   final List<Widget> _pages = [
     HomePage(),
@@ -50,25 +51,25 @@ class _HomepageState extends State<NavigationBarSet> {
             _buildNavItem(
               index: 0,
               icon: Icons.home,
-              label: _pageNames[0],
+              label: pageNames[0],
               showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 1,
               icon: Icons.emoji_events,
-              label: _pageNames[1],
+              label: pageNames[1],
               showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 2,
               icon: Icons.bar_chart,
-              label: _pageNames[2],
+              label: pageNames[2],
               showPersistentLabel: Globals.wcagModeEnabled,
             ),
             _buildNavItem(
               index: 3,
               icon: Icons.play_circle,
-              label: _pageNames[3],
+              label: pageNames[3],
               showPersistentLabel: Globals.wcagModeEnabled,
             ),
           ],
@@ -91,7 +92,7 @@ class _HomepageState extends State<NavigationBarSet> {
     return Semantics(
       button: true,
       selected: isSelected,
-      label: 'Go to $label tab',
+      label: AppLocalizations.of(context)!.navGoToTab(label),
       child: InkResponse(
         radius: 32,
         onTap: () {

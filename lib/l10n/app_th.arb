@@ -1,0 +1,376 @@
+{
+  "@@locale": "th",
+  "appTitle": "FlexiFlow",
+  "navHome": "หน้าหลัก",
+  "navMission": "ภารกิจ",
+  "navStats": "สถิติ",
+  "navTraining": "ฝึกฝน",
+  "navGoToTab": "ไปที่แท็บ {label}",
+  "@navGoToTab": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "goBack": "ย้อนกลับ",
+  "profileTitle": "โปรไฟล์",
+  "profileEditPersonalInfo": "แก้ไขข้อมูลส่วนตัว",
+  "profileFeedback": "ข้อเสนอแนะ",
+  "profileFeedbackComingSoon": "ส่วนข้อเสนอแนะจะพร้อมใช้งานเร็ว ๆ นี้!",
+  "languageSetting": "ภาษา",
+  "thaiLanguage": "ไทย",
+  "englishLanguage": "English",
+  "useWcag": "ใช้โหมดการเข้าถึงตาม WCAG 2.2",
+  "useWcagSubtitle": "คอนทราสต์สูงขึ้นและปุ่มกดใหญ่ขึ้น",
+  "textSize": "ขนาดตัวอักษร",
+  "adjustTextScale": "ปรับขนาดตัวอักษรตั้งแต่ 100% ถึง 250%",
+  "profileSignOut": "ออกจากระบบ",
+  "confirmSignOutTitle": "ออกจากระบบ",
+  "confirmSignOutMessage": "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ?",
+  "cancel": "ยกเลิก",
+  "yes": "ใช่",
+  "resetProgressTitle": "รีเซ็ตความคืบหน้า",
+  "resetProgressMessage": "คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตความคืบหน้าทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้",
+  "reset": "รีเซ็ต",
+  "progressResetDone": "รีเซ็ตความคืบหน้าทั้งหมดเรียบร้อยแล้ว",
+  "levelShort": "เลเวล",
+  "loginWelcomeBack": "ยินดีต้อนรับกลับ",
+  "loginSignInToContinue": "เข้าสู่ระบบเพื่อดำเนินการต่อ",
+  "email": "อีเมล",
+  "password": "รหัสผ่าน",
+  "signIn": "เข้าสู่ระบบ",
+  "dontHaveAccount": "ยังไม่มีบัญชีใช่ไหม?",
+  "signUp": "สมัครสมาชิก",
+  "loginMissingCredentials": "กรุณากรอกอีเมลและรหัสผ่าน",
+  "loginIncorrectCredentials": "อีเมลหรือรหัสผ่านไม่ถูกต้อง",
+  "unexpectedError": "เกิดข้อผิดพลาดที่ไม่คาดคิด",
+  "createAccount": "สร้างบัญชี",
+  "fullName": "ชื่อ-นามสกุล",
+  "emergencyContact": "ผู้ติดต่อฉุกเฉิน",
+  "birthday": "วันเกิด",
+  "gender": "เพศ",
+  "signupMissingFields": "กรุณากรอกข้อมูลที่จำเป็นให้ครบถ้วน",
+  "alreadyHaveAccount": "มีบัญชีอยู่แล้วใช่ไหม?",
+  "statsTitle": "สถิติ",
+  "aiSuggestion": "คำแนะนำจาก AI",
+  "suggestionTryMoreScoreOn": "ลองเพิ่มคะแนนอีกนิดใน ",
+  "suggestionFasterOn": "อาจทำเวลาให้เร็วขึ้นอีกนิดใน ",
+  "gamePerfectMatch": "Perfect Match",
+  "gameSumItUp": "Sum It Up",
+  "gameWander": "Wander",
+  "recent": "ล่าสุด",
+  "nothingToShow": "ยังไม่มี\nข้อมูล",
+  "brainScore": "คะแนนสมอง",
+  "pointsShort": "แต้ม",
+  "steps": "ก้าวเดิน",
+  "stepsShort": "ก้าว",
+  "timeSpent": "เวลาที่ใช้",
+  "today": "วันนี้",
+  "week": "สัปดาห์",
+  "month": "เดือน",
+  "hour": "ชม.",
+  "minuteShort": "นาที",
+  "secondShort": "วินาที",
+  "trainingTitle": "ฝึกฝน",
+  "games": "เกม",
+  "days": "วัน",
+  "todoList": "รายการที่ต้องทำ",
+  "add": "เพิ่ม",
+  "noTasksForToday": "ไม่มีงานสำหรับวันนี้",
+  "tapAddToCreateSchedule": "แตะ \"เพิ่ม\" เพื่อสร้างตารางงาน",
+  "eventDeleted": "ลบกิจกรรม \"{event}\" แล้ว",
+  "@eventDeleted": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
+  "addEvent": "เพิ่มกิจกรรม",
+  "timeHhMm": "เวลา (HH:MM)",
+  "eventDescription": "รายละเอียดกิจกรรม",
+  "locked": "ล็อก",
+  "unlockInShop": "ปลดล็อกในร้านค้า",
+  "homeOpenProfile": "เปิดโปรไฟล์",
+  "homeOpenService": "เปิด {label}",
+  "@homeOpenService": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "homeServicesTitle": "บริการ",
+  "homeServiceDiscoverPosture": "สำรวจท่าทาง",
+  "homeServiceLeaderboard": "อันดับคะแนน",
+  "homeServiceChatbot": "แชตบอต",
+  "homeServiceShop": "ร้านค้า",
+  "homeOthersTitle": "อื่น ๆ",
+  "homeFeedbackSummary": "สรุปผลตอบรับ",
+  "homeStreak": "สตรีค",
+  "homeTimeSpentPastTenDays": "เวลาที่ใช้ใน 10 วันที่ผ่านมา",
+  "homeStreakDaysCount": "{count} วัน",
+  "@homeStreakDaysCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "missionHeaderYour": "ภารกิจ",
+  "missionHeaderMissions": "ของคุณ",
+  "missionTabDaily": "รายวัน",
+  "missionTabWeekly": "รายสัปดาห์",
+  "missionTabAll": "ทั้งหมด",
+  "missionTitleFirstExerciseOfDay": "ออกกำลังกายครั้งแรกของวัน",
+  "missionTitleComplete3Exercises": "ออกกำลังกายให้ครบ 3 ครั้ง",
+  "missionTitleWalk5000Steps": "เดินให้ครบ 5,000 ก้าว",
+  "missionTitlePlayPerfectMatch10Min": "เล่น Perfect Match 10 นาที",
+  "missionTitleComplete10Exercises": "ออกกำลังกายให้ครบ 10 ครั้ง",
+  "missionTitleReach200BrainScore": "ทำคะแนนสมองให้ถึง 200",
+  "missionTitleExercise5DaysRow": "ออกกำลังกายต่อเนื่อง 5 วัน",
+  "missionTitleExercise20DaysRow": "ออกกำลังกายต่อเนื่อง 20 วัน",
+  "missionTitleReachLevel25": "ถึงเลเวล 25",
+  "missionTitleComplete20Exercises": "ออกกำลังกายให้ครบ 20 ครั้ง",
+  "missionStatusDone": "สำเร็จ",
+  "missionStatusClaim": "รับ",
+  "shopTitle": "ร้านค้า",
+  "shopCardDefaultTitle": "ทั่วไป",
+  "shopCardDefaultDescription": "ไอเทมที่คัดมาเพื่อคุณ",
+  "shopCardUniversalTitle": "บัตรทอง",
+  "shopCardUniversalDescription": "สำรวจสิทธิพิเศษจากภาครัฐเป็นหลัก",
+  "shopCardAiaTitle": "AIA Vitality",
+  "shopCardAiaDescription": "ดีลพิเศษสำหรับสมาชิก AIA Vitality",
+  "shopCardThaiIdTitle": "บัตรประชาชนไทย",
+  "shopCardThaiIdVerified": "เชื่อมต่อสำเร็จ",
+  "shopCardThaiIdUnverified": "แตะเพื่อยืนยันบัตรประชาชนไทย",
+  "shopRequest": "ขอเพิ่ม",
+  "shopMoreItemsComingSoon": "ไอเทมเพิ่มเติมเร็ว ๆ นี้",
+  "shopRequestItemTitle": "ขอเพิ่มสินค้า",
+  "shopRequestItemPrompt": "คุณอยากเห็นสินค้าอะไรในร้านค้า?",
+  "shopRequestItemHint": "กรอกชื่อสินค้า...",
+  "submit": "ส่ง",
+  "shopThankYouTitle": "ขอบคุณ!",
+  "shopThankYouMessage": "เราได้รับคำขอของคุณแล้ว",
+  "closeLabel": "ปิด",
+  "buyLabel": "ซื้อ",
+  "shopConfirmPurchaseTitle": "ยืนยันการซื้อ",
+  "shopConfirmPurchaseMessage": "คุณแน่ใจหรือไม่ว่าต้องการซื้อ {itemName} ราคา {itemPrice} เหรียญ?",
+  "@shopConfirmPurchaseMessage": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "itemPrice": {
+        "type": "String"
+      }
+    }
+  },
+  "shopPurchaseSuccess": "คุณซื้อ {itemName} สำเร็จแล้ว!",
+  "@shopPurchaseSuccess": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "shopItemUnlockWander": "ปลดล็อก Wander",
+  "shopItemSushiroCoupon60": "คูปอง Sushiro 60 บาท",
+  "shopItemMkRestaurant150": "MK Restaurant 150 บาท",
+  "shopItemMomo20Off": "Momo Paradise ลด 20%",
+  "shopItemFreeMajorTicket": "ตั๋วหนัง Major ฟรี",
+  "shopItemFreeSfPopcorn": "ป๊อปคอร์นขนาดกลางที่ SF ฟรี",
+  "shopItemPttFuel300": "บัตรน้ำมัน PTT 300 บาท",
+  "shopItemBcpFuel300": "บัตรน้ำมัน BCP 300 บาท",
+  "shopItemMeaPea150": "ส่วนลดค่าไฟ MEA/PEA 150 บาท",
+  "shopItemMwaPwa150": "ส่วนลดค่าน้ำ MWA/PWA 150 บาท",
+  "shopItemNt250": "ส่วนลด NT 250 บาท",
+  "shopItemMrt200": "เติมเงิน MRT 200 บาท",
+  "shopItemThailandPost100": "ยอดคงเหลือไปรษณีย์ไทย 100 บาท",
+  "shopItemGovLottery": "สลากกินแบ่งรัฐบาล",
+  "chatbotNoResponse": "ไม่มีคำตอบ",
+  "chatbotConnectionError": "ขออภัย ไม่สามารถเชื่อมต่อผู้ช่วยได้ในขณะนี้ โปรดลองอีกครั้งภายหลัง\\nข้อผิดพลาด: {error}",
+  "@chatbotConnectionError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatbotMoreOptions": "ตัวเลือกเพิ่มเติม",
+  "chatbotTitleLexiAssistant": "ผู้ช่วย Lexi",
+  "chatbotSubtitleAlwaysHere": "พร้อมช่วยเหลือเสมอ",
+  "chatbotHowCanWeHelp": "มีอะไรให้เราช่วยไหม?",
+  "chatbotAttachFile": "แนบไฟล์",
+  "chatbotInputHint": "พิมพ์คำถาม...",
+  "chatbotSendMessage": "ส่งข้อความ",
+  "chatbotJustNow": "เมื่อสักครู่",
+  "chatbotMinutesAgo": "{minutes} นาทีที่แล้ว",
+  "@chatbotMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "chatbotHoursAgo": "{hours} ชั่วโมงที่แล้ว",
+  "@chatbotHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "chatbotClearChatHistory": "ล้างประวัติแชต",
+  "chatbotHelpSupport": "ช่วยเหลือและสนับสนุน",
+  "chatbotClearHistoryConfirm": "คุณแน่ใจหรือไม่ว่าต้องการล้างข้อความแชตทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้",
+  "chatbotClear": "ล้าง",
+  "chatbotHelpTipsTitle": "ช่วยเหลือและเคล็ดลับ",
+  "chatbotHelpTipsHeader": "วิธีใช้งานให้ได้ผลดีที่สุด:",
+  "chatbotHelpTipSpecificQuestions": "ถามคำถามเฉพาะเกี่ยวกับท่าออกกำลังกาย FlexiFlow",
+  "chatbotHelpTipPersonalizedRoutine": "ขอแผนการออกกำลังกายที่เหมาะกับคุณ",
+  "chatbotHelpTipFormTechnique": "รับคำแนะนำเรื่องท่าทางและเทคนิคที่ถูกต้อง",
+  "chatbotHelpTipSchedules": "สอบถามตารางและช่วงเวลาออกกำลังกาย",
+  "chatbotHelpTipSuggestionChips": "ใช้คำถามแนะนำเพื่อถามแบบรวดเร็ว",
+  "chatbotGotIt": "เข้าใจแล้ว!",
+  "chatbotSuggestion1": "FlexiFlow คืออะไร?",
+  "chatbotSuggestion2": "ควรใช้เวลาฝึกเท่าไร?",
+  "chatbotSuggestion3": "ทำอย่างไรให้ยืดหยุ่นมากขึ้น?",
+  "chatbotSuggestion4": "FlexiFlow มีประโยชน์อะไรบ้าง?",
+  "chatbotSuggestion5": "ช่วยแนะนำโปรแกรมฝึกให้หน่อยได้ไหม?",
+  "chatbotSuggestion6": "ติดตามความคืบหน้ายังไง?",
+  "chatbotSuggestion7": "ถ้ารู้สึกเจ็บควรทำอย่างไร?",
+  "chatbotSuggestion8": "ควรฝึกบ่อยแค่ไหน?",
+  "chatbotSuggestion9": "ต้องใช้อุปกรณ์อะไรบ้าง?",
+  "chatbotSuggestion10": "ช่วยแนะนำท่าเฉพาะให้หน่อยได้ไหม?",
+  "chatbotSuggestion11": "ข้อผิดพลาดที่พบบ่อยใน FlexiFlow คืออะไร?",
+  "chatbotSuggestion12": "ทำอย่างไรให้มีแรงจูงใจต่อเนื่อง?",
+  "chatbotSuggestion13": "ช่วงเวลาไหนเหมาะที่สุดในการฝึก?",
+  "chatbotSuggestion14": "จะใส่ FlexiFlow ในกิจวัตรประจำวันได้อย่างไร?",
+  "leaderboardWeeklyRankings": "อันดับประจำสัปดาห์",
+  "leaderboardYou": "คุณ",
+  "leaderboardRankText": "อันดับ {rank}",
+  "@leaderboardRankText": {
+    "placeholders": {
+      "rank": {
+        "type": "String"
+      }
+    }
+  },
+  "leaderboardAvgScore": "คะแนนเฉลี่ย",
+  "leaderboardGamesLabel": "เกม",
+  "leaderboardStreakLabel": "สตรีค",
+  "leaderboardWantMoreCompetition": "อยากแข่งขันมากขึ้นไหม?",
+  "leaderboardInviteDescription": "ชวนเพื่อนมาแข่งกันว่าใครจะครองอันดับสูงสุด!",
+  "leaderboardInviteFriends": "ชวนเพื่อน",
+  "getStartedGestureTitle": "L + บีบปลายนิ้ว",
+  "getStartedGestureDescription": "ช่วยพัฒนาทักษะการเคลื่อนไหวและการประสานงานระหว่างมือกับตา",
+  "next": "ถัดไป",
+  "gamePaused": "หยุดชั่วคราว",
+  "gameScoreLabel": "คะแนน",
+  "gamePointsAbbrev": "แต้ม",
+  "mathGameSelectDifficulty": "เลือกระดับความยาก",
+  "mathGameChooseLevelToStart": "เลือกระดับเพื่อเริ่มเกม",
+  "mathGameLevelEasy": "ง่าย (บวก)",
+  "mathGameLevelNormal": "ปานกลาง (+, -)",
+  "mathGameLevelHard": "ยาก (+, -, x, ÷)",
+  "mathGameLevelExtreme": "โหด (คณิตขั้นสูง)",
+  "mathGameExtremeNote": "* หมายเหตุ: ระดับนี้อาจต้องใช้กระดาษช่วยคำนวณ!",
+  "mathGamePercentOfEquation": "{percent}% ของ {number} = ?",
+  "@mathGamePercentOfEquation": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchNameLabel": "ชื่อท่า",
+  "perfectMatchComboMultiplier": "คอมโบ x{multiplier}",
+  "@perfectMatchComboMultiplier": {
+    "placeholders": {
+      "multiplier": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchComboHits": "{count} ครั้ง!",
+  "@perfectMatchComboHits": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchPosePair": "{left} + {right}",
+  "@perfectMatchPosePair": {
+    "placeholders": {
+      "left": {
+        "type": "String"
+      },
+      "right": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchPosePartL": "แอล",
+  "perfectMatchPosePartFingertipPinch": "ปลายนิ้วจีบ",
+  "perfectMatchPosePartThumb": "นิ้วโป้ง",
+  "perfectMatchPosePartPinky": "นิ้วก้อย",
+  "perfectMatchPosePartPoint": "ชี้",
+  "perfectMatchPosePartOne": "หนึ่ง",
+  "perfectMatchPosePartTwo": "สอง",
+  "perfectMatchPosePartThree": "สาม",
+  "perfectMatchPosePartFour": "สี่",
+  "perfectMatchPosePartFive": "ห้า",
+  "perfectMatchPosePartSix": "หก",
+  "perfectMatchPosePartSeven": "เจ็ด",
+  "perfectMatchPosePartEight": "แปด",
+  "perfectMatchPosePartNine": "เก้า",
+  "perfectMatchPosePartTen": "สิบ",
+  "wanderTitle": "Wander Trace",
+  "wanderTraceRandomShapes": "ลากตามรูปทรงสุ่ม",
+  "wanderDescription": "ในแต่ละรอบจะมีรูปทรงสุ่ม: สามเหลี่ยม สี่เหลี่ยม ห้าเหลี่ยม\nดาว หรือวงกลม\nลากเส้นด้วยปลายนิ้วชี้จนกว่าขอบทุกด้านจะเต็ม",
+  "wanderStartTracing": "เริ่มลากเส้น",
+  "wanderStatusShowFinger": "ยกนิ้วชี้เพื่อเริ่มวางจุด",
+  "wanderStatusProgress": "{shape}  {completed} / {total}",
+  "@wanderStatusProgress": {
+    "placeholders": {
+      "shape": {
+        "type": "String"
+      },
+      "completed": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "wanderShapeTriangle": "สามเหลี่ยม",
+  "wanderShapeQuadrilateral": "สี่เหลี่ยม",
+  "wanderShapePentagon": "ห้าเหลี่ยม",
+  "wanderShapeStar": "ดาว",
+  "wanderShapeCircle": "วงกลม",
+  "scoreCongratsYouScore": "ยินดีด้วย! คุณทำได้",
+  "scorePointsWord": "คะแนน",
+  "scoreInSeconds": "ใน {seconds} วินาที",
+  "@scoreInSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "scoreHighScore": "คะแนนสูงสุด: {score}",
+  "@scoreHighScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  }
+}

@@ -1,0 +1,376 @@
+{
+  "@@locale": "en",
+  "appTitle": "FlexiFlow",
+  "navHome": "Home",
+  "navMission": "Mission",
+  "navStats": "Stats",
+  "navTraining": "Training",
+  "navGoToTab": "Go to {label} tab",
+  "@navGoToTab": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "goBack": "Go back",
+  "profileTitle": "Profile",
+  "profileEditPersonalInfo": "Edit personal information",
+  "profileFeedback": "Feedback",
+  "profileFeedbackComingSoon": "Feedback option coming soon!",
+  "languageSetting": "Language",
+  "thaiLanguage": "ไทย",
+  "englishLanguage": "English",
+  "useWcag": "Use WCAG 2.2 accessible UI",
+  "useWcagSubtitle": "Higher contrast and larger touch targets",
+  "textSize": "Text size",
+  "adjustTextScale": "Adjust text scale from 100% to 250%",
+  "profileSignOut": "Sign Out",
+  "confirmSignOutTitle": "Sign Out",
+  "confirmSignOutMessage": "Are you sure you want to sign out?",
+  "cancel": "Cancel",
+  "yes": "Yes",
+  "resetProgressTitle": "Reset Progress",
+  "resetProgressMessage": "Are you sure you want to reset all progress? This cannot be undone.",
+  "reset": "Reset",
+  "progressResetDone": "All progress has been reset.",
+  "levelShort": "Lvl",
+  "loginWelcomeBack": "Welcome Back",
+  "loginSignInToContinue": "Sign in to continue",
+  "email": "Email",
+  "password": "Password",
+  "signIn": "Sign In",
+  "dontHaveAccount": "Don't have an account?",
+  "signUp": "Sign Up",
+  "loginMissingCredentials": "Please enter both email and password",
+  "loginIncorrectCredentials": "Incorrect email or password",
+  "unexpectedError": "An unexpected error occurred",
+  "createAccount": "Create Account",
+  "fullName": "Full Name",
+  "emergencyContact": "Emergency Contact",
+  "birthday": "Birthday",
+  "gender": "Gender",
+  "signupMissingFields": "Please fill in all required fields",
+  "alreadyHaveAccount": "Already have an account?",
+  "statsTitle": "Stats",
+  "aiSuggestion": "AI Suggestion",
+  "suggestionTryMoreScoreOn": "Try getting a little bit more score on ",
+  "suggestionFasterOn": "Might be a little bit faster on ",
+  "gamePerfectMatch": "Perfect Match",
+  "gameSumItUp": "Sum It Up",
+  "gameWander": "Wander",
+  "recent": "Recent",
+  "nothingToShow": "Nothing to\nshow",
+  "brainScore": "Brain score",
+  "pointsShort": "pts",
+  "steps": "Steps",
+  "stepsShort": "steps",
+  "timeSpent": "Time Spent",
+  "today": "today",
+  "week": "week",
+  "month": "month",
+  "hour": "hour",
+  "minuteShort": "min",
+  "secondShort": "sec",
+  "trainingTitle": "Training",
+  "games": "Games",
+  "days": "Days",
+  "todoList": "To Do List",
+  "add": "Add",
+  "noTasksForToday": "No tasks for today",
+  "tapAddToCreateSchedule": "Tap \"Add\" to create a schedule",
+  "eventDeleted": "Event \"{event}\" deleted",
+  "@eventDeleted": {
+    "placeholders": {
+      "event": {
+        "type": "String"
+      }
+    }
+  },
+  "addEvent": "Add Event",
+  "timeHhMm": "Time (HH:MM)",
+  "eventDescription": "Event Description",
+  "locked": "LOCKED",
+  "unlockInShop": "Unlock in Shop",
+  "homeOpenProfile": "Open profile",
+  "homeOpenService": "Open {label}",
+  "@homeOpenService": {
+    "placeholders": {
+      "label": {
+        "type": "String"
+      }
+    }
+  },
+  "homeServicesTitle": "Services",
+  "homeServiceDiscoverPosture": "Discover Posture",
+  "homeServiceLeaderboard": "Leaderboard",
+  "homeServiceChatbot": "Chatbot",
+  "homeServiceShop": "Shop",
+  "homeOthersTitle": "Others",
+  "homeFeedbackSummary": "Feedback Summary",
+  "homeStreak": "Streak",
+  "homeTimeSpentPastTenDays": "Time spent in the past 10 days",
+  "homeStreakDaysCount": "{count} days",
+  "@homeStreakDaysCount": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "missionHeaderYour": "YOUR",
+  "missionHeaderMissions": "MISSIONS",
+  "missionTabDaily": "Daily",
+  "missionTabWeekly": "Weekly",
+  "missionTabAll": "All",
+  "missionTitleFirstExerciseOfDay": "First exercise of the day",
+  "missionTitleComplete3Exercises": "Complete 3 exercises",
+  "missionTitleWalk5000Steps": "Walk 5,000 steps",
+  "missionTitlePlayPerfectMatch10Min": "Play Perfect Match for 10 minutes",
+  "missionTitleComplete10Exercises": "Complete 10 exercises",
+  "missionTitleReach200BrainScore": "Reach 200 Brain Score",
+  "missionTitleExercise5DaysRow": "Exercise 5 days in a row",
+  "missionTitleExercise20DaysRow": "Exercise 20 days in a row",
+  "missionTitleReachLevel25": "Reach Level 25",
+  "missionTitleComplete20Exercises": "Complete 20 exercises",
+  "missionStatusDone": "Done",
+  "missionStatusClaim": "Claim",
+  "shopTitle": "Shop",
+  "shopCardDefaultTitle": "General",
+  "shopCardDefaultDescription": "Handpicked items just for you",
+  "shopCardUniversalTitle": "Universal Coverage Scheme",
+  "shopCardUniversalDescription": "Explore our full range of mostly from the government",
+  "shopCardAiaTitle": "AIA Vitality",
+  "shopCardAiaDescription": "Exclusive deals for AIA Vitality members",
+  "shopCardThaiIdTitle": "Thai ID",
+  "shopCardThaiIdVerified": "Successfully linked",
+  "shopCardThaiIdUnverified": "Tap to verify your Thai ID",
+  "shopRequest": "Request",
+  "shopMoreItemsComingSoon": "More items coming soon",
+  "shopRequestItemTitle": "Request Item",
+  "shopRequestItemPrompt": "What would you like to see in the shop?",
+  "shopRequestItemHint": "Enter item name...",
+  "submit": "Submit",
+  "shopThankYouTitle": "Thank You!",
+  "shopThankYouMessage": "We have received your request.",
+  "closeLabel": "Close",
+  "buyLabel": "Buy",
+  "shopConfirmPurchaseTitle": "Confirm Purchase",
+  "shopConfirmPurchaseMessage": "Are you sure you want to buy {itemName} for {itemPrice} coins?",
+  "@shopConfirmPurchaseMessage": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      },
+      "itemPrice": {
+        "type": "String"
+      }
+    }
+  },
+  "shopPurchaseSuccess": "You have successfully purchased {itemName}!",
+  "@shopPurchaseSuccess": {
+    "placeholders": {
+      "itemName": {
+        "type": "String"
+      }
+    }
+  },
+  "shopItemUnlockWander": "Unlock Wander",
+  "shopItemSushiroCoupon60": "Sushiro Coupon 60B",
+  "shopItemMkRestaurant150": "MK Restaurant 150B",
+  "shopItemMomo20Off": "Momo Paradise 20% off",
+  "shopItemFreeMajorTicket": "Free major cinema ticket",
+  "shopItemFreeSfPopcorn": "Free medium popcorn at SF",
+  "shopItemPttFuel300": "PTT Station Fuel Card 300B",
+  "shopItemBcpFuel300": "BCP Station Fuel Card 300B",
+  "shopItemMeaPea150": "MEA/PEA 150B Discount",
+  "shopItemMwaPwa150": "MWA/PWA 150B Discount",
+  "shopItemNt250": "NT 250B Discount",
+  "shopItemMrt200": "MRT 200B Balance",
+  "shopItemThailandPost100": "Thailand Post 100B Balance",
+  "shopItemGovLottery": "Government Lottery Ticket",
+  "chatbotNoResponse": "No response",
+  "chatbotConnectionError": "Sorry, I'm having trouble connecting to the assistant. Please try again later.\\nError: {error}",
+  "@chatbotConnectionError": {
+    "placeholders": {
+      "error": {
+        "type": "String"
+      }
+    }
+  },
+  "chatbotMoreOptions": "More options",
+  "chatbotTitleLexiAssistant": "Lexi Assistant",
+  "chatbotSubtitleAlwaysHere": "Always here to help",
+  "chatbotHowCanWeHelp": "How can we help you?",
+  "chatbotAttachFile": "Attach file",
+  "chatbotInputHint": "Ask us....",
+  "chatbotSendMessage": "Send message",
+  "chatbotJustNow": "Just now",
+  "chatbotMinutesAgo": "{minutes}m ago",
+  "@chatbotMinutesAgo": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "chatbotHoursAgo": "{hours}h ago",
+  "@chatbotHoursAgo": {
+    "placeholders": {
+      "hours": {
+        "type": "String"
+      }
+    }
+  },
+  "chatbotClearChatHistory": "Clear Chat History",
+  "chatbotHelpSupport": "Help & Support",
+  "chatbotClearHistoryConfirm": "Are you sure you want to clear all chat messages? This action cannot be undone.",
+  "chatbotClear": "Clear",
+  "chatbotHelpTipsTitle": "Help & Tips",
+  "chatbotHelpTipsHeader": "How to get the best results:",
+  "chatbotHelpTipSpecificQuestions": "Ask specific questions about FlexiFlow exercises",
+  "chatbotHelpTipPersonalizedRoutine": "Request personalized workout routines",
+  "chatbotHelpTipFormTechnique": "Get tips on proper form and technique",
+  "chatbotHelpTipSchedules": "Ask about workout schedules and timing",
+  "chatbotHelpTipSuggestionChips": "Use the suggestion chips for quick questions",
+  "chatbotGotIt": "Got it!",
+  "chatbotSuggestion1": "What is FlexiFlow?",
+  "chatbotSuggestion2": "How much time should I spend?",
+  "chatbotSuggestion3": "How can I improve my flexibility?",
+  "chatbotSuggestion4": "What are the benefits of FlexiFlow?",
+  "chatbotSuggestion5": "Can you suggest a routine for me?",
+  "chatbotSuggestion6": "How do I track my progress?",
+  "chatbotSuggestion7": "What should I do if I feel pain?",
+  "chatbotSuggestion8": "How often should I practice?",
+  "chatbotSuggestion9": "What equipment do I need?",
+  "chatbotSuggestion10": "Can you help me with a specific pose?",
+  "chatbotSuggestion11": "What are the common mistakes in FlexiFlow?",
+  "chatbotSuggestion12": "How can I stay motivated?",
+  "chatbotSuggestion13": "What is the best time to practice?",
+  "chatbotSuggestion14": "How can I incorporate FlexiFlow into my daily routine?",
+  "leaderboardWeeklyRankings": "Weekly Rankings",
+  "leaderboardYou": "You",
+  "leaderboardRankText": "Rank {rank}",
+  "@leaderboardRankText": {
+    "placeholders": {
+      "rank": {
+        "type": "String"
+      }
+    }
+  },
+  "leaderboardAvgScore": "AVG SCORE",
+  "leaderboardGamesLabel": "GAMES",
+  "leaderboardStreakLabel": "STREAK",
+  "leaderboardWantMoreCompetition": "Want more competition?",
+  "leaderboardInviteDescription": "Invite your friends to see who really rules the leaderboard!",
+  "leaderboardInviteFriends": "Invite Friends",
+  "getStartedGestureTitle": "L + Fingertip pinch",
+  "getStartedGestureDescription": "Enhances movements skills and hand-eye coordination.",
+  "next": "Next",
+  "gamePaused": "PAUSED",
+  "gameScoreLabel": "Score",
+  "gamePointsAbbrev": "Pts",
+  "mathGameSelectDifficulty": "Select Difficulty",
+  "mathGameChooseLevelToStart": "Choose a level to start the game",
+  "mathGameLevelEasy": "Easy (Addition)",
+  "mathGameLevelNormal": "Normal (+, -)",
+  "mathGameLevelHard": "Hard (+, -, x, ÷)",
+  "mathGameLevelExtreme": "Extreme (Advanced Math)",
+  "mathGameExtremeNote": "* Note: You might need a piece of paper for this one!",
+  "mathGamePercentOfEquation": "{percent}% of {number} = ?",
+  "@mathGamePercentOfEquation": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      },
+      "number": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchNameLabel": "Name",
+  "perfectMatchComboMultiplier": "COMBO x{multiplier}",
+  "@perfectMatchComboMultiplier": {
+    "placeholders": {
+      "multiplier": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchComboHits": "{count} Hits!",
+  "@perfectMatchComboHits": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchPosePair": "{left} + {right}",
+  "@perfectMatchPosePair": {
+    "placeholders": {
+      "left": {
+        "type": "String"
+      },
+      "right": {
+        "type": "String"
+      }
+    }
+  },
+  "perfectMatchPosePartL": "L",
+  "perfectMatchPosePartFingertipPinch": "Fingertip pinch",
+  "perfectMatchPosePartThumb": "Thumb",
+  "perfectMatchPosePartPinky": "Pinky",
+  "perfectMatchPosePartPoint": "Point",
+  "perfectMatchPosePartOne": "One",
+  "perfectMatchPosePartTwo": "Two",
+  "perfectMatchPosePartThree": "Three",
+  "perfectMatchPosePartFour": "Four",
+  "perfectMatchPosePartFive": "Five",
+  "perfectMatchPosePartSix": "Six",
+  "perfectMatchPosePartSeven": "Seven",
+  "perfectMatchPosePartEight": "Eight",
+  "perfectMatchPosePartNine": "Nine",
+  "perfectMatchPosePartTen": "Ten",
+  "wanderTitle": "Wander Trace",
+  "wanderTraceRandomShapes": "Trace Random Shapes",
+  "wanderDescription": "A random shape appears each round: triangle, quadrilateral,\npentagon, star, or circle.\nTrace lines with your index fingertip until every edge is filled.",
+  "wanderStartTracing": "Start Tracing",
+  "wanderStatusShowFinger": "Show your index finger to place dots",
+  "wanderStatusProgress": "{shape}  {completed} / {total}",
+  "@wanderStatusProgress": {
+    "placeholders": {
+      "shape": {
+        "type": "String"
+      },
+      "completed": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "wanderShapeTriangle": "Triangle",
+  "wanderShapeQuadrilateral": "Quadrilateral",
+  "wanderShapePentagon": "Pentagon",
+  "wanderShapeStar": "Star",
+  "wanderShapeCircle": "Circle",
+  "scoreCongratsYouScore": "Congrats!  You score",
+  "scorePointsWord": "points",
+  "scoreInSeconds": "in {seconds} seconds",
+  "@scoreInSeconds": {
+    "placeholders": {
+      "seconds": {
+        "type": "String"
+      }
+    }
+  },
+  "scoreHighScore": "High score: {score}",
+  "@scoreHighScore": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  }
+}

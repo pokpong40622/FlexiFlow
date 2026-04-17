@@ -6,6 +6,7 @@ import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
 
 import '../fake_var.dart';
@@ -171,18 +172,18 @@ class _WanderPlayingState extends State<WanderPlaying>
     });
   }
 
-  String _shapeName(TraceShapeType shape) {
+  String _shapeName(TraceShapeType shape, AppLocalizations l10n) {
     switch (shape) {
       case TraceShapeType.triangle:
-        return 'Triangle';
+        return l10n.wanderShapeTriangle;
       case TraceShapeType.quadrilateral:
-        return 'Quadrilateral';
+        return l10n.wanderShapeQuadrilateral;
       case TraceShapeType.pentagon:
-        return 'Pentagon';
+        return l10n.wanderShapePentagon;
       case TraceShapeType.star:
-        return 'Star';
+        return l10n.wanderShapeStar;
       case TraceShapeType.circle:
-        return 'Circle';
+        return l10n.wanderShapeCircle;
     }
   }
 
@@ -453,10 +454,15 @@ class _WanderPlayingState extends State<WanderPlaying>
   }
 
   String _statusText() {
+    final l10n = AppLocalizations.of(context)!;
     if (_quadPoints.length < 2 || _currentShape == null) {
-      return 'Show your index finger to place dots';
+      return l10n.wanderStatusShowFinger;
     }
-    return '${_shapeName(_currentShape!)}  ${_completedSidesCount()} / ${_quadPoints.length}';
+    return l10n.wanderStatusProgress(
+      _shapeName(_currentShape!, l10n),
+      '${_completedSidesCount()}',
+      '${_quadPoints.length}',
+    );
   }
 
   @override
@@ -464,6 +470,7 @@ class _WanderPlayingState extends State<WanderPlaying>
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
+    final l10n = AppLocalizations.of(context)!;
     final gameplayTextScale = mediaQuery.textScaler
         .scale(1.0)
         .clamp(1.0, 1.15)
@@ -512,7 +519,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                     Expanded(
                       child: Center(
                         child: Text(
-                          'Wander Trace',
+                          l10n.wanderTitle,
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.06,
                             fontWeight: FontWeight.bold,
@@ -533,7 +540,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                       children: [
                         SizedBox(height: screenHeight * 0.08),
                         Text(
-                          'Trace Random Shapes',
+                          l10n.wanderTraceRandomShapes,
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.07,
                             fontWeight: FontWeight.w800,
@@ -543,9 +550,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                         ),
                         SizedBox(height: screenHeight * 0.02),
                         Text(
-                          'A random shape appears each round: triangle, quadrilateral,\n'
-                              'pentagon, star, or circle.\n'
-                              'Trace lines with your index fingertip until every edge is filled.',
+                          l10n.wanderDescription,
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.04,
                             fontWeight: FontWeight.w500,
@@ -658,7 +663,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                                         ),
                                         const SizedBox(height: 16),
                                         Text(
-                                          'PAUSED',
+                                          l10n.gamePaused,
                                           style: GoogleFonts.montserrat(
                                             fontSize: 48,
                                             fontWeight: FontWeight.bold,
@@ -762,7 +767,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                                     Padding(
                                       padding: EdgeInsets.only(top: screenHeight * 0.02),
                                       child: Text(
-                                        'sec',
+                                        l10n.secondShort,
                                         style: GoogleFonts.montserrat(
                                           fontWeight: FontWeight.w800,
                                           fontSize: screenWidth * 0.034,
@@ -841,7 +846,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Score',
+                          l10n.gameScoreLabel,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.042,
@@ -858,7 +863,7 @@ class _WanderPlayingState extends State<WanderPlaying>
                           ),
                         ),
                         Text(
-                          'Pts',
+                          l10n.gamePointsAbbrev,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.042,
@@ -879,6 +884,7 @@ class _WanderPlayingState extends State<WanderPlaying>
   }
 
   Widget _buildStartButton(double screenWidth, double screenHeight) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: _startGame,
       child: Container(
@@ -902,7 +908,7 @@ class _WanderPlayingState extends State<WanderPlaying>
         ),
         alignment: Alignment.center,
         child: Text(
-          'Start Tracing',
+          l10n.wanderStartTracing,
           style: GoogleFonts.montserrat(
             fontSize: screenWidth * 0.045,
             fontWeight: FontWeight.w700,

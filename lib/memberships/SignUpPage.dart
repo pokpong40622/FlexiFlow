@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 
 class SignupPage extends StatefulWidget {
   const SignupPage({super.key});
@@ -26,12 +27,13 @@ class _SignupPageState extends State<SignupPage> {
   String? errorMessage = '';
 
   Future<void> createUserWithEmailAndPassword() async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       if (_controllerEmail.text.trim().isEmpty ||
           _controllerPassword.text.trim().isEmpty ||
           _controllerName.text.trim().isEmpty) {
         setState(() {
-          errorMessage = 'Please fill in all required fields';
+          errorMessage = l10n.signupMissingFields;
         });
         return;
       }
@@ -53,7 +55,7 @@ class _SignupPageState extends State<SignupPage> {
       });
     } catch (e) {
       setState(() {
-        errorMessage = 'An unexpected error occurred';
+        errorMessage = l10n.unexpectedError;
       });
     }
   }
@@ -135,6 +137,7 @@ class _SignupPageState extends State<SignupPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
@@ -173,7 +176,7 @@ class _SignupPageState extends State<SignupPage> {
                   ),
                   const SizedBox(height: 12),
                   Text(
-                    'Create Account',
+                    l10n.createAccount,
                     style: GoogleFonts.inter(
                       fontSize: 28,
                       fontWeight: FontWeight.w800,
@@ -191,26 +194,26 @@ class _SignupPageState extends State<SignupPage> {
                   _buildTextField(
                     controller: _controllerName,
                     icon: Icons.person_outline,
-                    hint: 'Full Name',
+                    hint: l10n.fullName,
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
                     controller: _controllerEmail,
                     icon: Icons.email_outlined,
-                    hint: 'Email',
+                    hint: l10n.email,
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
                     controller: _controllerPassword,
                     icon: Icons.lock_outline,
-                    hint: 'Password',
+                    hint: l10n.password,
                     isPassword: true,
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
                     controller: _controllerPhone,
                     icon: Icons.phone_outlined,
-                    hint: 'Emergency Contact',
+                    hint: l10n.emergencyContact,
                   ),
                   const SizedBox(height: 16),
                   Row(
@@ -219,7 +222,7 @@ class _SignupPageState extends State<SignupPage> {
                         child: _buildTextField(
                           controller: _controllerBirthday,
                           icon: Icons.calendar_today_outlined,
-                          hint: 'Birthday',
+                          hint: l10n.birthday,
                         ),
                       ),
                       const SizedBox(width: 12),
@@ -227,7 +230,7 @@ class _SignupPageState extends State<SignupPage> {
                         child: _buildTextField(
                           controller: _controllerGender,
                           icon: Icons.people_outline,
-                          hint: 'Gender',
+                          hint: l10n.gender,
                         ),
                       ),
                     ],
@@ -275,7 +278,7 @@ class _SignupPageState extends State<SignupPage> {
                         shadowColor: const Color(0x4D1E88E5),
                       ),
                       child: Text(
-                        'Sign Up',
+                        l10n.signUp,
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -289,7 +292,7 @@ class _SignupPageState extends State<SignupPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Already have an account? ',
+                        "${l10n.alreadyHaveAccount} ",
                         style: GoogleFonts.inter(
                             color: wcagColor(
                               context,
@@ -307,7 +310,7 @@ class _SignupPageState extends State<SignupPage> {
                           );
                         },
                         child: Text(
-                          'Sign In',
+                          l10n.signIn,
                           style: GoogleFonts.inter(
                             color: const Color(0xFF1E88E5),
                             fontWeight: FontWeight.w700,

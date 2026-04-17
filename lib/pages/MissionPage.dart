@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
 
 class MissionPage extends StatefulWidget {
@@ -23,6 +24,7 @@ class _MissionPageState extends State<MissionPage> {
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
+    final l10n = AppLocalizations.of(context)!;
     final pageTextScale = mediaQuery.textScaler
         .scale(1.0)
         .clamp(1.0, 1.35)
@@ -58,7 +60,7 @@ class _MissionPageState extends State<MissionPage> {
                             children: [
                               SizedBox(height: screenHeight * 0.045),
                               Text(
-                                'YOUR',
+                                l10n.missionHeaderYour,
                                 style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   fontSize: screenWidth * 0.076,
@@ -67,7 +69,7 @@ class _MissionPageState extends State<MissionPage> {
                                 ),
                               ),
                               Text(
-                                'MISSIONS',
+                                l10n.missionHeaderMissions,
                                 style: GoogleFonts.inter(
                                   fontWeight: FontWeight.w700,
                                   fontSize: screenWidth * 0.076,
@@ -93,9 +95,9 @@ class _MissionPageState extends State<MissionPage> {
                     mainAxisAlignment: MainAxisAlignment.start,
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      _buildTab(context, 'Daily', 0),
-                      _buildTab(context, 'Weekly', 1),
-                      _buildTab(context, 'All', 2),
+                      _buildTab(context, l10n.missionTabDaily, 0),
+                      _buildTab(context, l10n.missionTabWeekly, 1),
+                      _buildTab(context, l10n.missionTabAll, 2),
                     ],
                   )
                 ],
@@ -117,6 +119,7 @@ class _MissionPageState extends State<MissionPage> {
 
   List<Widget> _getMissions(BuildContext context) {
     List<MissionData> missions;
+    final l10n = AppLocalizations.of(context)!;
 
     final daily = [
       MissionData(
@@ -228,7 +231,8 @@ class _MissionPageState extends State<MissionPage> {
     return missions
         .map((m) => _buildMissionItem(
               context,
-              title: m.title,
+          missionId: m.title,
+          title: _localizedMissionTitle(l10n, m.title),
               coins: m.coins,
               xp: m.xp,
               status: m.status,
@@ -294,6 +298,7 @@ class _MissionPageState extends State<MissionPage> {
 
   Widget _buildMissionItem(
     BuildContext context, {
+    required String missionId,
     required String title,
     required int coins,
     required int xp,
@@ -303,13 +308,14 @@ class _MissionPageState extends State<MissionPage> {
     int requiredLevel = 0,
   }) {
     // Override status if already claimed locally
-    if (Globals.claimedMissions.contains(title)) {
+    if (Globals.claimedMissions.contains(missionId)) {
       status = MissionStatus.claimed;
     }
 
     final double screenWidth = MediaQuery.of(context).size.width;
     final double screenHeight = MediaQuery.of(context).size.height;
     final tokens = tokensOf(context);
+    final l10n = AppLocalizations.of(context)!;
 
     // Derive colours & icons from status
     final Color accentColor;
@@ -370,7 +376,7 @@ class _MissionPageState extends State<MissionPage> {
                 setState(() {
                   Globals.coins += coins;
                   Globals.exp += xp;
-                  Globals.claimedMissions.add(title);
+                  Globals.claimedMissions.add(missionId);
                   Globals.save();
                 });
               } else if (status == MissionStatus.inProgress &&
@@ -508,7 +514,7 @@ class _MissionPageState extends State<MissionPage> {
                                     ),
                                   ),
                                   Text(
-                                    'Lvl $requiredLevel',
+                                    '${l10n.levelShort} $requiredLevel',
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w600,
                                       fontSize: screenWidth * 0.032,
@@ -586,6 +592,7 @@ class _MissionPageState extends State<MissionPage> {
     required double screenWidth,
     required double screenHeight,
   }) {
+    final l10n = AppLocalizations.of(context)!;
     switch (status) {
       case MissionStatus.claimed:
         return Container(
@@ -603,7 +610,7 @@ class _MissionPageState extends State<MissionPage> {
               Icon(Icons.check, color: accentColor, size: screenWidth * 0.04),
               SizedBox(width: screenWidth * 0.01),
               Text(
-                'Done',
+                l10n.missionStatusDone,
                 style: GoogleFonts.inter(
                   fontWeight: FontWeight.w600,
                   fontSize: screenWidth * 0.03,
@@ -634,7 +641,7 @@ class _MissionPageState extends State<MissionPage> {
             ],
           ),
           child: Text(
-            'Claim',
+            l10n.missionStatusClaim,
             style: GoogleFonts.inter(
               fontWeight: FontWeight.w700,
               fontSize: screenWidth * 0.033,
@@ -659,6 +666,33 @@ class _MissionPageState extends State<MissionPage> {
           color: accentColor,
           size: screenWidth * 0.055,
         );
+    }
+  }
+
+  String _localizedMissionTitle(AppLocalizations l10n, String missionId) {
+    switch (missionId) {
+      case 'First exercise of the day':
+        return l10n.missionTitleFirstExerciseOfDay;
+      case 'Complete 3 exercises':
+        return l10n.missionTitleComplete3Exercises;
+      case 'Walk 5,000 steps':
+        return l10n.missionTitleWalk5000Steps;
+      case 'Play Perfect Match for 10 minutes':
+        return l10n.missionTitlePlayPerfectMatch10Min;
+      case 'Complete 10 exercises':
+        return l10n.missionTitleComplete10Exercises;
+      case 'Reach 200 Brain Score':
+        return l10n.missionTitleReach200BrainScore;
+      case 'Exercise 5 days in a row':
+        return l10n.missionTitleExercise5DaysRow;
+      case 'Exercise 20 days in a row':
+        return l10n.missionTitleExercise20DaysRow;
+      case 'Reach Level 25':
+        return l10n.missionTitleReachLevel25;
+      case 'Complete 20 exercises':
+        return l10n.missionTitleComplete20Exercises;
+      default:
+        return missionId;
     }
   }
 }

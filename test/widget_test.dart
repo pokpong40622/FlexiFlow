@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/l10n/app_language.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/app_theme.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -24,6 +25,22 @@ void main() {
 
     await Globals.setWcagMode(false);
     expect(Globals.wcagModeEnabled, isFalse);
+  });
+
+  test('Language defaults to Thai and persists when changed', () async {
+    expect(Globals.locale.languageCode, equals('th'));
+
+    await Globals.setLanguage(const Locale('en'));
+    expect(Globals.locale.languageCode, equals('en'));
+
+    await Globals.load();
+    expect(Globals.locale.languageCode, equals('en'));
+  });
+
+  test('Language falls back to Thai for invalid stored value', () async {
+    SharedPreferences.setMockInitialValues({'languageCode': 'xx'});
+    await Globals.load();
+    expect(Globals.locale.languageCode, equals(AppLanguage.defaultLocale.languageCode));
   });
 
   test('AppTheme changes key colors between default and WCAG mode', () {

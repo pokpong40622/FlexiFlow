@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motion_kit/memberships/AuthPage.dart';
 import 'package:motion_kit/memberships/SignUpPage.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});
@@ -21,11 +22,12 @@ class _LoginPageState extends State<LoginPage> {
   final TextEditingController _controllerPassword = TextEditingController();
 
   Future<void> signInWithEmailAndPassword() async {
+    final l10n = AppLocalizations.of(context)!;
     try {
       if (_controllerEmail.text.trim().isEmpty ||
           _controllerPassword.text.trim().isEmpty) {
         setState(() {
-          errorMessage = 'Please enter both email and password';
+          errorMessage = l10n.loginMissingCredentials;
         });
         return;
       }
@@ -37,14 +39,14 @@ class _LoginPageState extends State<LoginPage> {
     } on FirebaseAuthException catch (e) {
       setState(() {
         if (e.code == 'user-not-found' || e.code == 'wrong-password') {
-          errorMessage = 'Incorrect email or password';
+          errorMessage = l10n.loginIncorrectCredentials;
         } else {
           errorMessage = e.message;
         }
       });
     } catch (e) {
       setState(() {
-        errorMessage = 'An unexpected error occurred';
+        errorMessage = l10n.unexpectedError;
       });
     }
   }
@@ -126,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: const Color(0xFFF8F9FD),
@@ -181,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Welcome Back',
+                    l10n.loginWelcomeBack,
                     style: GoogleFonts.inter(
                       fontSize: 28,
                       fontWeight: FontWeight.bold,
@@ -190,7 +193,7 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Sign in to continue',
+                    l10n.loginSignInToContinue,
                     style: GoogleFonts.inter(
                       fontSize: 16,
                       color: wcagColor(
@@ -204,13 +207,13 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(height: 40),
                   _buildTextField(
                     controller: _controllerEmail,
-                    hint: 'Email',
+                    hint: l10n.email,
                     icon: Icons.email_outlined,
                   ),
                   const SizedBox(height: 16),
                   _buildTextField(
                     controller: _controllerPassword,
-                    hint: 'Password',
+                    hint: l10n.password,
                     icon: Icons.lock_outline,
                     isPassword: true,
                   ),
@@ -257,7 +260,7 @@ class _LoginPageState extends State<LoginPage> {
                         shadowColor: const Color(0x4D1E88E5),
                       ),
                       child: Text(
-                        'Sign In',
+                        l10n.signIn,
                         style: GoogleFonts.inter(
                           fontSize: 16,
                           fontWeight: FontWeight.w700,
@@ -271,7 +274,7 @@ class _LoginPageState extends State<LoginPage> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        "Don't have an account? ",
+                        "${l10n.dontHaveAccount} ",
                         style: GoogleFonts.inter(
                             color: wcagColor(
                               context,
@@ -292,7 +295,7 @@ class _LoginPageState extends State<LoginPage> {
                           );
                         },
                         child: Text(
-                          'Sign Up',
+                          l10n.signUp,
                           style: GoogleFonts.inter(
                             color: const Color(0xFF1E88E5),
                             fontWeight: FontWeight.w700,
