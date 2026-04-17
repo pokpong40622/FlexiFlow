@@ -88,7 +88,7 @@ class _StatsPageState extends State<StatsPage> {
       case 'month':
         return l10n.month;
       default:
-        return key;
+        return l10n.today;
     }
   }
 

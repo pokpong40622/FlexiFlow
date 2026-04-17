@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:math';
-import 'package:flutter/material.dart';
+import 'dart:ui' show Locale;
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:motion_kit/l10n/app_language.dart';
 
