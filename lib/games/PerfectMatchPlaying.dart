@@ -4,6 +4,7 @@ import 'dart:async';
 import 'dart:ui';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/services/gesture_classification.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
 import '../services/hand_landmarker_service.dart';
@@ -352,12 +353,62 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
     });
   }
 
+  String _localizedPoseName(String rawName, AppLocalizations l10n) {
+    final parts = rawName.split(' + ');
+    if (parts.length != 2) {
+      return rawName;
+    }
+
+    return l10n.perfectMatchPosePair(
+      _localizedPosePart(parts[0], l10n),
+      _localizedPosePart(parts[1], l10n),
+    );
+  }
+
+  String _localizedPosePart(String part, AppLocalizations l10n) {
+    switch (part) {
+      case 'L':
+        return l10n.perfectMatchPosePartL;
+      case 'Fingertip pinch':
+        return l10n.perfectMatchPosePartFingertipPinch;
+      case 'Thumb':
+        return l10n.perfectMatchPosePartThumb;
+      case 'Pinky':
+        return l10n.perfectMatchPosePartPinky;
+      case 'Point':
+        return l10n.perfectMatchPosePartPoint;
+      case 'One':
+        return l10n.perfectMatchPosePartOne;
+      case 'Two':
+        return l10n.perfectMatchPosePartTwo;
+      case 'Three':
+        return l10n.perfectMatchPosePartThree;
+      case 'Four':
+        return l10n.perfectMatchPosePartFour;
+      case 'Five':
+        return l10n.perfectMatchPosePartFive;
+      case 'Six':
+        return l10n.perfectMatchPosePartSix;
+      case 'Seven':
+        return l10n.perfectMatchPosePartSeven;
+      case 'Eight':
+        return l10n.perfectMatchPosePartEight;
+      case 'Nine':
+        return l10n.perfectMatchPosePartNine;
+      case 'Ten':
+        return l10n.perfectMatchPosePartTen;
+      default:
+        return part;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
     final tokens = tokensOf(context);
+    final l10n = AppLocalizations.of(context)!;
     final gameplayTextScale = mediaQuery.textScaler
         .scale(1.0)
         .clamp(1.0, 1.15)
@@ -398,7 +449,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                             left: screenWidth * 0.012,
                           ),
                           child: Text(
-                            'sec',
+                            l10n.secondShort,
                             style: GoogleFonts.montserrat(
                               fontWeight: FontWeight.w800,
                               fontSize: screenWidth * 0.034,
@@ -451,7 +502,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                                         ),
                                         SizedBox(height: 16),
                                         Text(
-                                          'PAUSED',
+                                          l10n.gamePaused,
                                           style: GoogleFonts.montserrat(
                                             fontSize: 48,
                                             fontWeight: FontWeight.bold,
@@ -523,7 +574,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'Name: ',
+                                '${l10n.perfectMatchNameLabel}: ',
                                 style: GoogleFonts.montserrat(
                                   fontSize: screenWidth * 0.054,
                                   fontWeight: FontWeight.w800,
@@ -531,7 +582,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                                 ),
                               ),
                               Text(
-                                '${predefinedPoses[currentPoseIndex].name}: ',
+                                '${_localizedPoseName(predefinedPoses[currentPoseIndex].name, l10n)}: ',
                                 style: GoogleFonts.montserrat(
                                   fontSize: screenWidth * 0.054,
                                   fontWeight: FontWeight.w700,
@@ -685,7 +736,9 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                   crossAxisAlignment: CrossAxisAlignment.end,
                   children: [
                     Text(
-                      'COMBO x${1 + (_comboCounter ~/ 3)}',
+                      l10n.perfectMatchComboMultiplier(
+                        '${1 + (_comboCounter ~/ 3)}',
+                      ),
                       style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w900,
                         fontSize: screenWidth * 0.08,
@@ -704,7 +757,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                       ),
                     ),
                     Text(
-                      '$_comboCounter Hits!',
+                      l10n.perfectMatchComboHits('$_comboCounter'),
                       style: GoogleFonts.montserrat(
                         fontWeight: FontWeight.w700,
                         fontSize: screenWidth * 0.04,
@@ -773,7 +826,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Score',
+                          l10n.gameScoreLabel,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.042,
@@ -790,7 +843,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                           ),
                         ),
                         Text(
-                          'Pts',
+                          l10n.gamePointsAbbrev,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.042,

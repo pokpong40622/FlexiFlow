@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 
 class ScorePage extends StatefulWidget {
   final int score;
@@ -63,6 +64,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -111,7 +113,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
                         Opacity(
                           opacity: _opacityAnimation.value,
                           child: Text(
-                            'Congrats!  You score',
+                            l10n.scoreCongratsYouScore,
                             textAlign: TextAlign.center,
                             style: GoogleFonts.montserrat(
                               fontSize: 24,
@@ -148,7 +150,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
                                 child: Opacity(
                                   opacity: _opacityAnimation.value,
                                   child: Text(
-                                    'points',
+                                    l10n.scorePointsWord,
                                     style: GoogleFonts.montserrat(
                                       fontSize: 16,
                                       fontWeight: FontWeight.w700,
@@ -164,7 +166,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
                         Opacity(
                           opacity: _opacityAnimation.value,
                           child: Text(
-                            'in ${widget.timeSpent} seconds',
+                            l10n.scoreInSeconds('${widget.timeSpent}'),
                             textAlign: TextAlign.center,
                             style: GoogleFonts.montserrat(
                               fontSize: 24,
@@ -182,7 +184,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
                           child: Align(
                             alignment: Alignment.centerRight,
                             child: Text(
-                              'High score: ${widget.highScore}',
+                              l10n.scoreHighScore('${widget.highScore}'),
                               style: GoogleFonts.montserrat(
                                 fontSize: 20,
                                 fontWeight: FontWeight.w700,
@@ -213,7 +215,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
                                 ),
                               ),
                               child: Text(
-                                'Back',
+                                l10n.goBack,
                                 style: GoogleFonts.montserrat(
                                   fontSize: 18,
                                   fontWeight: FontWeight.w700,

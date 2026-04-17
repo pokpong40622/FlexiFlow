@@ -6,7 +6,7 @@ import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/l10n/app_language.dart';
 
 import '../fake_var.dart';

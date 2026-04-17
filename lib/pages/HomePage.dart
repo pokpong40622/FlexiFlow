@@ -6,6 +6,7 @@ import 'package:motion_kit/pages/ProfilePage.dart';
 import 'package:shimmer/shimmer.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'GetStarted.dart';
 import 'ShopPage.dart';
 import 'package:flutter/material.dart';
@@ -19,7 +20,6 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-  @override
   int activeIndex = 0;
   bool _isLoading = true;
 
@@ -35,15 +35,10 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void didChangeDependencies() {
-    super.didChangeDependencies();
-
-    final route = ModalRoute.of(context);
-  }
-
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
 
     final List<String> slideImages = [
       'assets/ImagesliderFlexicoin.png',
@@ -84,7 +79,7 @@ class _HomePageState extends State<HomePage> {
                   // Profile Picture with subtle styling
                   Semantics(
                     button: true,
-                    label: 'Open profile',
+                    label: l10n.homeOpenProfile,
                     child: InkWell(
                       borderRadius: BorderRadius.circular(100),
                       onTap: () {
@@ -121,7 +116,7 @@ class _HomePageState extends State<HomePage> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        'Home',
+                        l10n.navHome,
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.065,
                           fontWeight: FontWeight.w800,
@@ -201,7 +196,7 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       Text(
-                        'Services',
+                        l10n.homeServicesTitle,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -215,7 +210,7 @@ class _HomePageState extends State<HomePage> {
                     crossAxisAlignment: CrossAxisAlignment.center,
                     children: [
                       _buildServiceAction(
-                        label: "Discover Posture",
+                        label: l10n.homeServiceDiscoverPosture,
                         onTap: () {
                           Navigator.push<void>(
                             context,
@@ -226,12 +221,12 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                           icon: Icons.travel_explore,
-                          label: "Discover Posture",
+                          label: l10n.homeServiceDiscoverPosture,
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
                       _buildServiceAction(
-                        label: "Leaderboard",
+                        label: l10n.homeServiceLeaderboard,
                         onTap: () {
                           Navigator.push(
                             context,
@@ -240,12 +235,12 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                           icon: Icons.leaderboard,
-                          label: "Leaderboard",
+                          label: l10n.homeServiceLeaderboard,
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
                       _buildServiceAction(
-                        label: "Chatbot",
+                        label: l10n.homeServiceChatbot,
                         onTap: () {
                           Navigator.push<void>(
                             context,
@@ -256,12 +251,12 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                           icon: Icons.support_agent,
-                          label: "Chatbot",
+                          label: l10n.homeServiceChatbot,
                           ColorCode: Color(0xFF0397FD),
                         ),
                       ),
                       _buildServiceAction(
-                        label: "Shop",
+                        label: l10n.homeServiceShop,
                         onTap: () {
                           Navigator.push<void>(
                             context,
@@ -272,7 +267,7 @@ class _HomePageState extends State<HomePage> {
                         },
                         child: _buildServicesButton(
                             icon: Icons.shopping_cart_outlined,
-                            label: "Shop",
+                            label: l10n.homeServiceShop,
                             ColorCode: Color(0xFF0397FD)),
                       ),
                     ],
@@ -281,7 +276,7 @@ class _HomePageState extends State<HomePage> {
                   Row(
                     children: [
                       Text(
-                        'Others',
+                        l10n.homeOthersTitle,
                         style: GoogleFonts.inter(
                           fontWeight: FontWeight.w700,
                           fontSize: screenWidth * 0.054,
@@ -353,9 +348,10 @@ class _HomePageState extends State<HomePage> {
     required VoidCallback onTap,
   }) {
     final tokens = Globals.wcagModeEnabled ? AppTokens.wcag : AppTokens.standard;
+    final l10n = AppLocalizations.of(context)!;
     return Semantics(
       button: true,
-      label: 'Open $label',
+      label: l10n.homeOpenService(label),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(12),
@@ -373,6 +369,7 @@ class _HomePageState extends State<HomePage> {
   Widget _FeedbackSummary() {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       child: Stack(
         children: [
@@ -493,7 +490,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: Text(
-              'Feedback Summary',
+              l10n.homeFeedbackSummary,
               style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 13,
@@ -508,9 +505,9 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget _StreakWidget() {
-    double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
     final tokens = tokensOf(context);
+    final l10n = AppLocalizations.of(context)!;
 
     return Container(
       child: Stack(
@@ -558,7 +555,7 @@ class _HomePageState extends State<HomePage> {
                       ),
                       SizedBox(height: 8),
                         Text(
-                          '${Globals.streak} days',
+                          l10n.homeStreakDaysCount('${Globals.streak}'),
                           style: GoogleFonts.inter(
                           color: Globals.isStreakActive
                               ? const Color(0xFFFF6B35)
@@ -592,7 +589,7 @@ class _HomePageState extends State<HomePage> {
                         ),
                         SizedBox(height: 8),
                         Text(
-                          'Time spent in the past 10 days',
+                          l10n.homeTimeSpentPastTenDays,
                           style: GoogleFonts.inter(
                             color: wcagColor(
                               context,
@@ -630,7 +627,7 @@ class _HomePageState extends State<HomePage> {
               ],
             ),
             child: Text(
-              'Streak',
+              l10n.homeStreak,
               style: GoogleFonts.inter(
                 color: Colors.white,
                 fontSize: 13,

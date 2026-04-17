@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'dart:ui';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:intl/intl.dart';
 import 'package:motion_kit/games/PerfectMatchPlaying.dart'; // Import for date formatting

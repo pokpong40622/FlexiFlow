@@ -5,6 +5,7 @@ import 'dart:ui';
 import 'dart:math';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:google_mlkit_commons/google_mlkit_commons.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/services/gesture_classification.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
 import '../services/hand_landmarker_service.dart';
@@ -66,6 +67,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
   void _generateEquation() {
      var random = Random();
      if (_selectedLevel == null) return;
+      final l10n = AppLocalizations.of(context)!;
 
      if (_selectedLevel == MathGameLevel.extreme) {
        int type = random.nextInt(5);
@@ -112,7 +114,10 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
             n = random.nextInt(maxN) + 1;
          } while ((p * n) % 100 != 0); // ensure integer result
          _currentAnswer = (p * n) ~/ 100;
-         if (mounted) setState(() => _currentEquation = "$p% of $n = ?");
+         if (mounted) {
+           setState(() =>
+               _currentEquation = l10n.mathGamePercentOfEquation('$p', '$n'));
+         }
        } else {
          // Square Roots
          int x = random.nextInt(9) + 1; // 1 to 9
@@ -275,6 +280,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
+    final l10n = AppLocalizations.of(context)!;
     final gameplayTextScale = mediaQuery.textScaler
         .scale(1.0)
         .clamp(1.0, 1.15)
@@ -322,7 +328,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                     Expanded(
                       child: Center(
                         child: Text(
-                          'Sum It Up',
+                          l10n.gameSumItUp,
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.06,
                             fontWeight: FontWeight.bold,
@@ -344,7 +350,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                       children: [
                         SizedBox(height: screenHeight * 0.05),
                         Text(
-                          'Select Difficulty',
+                          l10n.mathGameSelectDifficulty,
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.07,
                             fontWeight: FontWeight.w800,
@@ -353,7 +359,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                         ),
                         SizedBox(height: screenHeight * 0.01),
                         Text(
-                          'Choose a level to start the game',
+                          l10n.mathGameChooseLevelToStart,
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.04,
                             fontWeight: FontWeight.w500,
@@ -365,16 +371,16 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                           ),
                         ),
                         SizedBox(height: screenHeight * 0.06),
-                        _buildLevelButton('Easy (Addition)', MathGameLevel.easy, screenWidth, screenHeight),
+                        _buildLevelButton(l10n.mathGameLevelEasy, MathGameLevel.easy, screenWidth, screenHeight),
                         SizedBox(height: screenHeight * 0.025),
-                        _buildLevelButton('Normal (+, -)', MathGameLevel.normal, screenWidth, screenHeight),
+                        _buildLevelButton(l10n.mathGameLevelNormal, MathGameLevel.normal, screenWidth, screenHeight),
                         SizedBox(height: screenHeight * 0.025),
-                        _buildLevelButton('Hard (+, -, x, ÷)', MathGameLevel.hard, screenWidth, screenHeight),
+                        _buildLevelButton(l10n.mathGameLevelHard, MathGameLevel.hard, screenWidth, screenHeight),
                         SizedBox(height: screenHeight * 0.025),
-                        _buildLevelButton('Extreme (Advanced Math)', MathGameLevel.extreme, screenWidth, screenHeight),
+                        _buildLevelButton(l10n.mathGameLevelExtreme, MathGameLevel.extreme, screenWidth, screenHeight),
                         SizedBox(height: screenHeight * 0.015),
                         Text(
-                          '* Note: You might need a piece of paper for this one!',
+                          l10n.mathGameExtremeNote,
                           style: GoogleFonts.montserrat(
                             fontSize: screenWidth * 0.035,
                             fontWeight: FontWeight.w500,
@@ -482,7 +488,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                                         ),
                                         SizedBox(height: 16),
                                         Text(
-                                          'PAUSED',
+                                          l10n.gamePaused,
                                           style: GoogleFonts.montserrat(
                                             fontSize: 48,
                                             fontWeight: FontWeight.bold,
@@ -589,7 +595,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                                         top: screenHeight * 0.02,
                                       ),
                                       child: Text(
-                                        'sec',
+                                        l10n.secondShort,
                                         style: GoogleFonts.montserrat(
                                           fontWeight: FontWeight.w800,
                                           fontSize: screenWidth * 0.034,
@@ -674,7 +680,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Text(
-                          'Score',
+                          l10n.gameScoreLabel,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.042,
@@ -691,7 +697,7 @@ class _MathgamePlayingState extends State<MathgamePlaying> with SingleTickerProv
                           ),
                         ),
                         Text(
-                          'Pts',
+                          l10n.gamePointsAbbrev,
                           style: GoogleFonts.montserrat(
                             fontWeight: FontWeight.w700,
                             fontSize: screenWidth * 0.042,

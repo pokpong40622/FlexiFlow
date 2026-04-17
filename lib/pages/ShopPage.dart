@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/pages/ThaiIdInputPage.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
 
@@ -12,20 +13,22 @@ class ShopPage extends StatefulWidget {
 }
 
 class ShopItem {
+  final String id;
   final String name;
   final String price;
   final String imagePath;
 
-  ShopItem({required this.name, required this.price, required this.imagePath});
+  ShopItem({required this.id, required this.name, required this.price, required this.imagePath});
 }
 
 class CardMetadata {
+  final String id;
   final String title;
   final String description;
   final String imagePath;
   final List<ShopItem> items;
 
-  CardMetadata({required this.title, required this.description, required this.imagePath, required this.items});
+  CardMetadata({required this.id, required this.title, required this.description, required this.imagePath, required this.items});
 }
 
 int coinPD = 240;
@@ -37,41 +40,45 @@ class _ShopPageState extends State<ShopPage> {
   late PageController _pageController;
 
   List<CardMetadata> get availableCards {
+    final l10n = AppLocalizations.of(context)!;
     List<CardMetadata> cards = [
       CardMetadata(
-      title: 'None',
-      description: 'Handpicked items just for you',
+      id: 'default',
+      title: l10n.shopCardDefaultTitle,
+      description: l10n.shopCardDefaultDescription,
       imagePath: 'assets/Newgamepic.png',
       items: [
-        ShopItem(name: 'Unlock Wander', price: '250', imagePath: 'assets/WanderLogo.png'),
-        ShopItem(name: 'Sushiro Coupon 60B', price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
-        ShopItem(name: 'MK Restaurant 150B', price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
-        ShopItem(name: 'Momo Paradise 20% off', price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
-        ShopItem(name: 'Free major cinema ticket', price: ((220 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MAJOR.png'),
-        ShopItem(name: 'Free medium popcorn at SF', price: ((120 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/SFC.jpeg'),
+        ShopItem(id: 'unlockWander', name: l10n.shopItemUnlockWander, price: '250', imagePath: 'assets/WanderLogo.png'),
+        ShopItem(id: 'sushiroCoupon60', name: l10n.shopItemSushiroCoupon60, price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
+        ShopItem(id: 'mkRestaurant150', name: l10n.shopItemMkRestaurant150, price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
+        ShopItem(id: 'momo20Off', name: l10n.shopItemMomo20Off, price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
+        ShopItem(id: 'freeMajorTicket', name: l10n.shopItemFreeMajorTicket, price: ((220 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MAJOR.png'),
+        ShopItem(id: 'freeSfPopcorn', name: l10n.shopItemFreeSfPopcorn, price: ((120 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/SFC.jpeg'),
       ],
     )];
 
     if (Globals.isThaiIdVerified) {
       cards.addAll([
         CardMetadata(
-          title: 'Universal Coverage Scheme',
-          description: 'Explore our full range of mostly from the government',
+          id: 'universalCoverage',
+          title: l10n.shopCardUniversalTitle,
+          description: l10n.shopCardUniversalDescription,
           imagePath: 'assets/card/gold_flat.png',
           items: [
-            ShopItem(name: 'PTT Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/PTT.jpg'),
-            ShopItem(name: 'BCP Station Fuel Card 300B', price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/BCP.png'),
-            ShopItem(name: 'MEA/PEA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Electricity.png'),
-            ShopItem(name: 'MWA/PWA 150B Discount', price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Water.jpg'),
-            ShopItem(name: 'NT 250B Discount', price: ((250 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/NT.jpg'),
-            ShopItem(name: 'MRT 200B Balance', price: ((200 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MRT.jpg'),
-            ShopItem(name: 'Thailand Post 100B Balance', price: ((100 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/ThailandP.png'),
-            ShopItem(name: 'Government Lottery Ticket', price: ((80 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Lottery.png'),
+            ShopItem(id: 'pttFuel300', name: l10n.shopItemPttFuel300, price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/PTT.jpg'),
+            ShopItem(id: 'bcpFuel300', name: l10n.shopItemBcpFuel300, price: ((300 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/BCP.png'),
+            ShopItem(id: 'meaPea150', name: l10n.shopItemMeaPea150, price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Electricity.png'),
+            ShopItem(id: 'mwaPwa150', name: l10n.shopItemMwaPwa150, price: ((150 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Water.jpg'),
+            ShopItem(id: 'nt250', name: l10n.shopItemNt250, price: ((250 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/NT.jpg'),
+            ShopItem(id: 'mrt200', name: l10n.shopItemMrt200, price: ((200 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MRT.jpg'),
+            ShopItem(id: 'thailandPost100', name: l10n.shopItemThailandPost100, price: ((100 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/ThailandP.png'),
+            ShopItem(id: 'govLottery', name: l10n.shopItemGovLottery, price: ((80 / governmentPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Lottery.png'),
           ],
         ),
         CardMetadata(
-          title: 'AIA Vitality',
-          description: 'Exclusive deals for AIA Vitality members',
+          id: 'aiaVitality',
+          title: l10n.shopCardAiaTitle,
+          description: l10n.shopCardAiaDescription,
           imagePath: 'assets/card/aia_vita.png',
           items: [
           ],
@@ -81,8 +88,9 @@ class _ShopPageState extends State<ShopPage> {
 
     cards.add(
       CardMetadata(
-        title: 'Thai ID',
-        description: Globals.isThaiIdVerified ? 'Successfully linked' : 'Tap to verify your Thai ID',
+        id: 'thaiId',
+        title: l10n.shopCardThaiIdTitle,
+        description: Globals.isThaiIdVerified ? l10n.shopCardThaiIdVerified : l10n.shopCardThaiIdUnverified,
         imagePath: 'assets/ThaiID-Front.png',
         items: [],
       )
@@ -108,6 +116,7 @@ class _ShopPageState extends State<ShopPage> {
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
+    final l10n = AppLocalizations.of(context)!;
     final pageTextScale = mediaQuery.textScaler
         .scale(1.0)
         .clamp(1.0, 1.3)
@@ -159,7 +168,7 @@ class _ShopPageState extends State<ShopPage> {
                       mainAxisSize: MainAxisSize.min,
                       children: [
                         Text(
-                          'Shop',
+                          l10n.shopTitle,
                           maxLines: 1,
                           overflow: TextOverflow.ellipsis,
                           style: GoogleFonts.inter(
@@ -235,7 +244,7 @@ class _ShopPageState extends State<ShopPage> {
                     final card = availableCards[index];
                     return GestureDetector(
                       onTap: () async {
-                        if (card.title == 'Thai ID' && !Globals.isThaiIdVerified) {
+                        if (card.id == 'thaiId' && !Globals.isThaiIdVerified) {
                           final result = await Navigator.push(
                             context,
                             MaterialPageRoute(builder: (context) => const ThaiIdInputPage()),
@@ -352,8 +361,9 @@ class _ShopPageState extends State<ShopPage> {
                   crossAxisSpacing: 16,
                   children: [
                     for (var item in availableCards[_selectedCardIndex].items)
-                      if (!(item.name == 'Unlock Wander' && Globals.unlockedSumItUp))
+                      if (!(item.id == 'unlockWander' && Globals.unlockedSumItUp))
                         _buildShopItems(
+                          itemId: item.id,
                           ItemPic: item.imagePath,
                           ItemLabel: item.name,
                           ItemPrice: item.price,
@@ -407,7 +417,7 @@ class _ShopPageState extends State<ShopPage> {
                   ),
                   child: Center(
                     child: Text(
-                      'Back',
+                      l10n.goBack,
                       style: GoogleFonts.inter(
                         fontSize: 18,
                         fontWeight: FontWeight.w600,
@@ -427,6 +437,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Widget _buildRequestItem(double screenWidth) {
+    final l10n = AppLocalizations.of(context)!;
     return GestureDetector(
       onTap: () {
         _showRequestDialog(context);
@@ -450,7 +461,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
             const SizedBox(height: 12),
             Text(
-              'Request',
+              l10n.shopRequest,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w700,
                 color: const Color(0xFF8B8B8B),
@@ -459,7 +470,7 @@ class _ShopPageState extends State<ShopPage> {
             ),
             const SizedBox(height: 4),
             Text(
-              'More items coming soon',
+              l10n.shopMoreItemsComingSoon,
               textAlign: TextAlign.center,
               style: GoogleFonts.inter(
                 fontWeight: FontWeight.w500,
@@ -475,6 +486,7 @@ class _ShopPageState extends State<ShopPage> {
 
   void _showRequestDialog(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
     TextEditingController requestController = TextEditingController();
 
     showDialog(
@@ -496,7 +508,7 @@ class _ShopPageState extends State<ShopPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Request Item',
+                  l10n.shopRequestItemTitle,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.w700,
@@ -505,7 +517,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 SizedBox(height: screenWidth * 0.04),
                 Text(
-                  'What would you like to see in the shop?',
+                  l10n.shopRequestItemPrompt,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
@@ -516,7 +528,7 @@ class _ShopPageState extends State<ShopPage> {
                 TextField(
                   controller: requestController,
                   decoration: InputDecoration(
-                    hintText: 'Enter item name...',
+                    hintText: l10n.shopRequestItemHint,
                     filled: true,
                     fillColor: Colors.grey[100],
                     border: OutlineInputBorder(
@@ -546,7 +558,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           child: Center(
                             child: Text(
-                              'Cancel',
+                              l10n.cancel,
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w600,
@@ -575,7 +587,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           child: Center(
                             child: Text(
-                              'Submit',
+                              l10n.submit,
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w600,
@@ -598,6 +610,7 @@ class _ShopPageState extends State<ShopPage> {
 
   void _showThankYouDialog(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
@@ -624,7 +637,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 SizedBox(height: screenWidth * 0.04),
                 Text(
-                  'Thank You!',
+                  l10n.shopThankYouTitle,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.w700,
@@ -633,7 +646,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 SizedBox(height: screenWidth * 0.02),
                 Text(
-                  'We have received your request.',
+                  l10n.shopThankYouMessage,
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.035,
@@ -654,7 +667,7 @@ class _ShopPageState extends State<ShopPage> {
                     ),
                     child: Center(
                       child: Text(
-                        'Close',
+                        l10n.closeLabel,
                         style: GoogleFonts.inter(
                           fontSize: screenWidth * 0.04,
                           fontWeight: FontWeight.w600,
@@ -673,7 +686,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Widget _buildCreditCard(CardMetadata card, bool isActive) {
-    if (card.title == 'AIA Vitality' || card.title == 'Universal Coverage Scheme') {
+    if (card.id == 'aiaVitality' || card.id == 'universalCoverage') {
       return AnimatedContainer(
         duration: const Duration(milliseconds: 300),
         margin: EdgeInsets.symmetric(
@@ -705,11 +718,11 @@ class _ShopPageState extends State<ShopPage> {
       ),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: card.title == 'AIA Vitality'
+          colors: card.id == 'aiaVitality'
               ? [const Color(0xFFD32F2F), const Color(0xFFC62828)]
-              : card.title == 'Universal Coverage Scheme'
+            : card.id == 'universalCoverage'
                   ? [const Color(0xFF00B0FF), const Color(0xFF0081CB)]
-                  : card.title == 'Thai ID'
+              : card.id == 'thaiId'
                       ? (Globals.isThaiIdVerified
                           ? [const Color(0xFF388E3C), const Color(0xFF2E7D32)]
                           : [const Color(0xFFFF9800), const Color(0xFFF57C00)])
@@ -766,6 +779,7 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   Widget _buildShopItems({
+    required String itemId,
     required String ItemPic,
     required String ItemLabel,
     required String ItemPrice,
@@ -831,7 +845,7 @@ class _ShopPageState extends State<ShopPage> {
                     const SizedBox(height: 6),
                     GestureDetector(
                       onTap: () {
-                        _showBuyConfirmationDialog(context, ItemLabel, ItemPrice);
+                        _showBuyConfirmationDialog(context, itemId, ItemLabel, ItemPrice);
                       },
                       child: Container(
                         height: 40,
@@ -856,7 +870,7 @@ class _ShopPageState extends State<ShopPage> {
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
                                 Text(
-                                  'Buy',
+                                  AppLocalizations.of(context)!.buyLabel,
                                   style: GoogleFonts.inter(
                                     fontSize: 13,
                                     color: Colors.white,
@@ -905,8 +919,9 @@ class _ShopPageState extends State<ShopPage> {
   }
 
   void _showBuyConfirmationDialog(
-      BuildContext context, String itemName, String itemPrice) {
+      BuildContext context, String itemId, String itemName, String itemPrice) {
     double screenWidth = MediaQuery.of(context).size.width;
+    final l10n = AppLocalizations.of(context)!;
 
     showDialog(
       context: context,
@@ -927,7 +942,7 @@ class _ShopPageState extends State<ShopPage> {
               mainAxisSize: MainAxisSize.min,
               children: [
                 Text(
-                  'Confirm Purchase',
+                  l10n.shopConfirmPurchaseTitle,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.055,
                     fontWeight: FontWeight.w700,
@@ -936,7 +951,7 @@ class _ShopPageState extends State<ShopPage> {
                 ),
                 SizedBox(height: screenWidth * 0.04),
                 Text(
-                  'Are you sure you want to buy $itemName for $itemPrice coins?',
+                  l10n.shopConfirmPurchaseMessage(itemName, itemPrice),
                   textAlign: TextAlign.center,
                   style: GoogleFonts.inter(
                     fontSize: screenWidth * 0.04,
@@ -960,7 +975,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           child: Center(
                             child: Text(
-                              'Cancel',
+                              l10n.cancel,
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w600,
@@ -979,7 +994,7 @@ class _ShopPageState extends State<ShopPage> {
                           // For now, just close the dialog and print a message
                           setState(() {
                             Globals.coins -= int.parse(itemPrice); // Deduct coins
-                            if (itemName == 'Unlock Wander') {
+                            if (itemId == 'unlockWander') {
                               Globals.unlockedSumItUp = true;
                             }
                             Globals.save();
@@ -987,8 +1002,7 @@ class _ShopPageState extends State<ShopPage> {
                           Navigator.of(context).pop();
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
-                              content:
-                                  Text('You have successfully purchased $itemName!'),
+                              content: Text(l10n.shopPurchaseSuccess(itemName)),
                               duration: Duration(seconds: 2),
                             ),
                           );
@@ -1002,7 +1016,7 @@ class _ShopPageState extends State<ShopPage> {
                           ),
                           child: Center(
                             child: Text(
-                              'Buy',
+                              l10n.buyLabel,
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.04,
                                 fontWeight: FontWeight.w600,

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 
 import '../fake_var.dart';
 
@@ -89,24 +90,26 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   ];
 
    */
-  final List<Map<String, dynamic>> leaderboardData = [
-    {
-      'rank': '1',
-      'name': 'You',
-      'rankText': 'Rank 1',
-      'points': Globals.brainScore,
-      'imageUrl': 'assets/FlexiFlowProfilePic.png',
-      // or network image if preferred
-      'isCurrentUser': true,
-      'winRate': '68%',
-      'games': 156,
-      'streak': 5,
-    },
-  ];
+  List<Map<String, dynamic>> _leaderboardData(AppLocalizations l10n) => [
+        {
+          'rank': 1,
+          'name': l10n.leaderboardYou,
+          'rankText': l10n.leaderboardRankText('1'),
+          'points': Globals.brainScore,
+          'imageUrl': 'assets/FlexiFlowProfilePic.png',
+          // or network image if preferred
+          'isCurrentUser': true,
+          'winRate': '68%',
+          'games': 156,
+          'streak': 5,
+        },
+      ];
 
   @override
   Widget build(BuildContext context) {
     final mediaQuery = MediaQuery.of(context);
+    final l10n = AppLocalizations.of(context)!;
+    final leaderboardData = _leaderboardData(l10n);
     final pageTextScale = mediaQuery.textScaler
         .scale(1.0)
         .clamp(1.0, 1.3)
@@ -155,6 +158,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Widget _buildAppBar(BuildContext context) {
+    final l10n = AppLocalizations.of(context)!;
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 16),
       child: Row(
@@ -189,7 +193,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             child: Padding(
               padding: const EdgeInsets.only(right: 48.0), // Balance the back button space
               child: Text(
-                'Weekly Rankings',
+                l10n.leaderboardWeeklyRankings,
                 textAlign: TextAlign.center,
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
@@ -209,6 +213,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Widget _buildCurrentUserCard(Map<String, dynamic> data) {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       margin: const EdgeInsets.only(bottom: 20),
       height: 80,
@@ -336,7 +341,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                             ),
                             children: [
                               TextSpan(
-                                text: 'pts',
+                                text: l10n.pointsShort,
                                 style: GoogleFonts.splineSans(
                                   fontSize: 14,
                                   fontWeight: FontWeight.w600,
@@ -360,6 +365,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
   Widget _buildStandardPlayerCard(
     Map<String, dynamic> data, int index, bool isExpanded) {
+    final l10n = AppLocalizations.of(context)!;
     
     int rank = data['rank'] is int ? data['rank'] : 999;
     Color rankColor = mutedColor;
@@ -489,7 +495,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                                   ),
                                   children: [
                                     TextSpan(
-                                      text: 'pts',
+                                      text: l10n.pointsShort,
                                       style: GoogleFonts.splineSans(
                                         fontSize: 14,
                                         fontWeight: FontWeight.w600,
@@ -528,9 +534,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        _buildStatItem('AVG SCORE', data['avgScore'] ?? 'N/A'),
-                        _buildStatItem('GAMES', '${data['games']}'),
-                        _buildStatItem('STREAK', '${data['streak']}', isFire: true),
+                        _buildStatItem(l10n.leaderboardAvgScore, data['avgScore'] ?? 'N/A'),
+                        _buildStatItem(l10n.leaderboardGamesLabel, '${data['games']}'),
+                        _buildStatItem(l10n.leaderboardStreakLabel, '${data['streak']}', isFire: true),
                       ],
                     ),
                   ),
@@ -609,6 +615,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
   }
 
   Widget _buildInviteCard() {
+    final l10n = AppLocalizations.of(context)!;
     return Container(
       padding: const EdgeInsets.all(32),
       decoration: BoxDecoration(
@@ -651,7 +658,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
             ),
           ),
           Text(
-            'Want more competition?',
+            l10n.leaderboardWantMoreCompetition,
             textAlign: TextAlign.center,
             style: GoogleFonts.splineSans(
               fontSize: 20, // ~text-xl
@@ -661,7 +668,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           ),
           const SizedBox(height: 8),
           Text(
-            'Invite your friends to see who really rules the leaderboard!',
+            l10n.leaderboardInviteDescription,
             textAlign: TextAlign.center,
             style: GoogleFonts.splineSans(
               fontSize: 14, // ~text-sm
@@ -695,7 +702,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   const Icon(Icons.send, size: 20),
                   const SizedBox(width: 8),
                   Text(
-                    'Invite Friends',
+                    l10n.leaderboardInviteFriends,
                     style: GoogleFonts.splineSans(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,

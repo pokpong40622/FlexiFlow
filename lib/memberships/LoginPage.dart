@@ -4,7 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:motion_kit/memberships/AuthPage.dart';
 import 'package:motion_kit/memberships/SignUpPage.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({super.key});

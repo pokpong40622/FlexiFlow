@@ -10,7 +10,7 @@ import 'package:motion_kit/services/step_service.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/app_theme.dart';
 import 'package:motion_kit/l10n/app_language.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/views/pose_detection_screen.dart';
 import 'package:motion_kit/views/hand_detection_screen.dart';
 import 'package:motion_kit/views/hand_pose_detection_screen.dart';

@@ -3,7 +3,7 @@ import '../pages/MissionPage.dart';
 import '../pages/StatsPage.dart';
 import '../pages/TrainingPage.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:motion_kit/l10n/app_localizations.dart';
 
 class Getstarted extends StatefulWidget {
   const Getstarted({super.key});
@@ -14,6 +15,7 @@ class _GetstartedState extends State<Getstarted> {
     final mediaQuery = MediaQuery.of(context);
     final screenHeight = mediaQuery.size.height;
     final screenWidth = mediaQuery.size.width;
+    final l10n = AppLocalizations.of(context)!;
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -62,7 +64,7 @@ class _GetstartedState extends State<Getstarted> {
                             crossAxisAlignment: CrossAxisAlignment.center,
                             children: [
                               Text(
-                                'L + Fingertip pinch',
+                                l10n.getStartedGestureTitle,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.montserrat(
                                   color: Colors.black,
@@ -83,7 +85,7 @@ class _GetstartedState extends State<Getstarted> {
                               ),
                               SizedBox(height: screenHeight * 0.05),
                               Text(
-                                'Enhances movements skills and hand-eye coordination.',
+                                l10n.getStartedGestureDescription,
                                 textAlign: TextAlign.center,
                                 style: GoogleFonts.inter(
                                   fontSize: screenWidth * 0.05,
@@ -141,7 +143,7 @@ class _GetstartedState extends State<Getstarted> {
                           ),
                           child: Center(
                             child: Text(
-                              'Back',
+                              l10n.goBack,
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.044,
                                 fontWeight: FontWeight.w700,
@@ -164,7 +166,7 @@ class _GetstartedState extends State<Getstarted> {
                           ),
                           child: Center(
                             child: Text(
-                              'Next',
+                              l10n.next,
                               style: GoogleFonts.inter(
                                 fontSize: screenWidth * 0.044,
                                 fontWeight: FontWeight.w700,
