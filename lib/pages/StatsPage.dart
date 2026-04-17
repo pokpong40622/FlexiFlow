@@ -160,10 +160,10 @@ class _StatsPageState extends State<StatsPage> {
                       child: Column(
                         mainAxisSize: MainAxisSize.min,
                         crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
+                          children: [
                             Text(
                               l10n.statsTitle,
-                            style: GoogleFonts.inter(
+                              style: GoogleFonts.inter(
                               fontSize: screenWidth * 0.065,
                               fontWeight: FontWeight.w800,
                               color: Color(0xFF2C2C2C),
@@ -400,8 +400,8 @@ class _StatsPageState extends State<StatsPage> {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                                Text(
-                                  l10n.recent,
+                              Text(
+                                l10n.recent,
                                 style: GoogleFonts.inter(
                                   fontSize: screenWidth * 0.048,
                                   fontWeight: FontWeight.w700,
@@ -759,8 +759,8 @@ class _StatsPageState extends State<StatsPage> {
                                           color: Color(0xFF0397FD),
                                         ),
                                       ),
-                                       Text(
-                                         ' ${l10n.minuteShort}',
+                                      Text(
+                                        ' ${l10n.minuteShort}',
                                         style: GoogleFonts.inter(
                                           fontSize: screenWidth * 0.06,
                                           color: Colors.black,
@@ -783,8 +783,8 @@ class _StatsPageState extends State<StatsPage> {
                                           color: Color(0xFF0397FD),
                                         ),
                                       ),
-                                        Text(
-                                          ' ${l10n.secondShort}',
+                                      Text(
+                                        ' ${l10n.secondShort}',
                                         style: GoogleFonts.inter(
                                           fontSize: screenWidth * 0.06,
                                           color: Colors.black,
