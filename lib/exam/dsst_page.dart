@@ -127,12 +127,6 @@ class _DsstPageState extends State<DsstPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('MemoryTest - DSST', style: TextStyle(color: Colors.grey)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
       body: _currentTrial >= _totalTrials 
         ? const Center(child: CircularProgressIndicator()) 
         : Column(
