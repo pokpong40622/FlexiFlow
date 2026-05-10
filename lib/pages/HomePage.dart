@@ -11,6 +11,14 @@ import 'GetStarted.dart';
 import 'ShopPage.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+// ── Helper model ─────────────────────────────────────────────────────────────
+class _BodyPart {
+  final String text;
+  final bool highlight;
+  const _BodyPart(this.text, this.highlight);
+}
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -33,8 +41,269 @@ class _HomePageState extends State<HomePage> {
         });
       }
     });
+    WidgetsBinding.instance.addPostFrameCallback((_) => _showAwarenessPopup());
   }
 
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    ModalRoute.of(context);
+  }
+
+  // ── Popup cycling logic ───────────────────────────────────────────────────
+
+  Future<void> _showAwarenessPopup() async {
+    final prefs = await SharedPreferences.getInstance();
+    final int idx = prefs.getInt('awareness_popup_index') ?? 0;
+    await prefs.setInt('awareness_popup_index', (idx + 1) % 2);
+    if (!mounted) return;
+
+    if (idx == 0) {
+      _showPopup(
+        emoji: '🧠',
+        tag: 'สุขภาพสมอง',
+        title: 'วันนี้คุณ\nบริหารสมองหรือยัง?',
+        bodyParts: const [
+          _BodyPart('เล่นเกมฝึกสมองหรือเรียนรู้สิ่งใหม่ๆ เพียง ', false),
+          _BodyPart('วันละ 15 นาที ', true),
+          _BodyPart('ช่วยสร้างโครงข่ายประสาทให้แข็งแรง', false),
+        ],
+        bodyExtra:
+            'เหมือนออกกำลังกายที่ทำให้ร่างกายแข็งแรง\nสมองก็ต้องการสิ่งนั้นเช่นกัน',
+        ctaText: 'เริ่มฝึกสมองเลย',
+        onCta: () => Navigator.push(
+          context,
+          MaterialPageRoute(builder: (_) => const Getstarted()),
+        ),
+      );
+    } else {
+      _showPopup(
+        emoji: '🔍',
+        tag: 'รู้ทันสัญญาณ',
+        title: 'ขี้ลืมแบบไหน...\nที่ควรใส่ใจ?',
+        bodyParts: const [
+          _BodyPart('ลืมของวางแล้วหาไม่เจอ ปกติมาก! แต่ถ้า ', false),
+          _BodyPart('ลืมเรื่องที่เพิ่งเกิดขึ้น ', true),
+          _BodyPart(
+              'หรือสับสนทิศทางในที่คุ้นเคย นั่นคือสัญญาณที่ควรใส่ใจ', false),
+        ],
+        bodyExtra:
+            'ปรึกษาผู้เชี่ยวชาญตั้งแต่เนิ่นๆ\nช่วยชะลออาการได้มากที่สุด',
+        ctaText: 'เช็กสัญญาณเตือน',
+        onCta: () {},
+      );
+    }
+  }
+
+  void _showPopup({
+    required String emoji,
+    required String tag,
+    required String title,
+    required List<_BodyPart> bodyParts,
+    required String bodyExtra,
+    required String ctaText,
+    required VoidCallback onCta,
+  }) {
+    final sw = MediaQuery.of(context).size.width;
+    final sh = MediaQuery.of(context).size.height;
+
+    showDialog(
+      context: context,
+      barrierDismissible: false,
+      barrierColor: Colors.black.withOpacity(0.55),
+      builder: (ctx) => Dialog(
+        backgroundColor: Colors.transparent,
+        insetPadding: EdgeInsets.symmetric(horizontal: sw * 0.06),
+        child: Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.circular(20),
+            boxShadow: [
+              BoxShadow(
+                color: Colors.grey.withOpacity(0.15),
+                blurRadius: 16,
+                offset: const Offset(0, 4),
+              ),
+            ],
+          ),
+          clipBehavior: Clip.hardEdge,
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              // ── Gradient header
+              Container(
+                width: double.infinity,
+                padding: EdgeInsets.symmetric(vertical: sh * 0.032),
+                decoration: const BoxDecoration(
+                  gradient: LinearGradient(
+                    colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                  ),
+                ),
+                child: Column(
+                  children: [
+                    Text(emoji, style: TextStyle(fontSize: sw * 0.14)),
+                    SizedBox(height: sh * 0.012),
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 14, vertical: 5),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.22),
+                        borderRadius: BorderRadius.circular(20),
+                      ),
+                      child: Text(
+                        tag,
+                        style: GoogleFonts.inter(
+                          color: Colors.white,
+                          fontSize: sw * 0.032,
+                          fontWeight: FontWeight.w600,
+                          letterSpacing: 0.4,
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+
+              // ── White body
+              Padding(
+                padding: EdgeInsets.symmetric(
+                    horizontal: sw * 0.06, vertical: sh * 0.026),
+                child: Column(
+                  children: [
+                    // Title
+                    Text(
+                      title,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: sw * 0.058,
+                        fontWeight: FontWeight.w800,
+                        color: const Color(0xFF1A1A1A),
+                        height: 1.35,
+                      ),
+                    ),
+                    SizedBox(height: sh * 0.016),
+
+                    // Divider
+                    Container(
+                      width: sw * 0.1,
+                      height: 3,
+                      decoration: BoxDecoration(
+                        gradient: const LinearGradient(
+                          colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                        ),
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                    SizedBox(height: sh * 0.016),
+
+                    // Body with highlights
+                    RichText(
+                      textAlign: TextAlign.center,
+                      text: TextSpan(
+                        style: GoogleFonts.inter(
+                          fontSize: sw * 0.04,
+                          fontWeight: FontWeight.w400,
+                          color: const Color(0xFF555555),
+                          height: 1.75,
+                        ),
+                        children: bodyParts
+                            .map((part) => TextSpan(
+                                  text: part.text,
+                                  style: part.highlight
+                                      ? GoogleFonts.inter(
+                                          fontSize: sw * 0.04,
+                                          fontWeight: FontWeight.w700,
+                                          color: const Color(0xFF1E88E5),
+                                          height: 1.75,
+                                        )
+                                      : null,
+                                ))
+                            .toList(),
+                      ),
+                    ),
+                    SizedBox(height: sh * 0.01),
+
+                    // Extra body
+                    Text(
+                      bodyExtra,
+                      textAlign: TextAlign.center,
+                      style: GoogleFonts.inter(
+                        fontSize: sw * 0.037,
+                        fontWeight: FontWeight.w400,
+                        color: const Color(0xFF888888),
+                        height: 1.7,
+                      ),
+                    ),
+                    SizedBox(height: sh * 0.026),
+
+                    // CTA button
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pop(ctx);
+                        onCta();
+                      },
+                      child: Container(
+                        width: double.infinity,
+                        padding: EdgeInsets.symmetric(vertical: sh * 0.018),
+                        decoration: BoxDecoration(
+                          gradient: const LinearGradient(
+                            colors: [Color(0xFF1E88E5), Color(0xFF42A5F5)],
+                            begin: Alignment.centerLeft,
+                            end: Alignment.centerRight,
+                          ),
+                          borderRadius: BorderRadius.circular(12),
+                          boxShadow: [
+                            BoxShadow(
+                              color: const Color(0xFF1E88E5).withOpacity(0.3),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Text(
+                          ctaText,
+                          textAlign: TextAlign.center,
+                          style: GoogleFonts.inter(
+                            color: Colors.white,
+                            fontSize: sw * 0.042,
+                            fontWeight: FontWeight.w700,
+                            letterSpacing: 0.3,
+                          ),
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: sh * 0.012),
+
+                    // Close
+                    GestureDetector(
+                      onTap: () => Navigator.pop(ctx),
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 4),
+                        child: Text(
+                          'ปิด',
+                          style: GoogleFonts.inter(
+                            color: const Color(0xFFBBBBBB),
+                            fontSize: sw * 0.036,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  // ── Build ─────────────────────────────────────────────────────────────────
+
+  @override
   Widget build(BuildContext context) {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
@@ -85,30 +354,31 @@ class _HomePageState extends State<HomePage> {
                       onTap: () {
                         Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => const ProfilePage()),
+                          MaterialPageRoute(
+                              builder: (context) => const ProfilePage()),
                         );
                       },
                       child: Container(
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.grey.withOpacity(0.15),
-                          spreadRadius: 1,
-                          blurRadius: 6,
-                          offset: Offset(0, 2),
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.grey.withOpacity(0.15),
+                              spreadRadius: 1,
+                              blurRadius: 6,
+                              offset: Offset(0, 2),
+                            ),
+                          ],
                         ),
-                      ],
-                    ),
-                    child: ClipOval(
-                      child: Image.asset(
-                        'assets/FlexiFlowProfilePic.png',
-                        width: screenWidth * 0.12,
-                        height: screenWidth * 0.12,
-                        fit: BoxFit.cover,
+                        child: ClipOval(
+                          child: Image.asset(
+                            'assets/FlexiFlowProfilePic.png',
+                            width: screenWidth * 0.12,
+                            height: screenWidth * 0.12,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                    ),
-                  ),
                     ),
                   ),
                   // Title with improved styling
@@ -156,31 +426,24 @@ class _HomePageState extends State<HomePage> {
       body: SingleChildScrollView(
         child: Column(
           children: [
-            // Scrollable Content Section
             SizedBox(height: screenHeight * 0.026),
             CarouselSlider(
               options: CarouselOptions(
                 height: screenHeight * 0.21836,
                 autoPlay: true,
                 viewportFraction: screenWidth * 0.808 / screenWidth,
-                onPageChanged: (index, reason) => setState(() {
-                  activeIndex = index;
-                }),
+                onPageChanged: (index, reason) =>
+                    setState(() => activeIndex = index),
               ),
               items: slideImages.map((slideImage) {
                 return Padding(
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                  ), //control the space between each image in the slide
-                  child: Container(
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.asset(
-                        slideImage,
-                        fit: BoxFit.cover,
-                        //make the image fit but not stretched i think (not sure)
-                        width: double.infinity,
-                      ),
+                  padding: const EdgeInsets.symmetric(horizontal: 10),
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(12),
+                    child: Image.asset(
+                      slideImage,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
                     ),
                   ),
                 );
@@ -188,9 +451,7 @@ class _HomePageState extends State<HomePage> {
             ),
             SizedBox(height: screenHeight * 0.0134),
             Padding(
-              padding: EdgeInsets.symmetric(
-                horizontal: screenWidth * 0.043,
-              ),
+              padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.043),
               child: Column(
                 children: [
                   Row(
@@ -230,7 +491,9 @@ class _HomePageState extends State<HomePage> {
                         onTap: () {
                           Navigator.push(
                             context,
-                            MaterialPageRoute(builder: (context) => const LeaderboardPage()),
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    const LeaderboardPage()),
                           );
                         },
                         child: _buildServicesButton(
@@ -298,7 +561,7 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
-  //Widget section
+  // ── Sub-widgets ───────────────────────────────────────────────────────────
 
   Widget _buildServicesButton(
       {required IconData icon,
@@ -313,14 +576,14 @@ class _HomePageState extends State<HomePage> {
         Container(
           width: screenWidth * 0.178,
           height: screenWidth * 0.178,
+          decoration: BoxDecoration(
+            borderRadius: BorderRadius.circular(300),
+            color: Color(0xFFFFFFFF),
+          ),
           child: Icon(
             icon,
             size: MediaQuery.of(context).size.width * 0.072,
             color: ColorCode,
-          ),
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(300),
-            color: Color(0xFFFFFFFF),
           ),
         ),
         SizedBox(height: screenHeight * 0.008),
@@ -347,7 +610,8 @@ class _HomePageState extends State<HomePage> {
     required Widget child,
     required VoidCallback onTap,
   }) {
-    final tokens = Globals.wcagModeEnabled ? AppTokens.wcag : AppTokens.standard;
+    final tokens =
+        Globals.wcagModeEnabled ? AppTokens.wcag : AppTokens.standard;
     final l10n = AppLocalizations.of(context)!;
     return Semantics(
       button: true,
@@ -376,7 +640,8 @@ class _HomePageState extends State<HomePage> {
           Container(
             width: screenWidth * 0.93333,
             margin: EdgeInsets.only(top: 22),
-            padding: EdgeInsets.only(top: 28, left: 18, right: 18, bottom: 16),
+            padding:
+                EdgeInsets.only(top: 28, left: 18, right: 18, bottom: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
@@ -470,7 +735,7 @@ class _HomePageState extends State<HomePage> {
                     ],
                   ),
           ),
-          // Blue overlapping container
+          // Blue overlapping label
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
@@ -515,7 +780,8 @@ class _HomePageState extends State<HomePage> {
           Container(
             width: screenWidth * 0.93333,
             margin: EdgeInsets.only(top: 22),
-            padding: EdgeInsets.only(top: 28, left: 18, right: 18, bottom: 16),
+            padding:
+                EdgeInsets.only(top: 28, left: 18, right: 18, bottom: 16),
             decoration: BoxDecoration(
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
@@ -528,86 +794,91 @@ class _HomePageState extends State<HomePage> {
                 ),
               ],
             ),
-            child: Row(
-              children: [
-                // Fire icon and number section
-                Container(
-                  width: screenWidth * 0.25,
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: screenWidth * 0.15,
-                        height: screenWidth * 0.15,
-                        decoration: BoxDecoration(
-                          gradient: LinearGradient(
-                            colors: Globals.isStreakActive ? [Color(0xFFFF6B35), Color(0xFFFF8E53)] : [Colors.grey[300]!, Colors.grey[400]!],
-                            begin: Alignment.topCenter,
-                            end: Alignment.bottomCenter,
-                          ),
-                          shape: BoxShape.circle,
+            child: Row(children: [
+              // Fire icon and number section
+              Container(
+                width: screenWidth * 0.25,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Container(
+                      width: screenWidth * 0.15,
+                      height: screenWidth * 0.15,
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: Globals.isStreakActive
+                              ? [Color(0xFFFF6B35), Color(0xFFFF8E53)]
+                              : [Colors.grey[300]!, Colors.grey[400]!],
+                          begin: Alignment.topCenter,
+                          end: Alignment.bottomCenter,
                         ),
-                        child: Icon(
-                          Icons.local_fire_department,
-                          color: Colors.white,
-                          size: screenWidth * 0.08,
+                        shape: BoxShape.circle,
+                      ),
+                      child: Icon(
+                        Icons.local_fire_department,
+                        color: Colors.white,
+                        size: screenWidth * 0.08,
+                      ),
+                    ),
+                    SizedBox(height: 8),
+                    Text(
+                      l10n.homeStreakDaysCount('${Globals.streak}'),
+                      style: GoogleFonts.inter(
+                        color: Globals.isStreakActive
+                            ? const Color(0xFFFF6B35)
+                            : wcagColor(
+                                context,
+                                standard: Colors.grey[500]!,
+                                wcag: tokens.textMuted,
+                              ),
+                        fontSize: 16,
+                        fontWeight: FontWeight.w700,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(width: 20),
+              // Bar chart section
+              Expanded(
+                child: Container(
+                  height: screenWidth * 0.2,
+                  child: Column(
+                    children: [
+                      Expanded(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                          crossAxisAlignment: CrossAxisAlignment.end,
+                          children: [
+                            ...Globals.past10DaysBars
+                                .map((val) => _buildBar(
+                                    val,
+                                    screenWidth,
+                                    val == Globals.past10DaysBars.last))
+                                .toList(),
+                          ],
                         ),
                       ),
                       SizedBox(height: 8),
-                        Text(
-                          l10n.homeStreakDaysCount('${Globals.streak}'),
-                          style: GoogleFonts.inter(
-                          color: Globals.isStreakActive
-                              ? const Color(0xFFFF6B35)
-                              : wcagColor(
-                                  context,
-                                  standard: Colors.grey[500]!,
-                                  wcag: tokens.textMuted,
-                                ),
-                          fontSize: 16,
-                          fontWeight: FontWeight.w700,
+                      Text(
+                        l10n.homeTimeSpentPastTenDays,
+                        style: GoogleFonts.inter(
+                          color: wcagColor(
+                            context,
+                            standard: Colors.grey[500]!,
+                            wcag: tokens.textMuted,
+                          ),
+                          fontSize: 11,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
                   ),
                 ),
-                SizedBox(width: 20),
-                // Bar chart section
-                Expanded(
-                  child: Container(
-                    height: screenWidth * 0.2,
-                    child: Column(
-                      children: [
-                        Expanded(
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                            crossAxisAlignment: CrossAxisAlignment.end,
-                            children: [
-                              ...Globals.past10DaysBars.map((val) => _buildBar(val, screenWidth, val == Globals.past10DaysBars.last)).toList(),
-                            ],
-                          ),
-                        ),
-                        SizedBox(height: 8),
-                        Text(
-                          l10n.homeTimeSpentPastTenDays,
-                          style: GoogleFonts.inter(
-                            color: wcagColor(
-                              context,
-                              standard: Colors.grey[500]!,
-                              wcag: tokens.textMuted,
-                            ),
-                            fontSize: 11,
-                            fontWeight: FontWeight.w400,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ),
-              ],
-            ),
+              ),
+            ]),
           ),
-          // Blue overlapping container
+          // Blue overlapping label
           Container(
             padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             decoration: BoxDecoration(
@@ -656,22 +927,27 @@ class _HomePageState extends State<HomePage> {
       margin: EdgeInsets.symmetric(horizontal: 2),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: isZero 
-              ? [Colors.grey[300]!, Colors.grey[400]!] 
-              : (isLast && Globals.isStreakActive 
-                  ? [Color(0xFFFF8E53), Color(0xFFFF6B35)] 
+          colors: isZero
+              ? [Colors.grey[300]!, Colors.grey[400]!]
+              : (isLast && Globals.isStreakActive
+                  ? [Color(0xFFFF8E53), Color(0xFFFF6B35)]
                   : [Color(0xFF64B5F6), Color(0xFF1E88E5)]),
           begin: Alignment.topCenter,
           end: Alignment.bottomCenter,
         ),
         borderRadius: BorderRadius.circular(6),
-        boxShadow: !isZero ? [
-          BoxShadow(
-            color: (isLast && Globals.isStreakActive ? Color(0xFFFF6B35) : Color(0xFF1E88E5)).withOpacity(0.3),
-            blurRadius: 4,
-            offset: Offset(0, 2),
-          )
-        ] : [],
+        boxShadow: !isZero
+            ? [
+                BoxShadow(
+                  color: (isLast && Globals.isStreakActive
+                          ? Color(0xFFFF6B35)
+                          : Color(0xFF1E88E5))
+                      .withOpacity(0.3),
+                  blurRadius: 4,
+                  offset: Offset(0, 2),
+                )
+              ]
+            : [],
       ),
     );
   }

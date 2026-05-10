@@ -33,86 +33,86 @@ class _MissionPageState extends State<MissionPage> {
     return MediaQuery(
       data: mediaQuery.copyWith(textScaler: TextScaler.linear(pageTextScale)),
       child: Scaffold(
-      backgroundColor: const Color(0xFFFAFAFA),
-      body: SafeArea(
-        bottom: false,
-        child: Column(
-          children: [
-            Container(
-              width: screenWidth,
-              constraints: BoxConstraints(
-                minHeight: screenHeight * 0.195,
-              ),
-              padding: EdgeInsets.only(bottom: screenHeight * 0.012),
-              color: const Color(0xFF0397FD),
-              child: Column(
-                mainAxisSize: MainAxisSize.min,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.066),
-                    child: Row(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              SizedBox(height: screenHeight * 0.045),
-                              Text(
-                                l10n.missionHeaderYour,
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: screenWidth * 0.076,
-                                  color: Colors.white,
-                                  height: 1,
+        backgroundColor: const Color(0xFFFAFAFA),
+        body: SafeArea(
+          bottom: false,
+          child: Column(
+            children: [
+              Container(
+                width: screenWidth,
+                constraints: BoxConstraints(
+                  minHeight: screenHeight * 0.195,
+                ),
+                padding: EdgeInsets.only(bottom: screenHeight * 0.012),
+                color: const Color(0xFF0397FD),
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.066),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                SizedBox(height: screenHeight * 0.045),
+                                Text(
+                                  l10n.missionHeaderYour,
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: screenWidth * 0.076,
+                                    color: Colors.white,
+                                    height: 1,
+                                  ),
                                 ),
-                              ),
-                              Text(
-                                l10n.missionHeaderMissions,
-                                style: GoogleFonts.inter(
-                                  fontWeight: FontWeight.w700,
-                                  fontSize: screenWidth * 0.076,
-                                  color: Colors.white,
-                                ),
-                              )
-                            ],
+                                Text(
+                                  l10n.missionHeaderMissions,
+                                  style: GoogleFonts.inter(
+                                    fontWeight: FontWeight.w700,
+                                    fontSize: screenWidth * 0.076,
+                                    color: Colors.white,
+                                  ),
+                                )
+                              ],
+                            ),
                           ),
-                        ),
-                        SizedBox(width: screenWidth * 0.02),
-                        Flexible(
-                          child: Image.asset(
-                            'assets/goldmedal.png',
-                            width: screenWidth * 0.25,
-                            fit: BoxFit.contain,
+                          SizedBox(width: screenWidth * 0.02),
+                          Flexible(
+                            child: Image.asset(
+                              'assets/goldmedal.png',
+                              width: screenWidth * 0.25,
+                              fit: BoxFit.contain,
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  SizedBox(height: screenHeight * 0.0225),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      _buildTab(context, l10n.missionTabDaily, 0),
-                      _buildTab(context, l10n.missionTabWeekly, 1),
-                      _buildTab(context, l10n.missionTabAll, 2),
-                    ],
-                  )
-                ],
+                    SizedBox(height: screenHeight * 0.0225),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      mainAxisSize: MainAxisSize.min,
+                      children: [
+                        _buildTab(context, l10n.missionTabDaily, 0),
+                        _buildTab(context, l10n.missionTabWeekly, 1),
+                        _buildTab(context, l10n.missionTabAll, 2),
+                      ],
+                    )
+                  ],
+                ),
               ),
-            ),
-            SizedBox(height: screenHeight * 0.016),
-            Expanded(
-              child: ListView(
-                padding: EdgeInsets.zero,
-                children: _getMissions(context),
+              SizedBox(height: screenHeight * 0.016),
+              Expanded(
+                child: ListView(
+                  padding: EdgeInsets.zero,
+                  children: _getMissions(context),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
-      ),
       ),
     );
   }
@@ -142,7 +142,6 @@ class _MissionPageState extends State<MissionPage> {
         title: 'Walk 5,000 steps',
         coins: 80,
         xp: 150,
-
         status: Globals.totalStepsTD >= 5000
             ? MissionStatus.claimable
             : MissionStatus.inProgress,
@@ -217,22 +216,20 @@ class _MissionPageState extends State<MissionPage> {
       missions = all;
     }
 
-    // Update status if claimed
     for (var m in missions) {
       if (Globals.claimedMissions.contains(m.title)) {
         m.status = MissionStatus.claimed;
       }
     }
 
-    // Sort: Claimable (0) -> InProgress (1) -> Locked (2) -> Claimed (3)
     missions.sort((a, b) =>
         _statusPriority(a.status).compareTo(_statusPriority(b.status)));
 
     return missions
         .map((m) => _buildMissionItem(
               context,
-          missionId: m.title,
-          title: _localizedMissionTitle(l10n, m.title),
+              missionId: m.title,
+              title: _localizedMissionTitle(l10n, m.title),
               coins: m.coins,
               xp: m.xp,
               status: m.status,
@@ -245,14 +242,10 @@ class _MissionPageState extends State<MissionPage> {
 
   int _statusPriority(MissionStatus status) {
     switch (status) {
-      case MissionStatus.claimable:
-        return 0;
-      case MissionStatus.inProgress:
-        return 1;
-      case MissionStatus.locked:
-        return 2;
-      case MissionStatus.claimed:
-        return 3;
+      case MissionStatus.claimable: return 0;
+      case MissionStatus.inProgress: return 1;
+      case MissionStatus.locked: return 2;
+      case MissionStatus.claimed: return 3;
     }
   }
 
@@ -307,7 +300,6 @@ class _MissionPageState extends State<MissionPage> {
     int totalProgress = 1,
     int requiredLevel = 0,
   }) {
-    // Override status if already claimed locally
     if (Globals.claimedMissions.contains(missionId)) {
       status = MissionStatus.claimed;
     }
@@ -317,18 +309,13 @@ class _MissionPageState extends State<MissionPage> {
     final tokens = tokensOf(context);
     final l10n = AppLocalizations.of(context)!;
 
-    // Derive colours & icons from status
     final Color accentColor;
     final IconData leadingIcon;
     final double cardOpacity;
 
     switch (status) {
       case MissionStatus.claimed:
-        accentColor = wcagColor(
-          context,
-          standard: const Color(0xFF62DA30),
-          wcag: tokens.textSuccess,
-        );
+        accentColor = wcagColor(context, standard: const Color(0xFF62DA30), wcag: tokens.textSuccess);
         leadingIcon = Icons.check_circle;
         cardOpacity = 0.72;
         break;
@@ -338,20 +325,12 @@ class _MissionPageState extends State<MissionPage> {
         cardOpacity = 1.0;
         break;
       case MissionStatus.inProgress:
-        accentColor = wcagColor(
-          context,
-          standard: const Color(0xFFFFA726),
-          wcag: tokens.textWarning,
-        );
+        accentColor = wcagColor(context, standard: const Color(0xFFFFA726), wcag: tokens.textWarning);
         leadingIcon = Icons.play_circle_fill_rounded;
         cardOpacity = 1.0;
         break;
       case MissionStatus.locked:
-        accentColor = wcagColor(
-          context,
-          standard: const Color(0xFFBBBBBB),
-          wcag: tokens.textDisabled,
-        );
+        accentColor = wcagColor(context, standard: const Color(0xFFBBBBBB), wcag: tokens.textDisabled);
         leadingIcon = Icons.lock_rounded;
         cardOpacity = 0.6;
         break;
@@ -397,10 +376,7 @@ class _MissionPageState extends State<MissionPage> {
               child: IntrinsicHeight(
                 child: Row(
                   children: [
-
                     SizedBox(width: screenWidth * 0.035 + 5),
-
-                    // ── Leading status icon ──
                     Container(
                       width: screenWidth * 0.105,
                       height: screenWidth * 0.105,
@@ -414,10 +390,7 @@ class _MissionPageState extends State<MissionPage> {
                         size: screenWidth * 0.055,
                       ),
                     ),
-
                     SizedBox(width: screenWidth * 0.035),
-
-                    // ── Title + coin row + optional progress ──
                     Expanded(
                       child: Padding(
                         padding: EdgeInsets.symmetric(
@@ -434,11 +407,7 @@ class _MissionPageState extends State<MissionPage> {
                                 fontWeight: FontWeight.w600,
                                 fontSize: screenWidth * 0.038,
                                  color: status == MissionStatus.claimed
-                                    ? wcagColor(
-                                        context,
-                                        standard: Colors.grey[600]!,
-                                        wcag: tokens.textDisabled,
-                                      )
+                                    ? wcagColor(context, standard: Colors.grey[600]!, wcag: tokens.textDisabled)
                                     : Colors.black87,
                                 decoration: status == MissionStatus.claimed
                                     ? TextDecoration.lineThrough
@@ -461,53 +430,17 @@ class _MissionPageState extends State<MissionPage> {
                                   style: GoogleFonts.inter(
                                     fontWeight: FontWeight.w500,
                                     fontSize: screenWidth * 0.032,
-                                    color: wcagColor(
-                                      context,
-                                      standard: const Color(0xFFE5A100),
-                                      wcag: tokens.textReward,
-                                    ),
+                                    color: wcagColor(context, standard: const Color(0xFFE5A100), wcag: tokens.textReward),
                                   ),
                                 ),
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                      horizontal: screenWidth * 0.02),
-                                  child: Text(
-                                    '•',
-                                      style: TextStyle(
-                                       color: wcagColor(
-                                         context,
-                                         standard: Colors.grey[300]!,
-                                         wcag: tokens.textDisabled,
-                                       ),
-                                       fontSize: screenWidth * 0.032,
-                                       fontWeight: FontWeight.bold,
-                                     ),
-                                  ),
-                                ),
-                                Text(
-                                  '+$xp XP',
-                                  style: GoogleFonts.inter(
-                                    fontWeight: FontWeight.w500,
-                                    fontSize: screenWidth * 0.032,
-                                    color: wcagColor(
-                                      context,
-                                      standard: const Color(0xFF0397FD),
-                                      wcag: tokens.textSecondary,
-                                    ),
-                                  ),
-                                ),
+                                // XP Text and separator dot removed from here
                                 if (requiredLevel > 0) ...[
                                   Padding(
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: screenWidth * 0.02),
+                                    padding: EdgeInsets.symmetric(horizontal: screenWidth * 0.02),
                                     child: Text(
                                       '•',
                                        style: TextStyle(
-                                         color: wcagColor(
-                                           context,
-                                           standard: Colors.grey[300]!,
-                                           wcag: tokens.textDisabled,
-                                         ),
+                                         color: wcagColor(context, standard: Colors.grey[300]!, wcag: tokens.textDisabled),
                                          fontSize: screenWidth * 0.032,
                                          fontWeight: FontWeight.bold,
                                        ),
@@ -518,17 +451,12 @@ class _MissionPageState extends State<MissionPage> {
                                     style: GoogleFonts.inter(
                                       fontWeight: FontWeight.w600,
                                       fontSize: screenWidth * 0.032,
-                                      color: wcagColor(
-                                        context,
-                                        standard: const Color(0xFFFF5252),
-                                        wcag: tokens.textWarning,
-                                      ),
+                                      color: wcagColor(context, standard: const Color(0xFFFF5252), wcag: tokens.textWarning),
                                     ),
                                   ),
                                 ],
                               ],
                             ),
-                            // Progress bar for in-progress missions
                             if (status == MissionStatus.inProgress) ...[
                               SizedBox(height: screenHeight * 0.008),
                               Row(
@@ -539,11 +467,8 @@ class _MissionPageState extends State<MissionPage> {
                                       child: LinearProgressIndicator(
                                         value: currentProgress / totalProgress,
                                         minHeight: 6,
-                                        backgroundColor:
-                                            accentColor.withValues(alpha: 0.15),
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                                accentColor),
+                                        backgroundColor: accentColor.withValues(alpha: 0.15),
+                                        valueColor: AlwaysStoppedAnimation<Color>(accentColor),
                                       ),
                                     ),
                                   ),
@@ -563,11 +488,8 @@ class _MissionPageState extends State<MissionPage> {
                         ),
                       ),
                     ),
-
-                    // ── Trailing action / badge ──
                     Padding(
-                      padding:
-                          EdgeInsets.only(right: screenWidth * 0.04),
+                      padding: EdgeInsets.only(right: screenWidth * 0.04),
                       child: _buildTrailing(
                         status: status,
                         accentColor: accentColor,
@@ -585,7 +507,6 @@ class _MissionPageState extends State<MissionPage> {
     );
   }
 
-  /// Trailing widget that varies by mission status.
   Widget _buildTrailing({
     required MissionStatus status,
     required Color accentColor,
@@ -620,7 +541,6 @@ class _MissionPageState extends State<MissionPage> {
             ],
           ),
         );
-
       case MissionStatus.claimable:
         return Container(
           padding: EdgeInsets.symmetric(
@@ -649,17 +569,13 @@ class _MissionPageState extends State<MissionPage> {
             ),
           ),
         );
-
       case MissionStatus.inProgress:
-        if (widget.onNavigateToTraining == null) {
-          return const SizedBox.shrink();
-        }
+        if (widget.onNavigateToTraining == null) return const SizedBox.shrink();
         return Icon(
           Icons.arrow_forward_ios_rounded,
           color: accentColor,
           size: screenWidth * 0.045,
         );
-
       case MissionStatus.locked:
         return Icon(
           Icons.lock_outline_rounded,
@@ -671,33 +587,21 @@ class _MissionPageState extends State<MissionPage> {
 
   String _localizedMissionTitle(AppLocalizations l10n, String missionId) {
     switch (missionId) {
-      case 'First exercise of the day':
-        return l10n.missionTitleFirstExerciseOfDay;
-      case 'Complete 3 exercises':
-        return l10n.missionTitleComplete3Exercises;
-      case 'Walk 5,000 steps':
-        return l10n.missionTitleWalk5000Steps;
-      case 'Play Perfect Match for 10 minutes':
-        return l10n.missionTitlePlayPerfectMatch10Min;
-      case 'Complete 10 exercises':
-        return l10n.missionTitleComplete10Exercises;
-      case 'Reach 200 Brain Score':
-        return l10n.missionTitleReach200BrainScore;
-      case 'Exercise 5 days in a row':
-        return l10n.missionTitleExercise5DaysRow;
-      case 'Exercise 20 days in a row':
-        return l10n.missionTitleExercise20DaysRow;
-      case 'Reach Level 25':
-        return l10n.missionTitleReachLevel25;
-      case 'Complete 20 exercises':
-        return l10n.missionTitleComplete20Exercises;
-      default:
-        return missionId;
+      case 'First exercise of the day': return l10n.missionTitleFirstExerciseOfDay;
+      case 'Complete 3 exercises': return l10n.missionTitleComplete3Exercises;
+      case 'Walk 5,000 steps': return l10n.missionTitleWalk5000Steps;
+      case 'Play Perfect Match for 10 minutes': return l10n.missionTitlePlayPerfectMatch10Min;
+      case 'Complete 10 exercises': return l10n.missionTitleComplete10Exercises;
+      case 'Reach 200 Brain Score': return l10n.missionTitleReach200BrainScore;
+      case 'Exercise 5 days in a row': return l10n.missionTitleExercise5DaysRow;
+      case 'Exercise 20 days in a row': return l10n.missionTitleExercise20DaysRow;
+      case 'Reach Level 25': return l10n.missionTitleReachLevel25;
+      case 'Complete 20 exercises': return l10n.missionTitleComplete20Exercises;
+      default: return missionId;
     }
   }
 }
 
-/// The four possible states a mission card can be in.
 enum MissionStatus { claimed, claimable, inProgress, locked }
 
 class MissionData {
