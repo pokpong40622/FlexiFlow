@@ -3,6 +3,7 @@ import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:camera/camera.dart';
 import 'package:google_mlkit_pose_detection/google_mlkit_pose_detection.dart';
 import 'package:motion_kit/Others/NavigationBar.dart';
+import 'package:motion_kit/exam/dsst_page.dart';
 import 'package:motion_kit/figma/chatbot.dart';
 import 'package:motion_kit/memberships/widget_tree.dart';
 import 'package:motion_kit/pages/GetStarted.dart';
@@ -100,7 +101,8 @@ class MyApp extends StatelessWidget {
                       child: child ?? const SizedBox.shrink(),
                     );
                   },
-                  home: WidgetTree(),
+                  home: DsstPage(),
+                  // home: WidgetTree(),
                 );
               },
             );
