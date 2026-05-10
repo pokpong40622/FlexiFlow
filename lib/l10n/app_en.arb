@@ -54,6 +54,8 @@
   "alreadyHaveAccount": "Already have an account?",
   "statsTitle": "Stats",
   "aiSuggestion": "AI Suggestion",
+  "aiKeepUpMomentum": "Keep up the momentum! Try ",
+  "aiToBoostScore": " to boost your concentration score.",
   "suggestionTryMoreScoreOn": "Try getting a little bit more score on ",
   "suggestionFasterOn": "Might be a little bit faster on ",
   "gamePerfectMatch": "Perfect Match",
@@ -62,6 +64,7 @@
   "recent": "Recent",
   "nothingToShow": "Nothing to\nshow",
   "brainScore": "Brain score",
+  "brainScoreDesc": "Focusing on calculation and memory leads to better results.",
   "pointsShort": "pts",
   "steps": "Steps",
   "stepsShort": "steps",
@@ -72,6 +75,21 @@
   "hour": "hour",
   "minuteShort": "min",
   "secondShort": "sec",
+  "trainingToday": "Training today",
+  "rounds": "Rounds",
+  "totalSessions": "Total sessions",
+  "skillPerformance": "Skill Performance",
+  "excellentMemory": "Excellent memory",
+  "steadyCalculation": "Steady calculation",
+  "ptsAchieved": "{score} pts achieved",
+  "@ptsAchieved": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
+  "recentActivity": "Recent Activity",
   "trainingTitle": "Training",
   "games": "Games",
   "days": "Days",
@@ -318,9 +336,9 @@
   },
   "perfectMatchPosePartL": "L",
   "perfectMatchPosePartFingertipPinch": "Fingertip pinch",
+  "perfectMatchPosePartPoint": "Point",
   "perfectMatchPosePartThumb": "Thumb",
   "perfectMatchPosePartPinky": "Pinky",
-  "perfectMatchPosePartPoint": "Point",
   "perfectMatchPosePartOne": "One",
   "perfectMatchPosePartTwo": "Two",
   "perfectMatchPosePartThree": "Three",

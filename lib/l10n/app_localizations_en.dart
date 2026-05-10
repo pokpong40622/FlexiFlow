@@ -153,6 +153,12 @@ class AppLocalizationsEn extends AppLocalizations {
   String get aiSuggestion => 'AI Suggestion';
 
   @override
+  String get aiKeepUpMomentum => 'Keep up the momentum! Try ';
+
+  @override
+  String get aiToBoostScore => ' to boost your concentration score.';
+
+  @override
   String get suggestionTryMoreScoreOn =>
       'Try getting a little bit more score on ';
 
@@ -176,6 +182,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get brainScore => 'Brain score';
+
+  @override
+  String get brainScoreDesc =>
+      'Focusing on calculation and memory leads to better results.';
 
   @override
   String get pointsShort => 'pts';
@@ -206,6 +216,32 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get secondShort => 'sec';
+
+  @override
+  String get trainingToday => 'Training today';
+
+  @override
+  String get rounds => 'Rounds';
+
+  @override
+  String get totalSessions => 'Total sessions';
+
+  @override
+  String get skillPerformance => 'Skill Performance';
+
+  @override
+  String get excellentMemory => 'Excellent memory';
+
+  @override
+  String get steadyCalculation => 'Steady calculation';
+
+  @override
+  String ptsAchieved(String score) {
+    return '$score pts achieved';
+  }
+
+  @override
+  String get recentActivity => 'Recent Activity';
 
   @override
   String get trainingTitle => 'Training';
@@ -686,13 +722,13 @@ class AppLocalizationsEn extends AppLocalizations {
   String get perfectMatchPosePartFingertipPinch => 'Fingertip pinch';
 
   @override
+  String get perfectMatchPosePartPoint => 'Point';
+
+  @override
   String get perfectMatchPosePartThumb => 'Thumb';
 
   @override
   String get perfectMatchPosePartPinky => 'Pinky';
-
-  @override
-  String get perfectMatchPosePartPoint => 'Point';
 
   @override
   String get perfectMatchPosePartOne => 'One';

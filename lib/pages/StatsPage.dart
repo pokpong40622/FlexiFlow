@@ -3,8 +3,6 @@ import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'dart:async';
 import 'package:intl/intl.dart';
-import 'package:motion_kit/theme/wcag_utils.dart';
-
 import '../fake_var.dart';
 
 class StatsPage extends StatefulWidget {
@@ -41,7 +39,6 @@ class _StatsPageState extends State<StatsPage> {
     super.dispose();
   }
 
-  // Helper to get dynamic values from Globals based on filter
   int get _getTimeSpent {
     switch (_selectedTimeFilter) {
       case 'week': return Globals.timeSpentWK;
@@ -142,16 +139,20 @@ class _StatsPageState extends State<StatsPage> {
           decoration: _cardDecoration(sw),
           child: Row(
             children: [
-              CircleAvatar(backgroundColor: primaryBlue, radius: sw * 0.04, child: Image.asset('assets/FlexiFlowLogoWhite.png', width: sw * 0.045)),
+              CircleAvatar(
+                backgroundColor: primaryBlue, 
+                radius: sw * 0.04, 
+                child: const Icon(Icons.auto_awesome, color: Colors.white, size: 16) // ปรับเป็น Icon แทนถ้าโหลด Assets ไม่ได้
+              ),
               SizedBox(width: sw * 0.03),
               Expanded(
                 child: RichText(
                   text: TextSpan(
                     style: GoogleFonts.inter(fontSize: sw * 0.035, color: Colors.black, height: 1.3),
                     children: [
-                      TextSpan(text: "Keep up the momentum! Try "),
+                      TextSpan(text: l10n.aiKeepUpMomentum),
                       TextSpan(text: l10n.gamePerfectMatch, style: TextStyle(color: pink, fontWeight: FontWeight.bold)),
-                      TextSpan(text: " to boost your concentration score."),
+                      TextSpan(text: l10n.aiToBoostScore),
                     ],
                   ),
                 ),
@@ -170,7 +171,7 @@ class _StatsPageState extends State<StatsPage> {
       decoration: BoxDecoration(
         color: primaryBlue,
         borderRadius: BorderRadius.circular(sw * 0.05),
-        boxShadow: [BoxShadow(color: primaryBlue.withOpacity(0.3), blurRadius: 12, offset: Offset(0, 6))],
+        boxShadow: [BoxShadow(color: primaryBlue.withOpacity(0.3), blurRadius: 12, offset: const Offset(0, 6))],
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -180,13 +181,16 @@ class _StatsPageState extends State<StatsPage> {
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
               Text('${Globals.brainScore}', style: GoogleFonts.inter(color: Colors.white, fontSize: sw * 0.12, fontWeight: FontWeight.w900)),
-              Padding(padding: EdgeInsets.only(bottom: 8, left: 4), child: Text(l10n.pointsShort, style: TextStyle(color: Colors.white70, fontWeight: FontWeight.bold))),
+              Padding(
+                padding: const EdgeInsets.only(bottom: 8, left: 4), 
+                child: Text(l10n.pointsShort, style: const TextStyle(color: Colors.white70, fontWeight: FontWeight.bold))
+              ),
               const Spacer(),
-              _buildGrowthBadge(sw, "12%"), // Mock growth value
+              _buildGrowthBadge(sw, "12%"), 
             ],
           ),
           SizedBox(height: sh * 0.01),
-          Text("Focusing on calculation and memory leads to better results.", style: TextStyle(color: Colors.white, fontSize: sw * 0.032)),
+          Text(l10n.brainScoreDesc, style: TextStyle(color: Colors.white, fontSize: sw * 0.032)),
         ],
       ),
     );
@@ -195,9 +199,9 @@ class _StatsPageState extends State<StatsPage> {
   Widget _buildSummaryGrid(double sw, double sh, AppLocalizations l10n) {
     return Row(
       children: [
-        Expanded(child: _buildSmallMetricCard(sw, sh, l10n.timeSpent, _formatDuration(_getTimeSpent), "Training today")),
+        Expanded(child: _buildSmallMetricCard(sw, sh, l10n.timeSpent, _formatDuration(_getTimeSpent), l10n.trainingToday)),
         SizedBox(width: sw * 0.035),
-        Expanded(child: _buildSmallMetricCard(sw, sh, "Rounds", "${Globals.exercisesList.length}", "Total sessions")),
+        Expanded(child: _buildSmallMetricCard(sw, sh, l10n.rounds, "${Globals.exercisesList.length}", l10n.totalSessions)),
       ],
     );
   }
@@ -209,10 +213,10 @@ class _StatsPageState extends State<StatsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Skill Performance", style: GoogleFonts.inter(fontSize: sw * 0.045, fontWeight: FontWeight.w800)),
+          Text(l10n.skillPerformance, style: GoogleFonts.inter(fontSize: sw * 0.045, fontWeight: FontWeight.w800)),
           SizedBox(height: sh * 0.015),
-          _buildSkillRow(sw, sh, l10n.gamePerfectMatch, 0.85, "Excellent memory"),
-          _buildSkillRow(sw, sh, l10n.gameSumItUp, 0.60, "Steady calculation"),
+          _buildSkillRow(sw, sh, l10n.gamePerfectMatch, 0.85, l10n.excellentMemory),
+          _buildSkillRow(sw, sh, l10n.gameSumItUp, 0.60, l10n.steadyCalculation),
         ],
       ),
     );
@@ -225,9 +229,17 @@ class _StatsPageState extends State<StatsPage> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Text("Recent Activity", style: GoogleFonts.inter(fontSize: sw * 0.045, fontWeight: FontWeight.w800)),
+          Text(l10n.recentActivity, style: GoogleFonts.inter(fontSize: sw * 0.045, fontWeight: FontWeight.w800)),
           SizedBox(height: sh * 0.015),
-          ...Globals.exercisesList.reversed.take(3).map((ex) => _buildHistoryItem(sw, sh, "Recent", _exerciseLabel(ex.type, l10n), "${ex.score} pts achieved")).toList(),
+          ...Globals.exercisesList.reversed.take(3).map((ex) => 
+            _buildHistoryItem(
+              sw, 
+              sh, 
+              l10n.recent, 
+              _exerciseLabel(ex.type, l10n), 
+              l10n.ptsAchieved(ex.score.toString()) // สมมติว่าใน arb รับ parameter
+            )
+          ).toList(),
         ],
       ),
     );
@@ -256,7 +268,7 @@ class _StatsPageState extends State<StatsPage> {
             Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: sw * 0.035)),
             Text("${(val * 100).toInt()}%", style: TextStyle(color: primaryBlue, fontWeight: FontWeight.bold)),
           ]),
-          SizedBox(height: 4),
+          const SizedBox(height: 4),
           LinearProgressIndicator(value: val, backgroundColor: Colors.grey[200], color: primaryBlue, minHeight: 6),
           Text(desc, style: TextStyle(color: Colors.grey, fontSize: sw * 0.028)),
         ],
@@ -272,7 +284,7 @@ class _StatsPageState extends State<StatsPage> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(title, style: TextStyle(fontSize: sw * 0.03, fontWeight: FontWeight.bold, color: Colors.grey)),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Text(val, style: TextStyle(fontSize: sw * 0.045, fontWeight: FontWeight.w900, color: primaryBlue)),
           Text(sub, style: TextStyle(fontSize: sw * 0.025, color: Colors.grey[400])),
         ],
@@ -285,7 +297,7 @@ class _StatsPageState extends State<StatsPage> {
       padding: EdgeInsets.only(bottom: sh * 0.015),
       child: Row(children: [
         CircleAvatar(radius: 4, backgroundColor: primaryBlue),
-        SizedBox(width: 12),
+        const SizedBox(width: 12),
         Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
           Text(title, style: TextStyle(fontWeight: FontWeight.bold, fontSize: sw * 0.035)),
           Text(detail, style: TextStyle(color: Colors.grey, fontSize: sw * 0.03)),
@@ -297,9 +309,9 @@ class _StatsPageState extends State<StatsPage> {
   Widget _buildFilterRow(double sw, AppLocalizations l10n) {
     return Row(children: [
       _buildFilterBtn('today', l10n.today, sw),
-      SizedBox(width: 8),
+      const SizedBox(width: 8),
       _buildFilterBtn('week', l10n.week, sw),
-      SizedBox(width: 8),
+      const SizedBox(width: 8),
       _buildFilterBtn('month', l10n.month, sw),
     ]);
   }
@@ -319,7 +331,7 @@ class _StatsPageState extends State<StatsPage> {
   BoxDecoration _cardDecoration(double sw) => BoxDecoration(
     color: Colors.white,
     borderRadius: BorderRadius.circular(sw * 0.04),
-    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: Offset(0, 4))],
+    boxShadow: [BoxShadow(color: Colors.black.withOpacity(0.03), blurRadius: 10, offset: const Offset(0, 4))],
   );
 
   String _exerciseLabel(ExerciseType type, AppLocalizations l10n) {

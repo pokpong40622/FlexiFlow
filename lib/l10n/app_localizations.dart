@@ -380,6 +380,18 @@ abstract class AppLocalizations {
   /// **'AI Suggestion'**
   String get aiSuggestion;
 
+  /// No description provided for @aiKeepUpMomentum.
+  ///
+  /// In en, this message translates to:
+  /// **'Keep up the momentum! Try '**
+  String get aiKeepUpMomentum;
+
+  /// No description provided for @aiToBoostScore.
+  ///
+  /// In en, this message translates to:
+  /// **' to boost your concentration score.'**
+  String get aiToBoostScore;
+
   /// No description provided for @suggestionTryMoreScoreOn.
   ///
   /// In en, this message translates to:
@@ -427,6 +439,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Brain score'**
   String get brainScore;
+
+  /// No description provided for @brainScoreDesc.
+  ///
+  /// In en, this message translates to:
+  /// **'Focusing on calculation and memory leads to better results.'**
+  String get brainScoreDesc;
 
   /// No description provided for @pointsShort.
   ///
@@ -487,6 +505,54 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'sec'**
   String get secondShort;
+
+  /// No description provided for @trainingToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Training today'**
+  String get trainingToday;
+
+  /// No description provided for @rounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Rounds'**
+  String get rounds;
+
+  /// No description provided for @totalSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'Total sessions'**
+  String get totalSessions;
+
+  /// No description provided for @skillPerformance.
+  ///
+  /// In en, this message translates to:
+  /// **'Skill Performance'**
+  String get skillPerformance;
+
+  /// No description provided for @excellentMemory.
+  ///
+  /// In en, this message translates to:
+  /// **'Excellent memory'**
+  String get excellentMemory;
+
+  /// No description provided for @steadyCalculation.
+  ///
+  /// In en, this message translates to:
+  /// **'Steady calculation'**
+  String get steadyCalculation;
+
+  /// No description provided for @ptsAchieved.
+  ///
+  /// In en, this message translates to:
+  /// **'{score} pts achieved'**
+  String ptsAchieved(String score);
+
+  /// No description provided for @recentActivity.
+  ///
+  /// In en, this message translates to:
+  /// **'Recent Activity'**
+  String get recentActivity;
 
   /// No description provided for @trainingTitle.
   ///
@@ -1364,6 +1430,12 @@ abstract class AppLocalizations {
   /// **'Fingertip pinch'**
   String get perfectMatchPosePartFingertipPinch;
 
+  /// No description provided for @perfectMatchPosePartPoint.
+  ///
+  /// In en, this message translates to:
+  /// **'Point'**
+  String get perfectMatchPosePartPoint;
+
   /// No description provided for @perfectMatchPosePartThumb.
   ///
   /// In en, this message translates to:
@@ -1375,12 +1447,6 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Pinky'**
   String get perfectMatchPosePartPinky;
-
-  /// No description provided for @perfectMatchPosePartPoint.
-  ///
-  /// In en, this message translates to:
-  /// **'Point'**
-  String get perfectMatchPosePartPoint;
 
   /// No description provided for @perfectMatchPosePartOne.
   ///

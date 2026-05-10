@@ -54,6 +54,8 @@
   "alreadyHaveAccount": "มีบัญชีอยู่แล้วใช่ไหม?",
   "statsTitle": "สถิติ",
   "aiSuggestion": "คำแนะนำจาก AI",
+  "aiKeepUpMomentum": "ทำได้ดีมากครับ! ลองเล่น ",
+  "aiToBoostScore": " เพื่อช่วยพัฒนาสมาธิให้ดียิ่งขึ้น",
   "suggestionTryMoreScoreOn": "ลองเพิ่มคะแนนอีกนิดใน ",
   "suggestionFasterOn": "อาจทำเวลาให้เร็วขึ้นอีกนิดใน ",
   "gamePerfectMatch": "Perfect Match",
@@ -62,6 +64,7 @@
   "recent": "ล่าสุด",
   "nothingToShow": "ยังไม่มี\nข้อมูล",
   "brainScore": "คะแนนสมอง",
+  "brainScoreDesc": "การฝึกคำนวณและหน่วยความจำอย่างต่อเนื่องช่วยให้สมองแจ่มใส",
   "pointsShort": "แต้ม",
   "steps": "ก้าวเดิน",
   "stepsShort": "ก้าว",
@@ -72,6 +75,20 @@
   "hour": "ชม.",
   "minuteShort": "นาที",
   "secondShort": "วินาที",
+  "trainingToday": "การฝึกฝนวันนี้",
+  "rounds": "จำนวนรอบ",
+  "totalSessions": "รวมการเล่นทั้งหมด",
+  "skillPerformance": "ทักษะความสามารถ",
+  "excellentMemory": "ความจำดีเยี่ยม",
+  "steadyCalculation": "การคำนวณแม่นยำ",
+  "ptsAchieved": "{score} คะแนนที่ทำได้",
+  "@ptsAchieved": {
+    "placeholders": {
+      "score": {
+        "type": "String"
+      }
+    }
+  },
   "trainingTitle": "ฝึกฝน",
   "games": "เกม",
   "days": "วัน",
@@ -190,7 +207,7 @@
   "shopItemThailandPost100": "ยอดคงเหลือไปรษณีย์ไทย 100 บาท",
   "shopItemGovLottery": "สลากกินแบ่งรัฐบาล",
   "chatbotNoResponse": "ไม่มีคำตอบ",
-  "chatbotConnectionError": "ขออภัย ไม่สามารถเชื่อมต่อผู้ช่วยได้ในขณะนี้ โปรดลองอีกครั้งภายหลัง\\nข้อผิดพลาด: {error}",
+  "chatbotConnectionError": "ขออภัย ไม่สามารถเชื่อมต่อผู้ช่วยได้ในขณะนี้ โปรดลองอีกครั้งภายหลัง\nข้อผิดพลาด: {error}",
   "@chatbotConnectionError": {
     "placeholders": {
       "error": {
@@ -276,7 +293,7 @@
   "mathGameLevelNormal": "ปานกลาง (+, -)",
   "mathGameLevelHard": "ยาก (+, -, x, ÷)",
   "mathGameLevelExtreme": "โหด (คณิตขั้นสูง)",
-  "mathGameExtremeNote": "* หมายเหตุ: ระดับนี้อาจต้องใช้กระดาษช่วยคำนวณ!",
+  "mathGameExtremeNote": "* หมายเหตุ: ระดับนี้อาจต้องใช้กระดาษช่วยคำวณ!",
   "mathGamePercentOfEquation": "{percent}% ของ {number} = ?",
   "@mathGamePercentOfEquation": {
     "placeholders": {

@@ -154,6 +154,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get aiSuggestion => 'คำแนะนำจาก AI';
 
   @override
+  String get aiKeepUpMomentum => 'ทำได้ดีมากครับ! ลองเล่น ';
+
+  @override
+  String get aiToBoostScore => ' เพื่อช่วยพัฒนาสมาธิให้ดียิ่งขึ้น';
+
+  @override
   String get suggestionTryMoreScoreOn => 'ลองเพิ่มคะแนนอีกนิดใน ';
 
   @override
@@ -176,6 +182,10 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get brainScore => 'คะแนนสมอง';
+
+  @override
+  String get brainScoreDesc =>
+      'การฝึกคำนวณและหน่วยความจำอย่างต่อเนื่องช่วยให้สมองแจ่มใส';
 
   @override
   String get pointsShort => 'แต้ม';
@@ -206,6 +216,32 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get secondShort => 'วินาที';
+
+  @override
+  String get trainingToday => 'การฝึกฝนวันนี้';
+
+  @override
+  String get rounds => 'จำนวนรอบ';
+
+  @override
+  String get totalSessions => 'รวมการเล่นทั้งหมด';
+
+  @override
+  String get skillPerformance => 'ทักษะความสามารถ';
+
+  @override
+  String get excellentMemory => 'ความจำดีเยี่ยม';
+
+  @override
+  String get steadyCalculation => 'การคำนวณแม่นยำ';
+
+  @override
+  String ptsAchieved(String score) {
+    return '$score คะแนนที่ทำได้';
+  }
+
+  @override
+  String get recentActivity => 'Recent Activity';
 
   @override
   String get trainingTitle => 'ฝึกฝน';
@@ -459,7 +495,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String chatbotConnectionError(String error) {
-    return 'ขออภัย ไม่สามารถเชื่อมต่อผู้ช่วยได้ในขณะนี้ โปรดลองอีกครั้งภายหลัง\\nข้อผิดพลาด: $error';
+    return 'ขออภัย ไม่สามารถเชื่อมต่อผู้ช่วยได้ในขณะนี้ โปรดลองอีกครั้งภายหลัง\nข้อผิดพลาด: $error';
   }
 
   @override
@@ -648,7 +684,7 @@ class AppLocalizationsTh extends AppLocalizations {
 
   @override
   String get mathGameExtremeNote =>
-      '* หมายเหตุ: ระดับนี้อาจต้องใช้กระดาษช่วยคำนวณ!';
+      '* หมายเหตุ: ระดับนี้อาจต้องใช้กระดาษช่วยคำวณ!';
 
   @override
   String mathGamePercentOfEquation(String percent, String number) {
@@ -680,13 +716,13 @@ class AppLocalizationsTh extends AppLocalizations {
   String get perfectMatchPosePartFingertipPinch => 'ปลายนิ้วจีบ';
 
   @override
+  String get perfectMatchPosePartPoint => 'ชี้';
+
+  @override
   String get perfectMatchPosePartThumb => 'นิ้วโป้ง';
 
   @override
   String get perfectMatchPosePartPinky => 'นิ้วก้อย';
-
-  @override
-  String get perfectMatchPosePartPoint => 'ชี้';
 
   @override
   String get perfectMatchPosePartOne => 'หนึ่ง';
