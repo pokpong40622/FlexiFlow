@@ -6,12 +6,6 @@ class TrackBPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('MemoryTest - Track B', style: TextStyle(color: Colors.grey)),
-        backgroundColor: Colors.transparent,
-        elevation: 0,
-        centerTitle: true,
-      ),
       body: const Center(
         child: Text(
           'ลากเส้นเรียงตาม\nลำดับให้ถูกต้อง\n1 -> ก -> 2 -> ...',
