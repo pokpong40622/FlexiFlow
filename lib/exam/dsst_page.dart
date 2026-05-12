@@ -1,5 +1,7 @@
 import 'dart:math';
 import 'package:flutter/material.dart';
+import 'exam_state.dart';
+import 'visual_pal_pick_page.dart';
 
 class DsstPage extends StatefulWidget {
   const DsstPage({super.key});
@@ -90,38 +92,25 @@ class _DsstPageState extends State<DsstPage> {
         ? _reactionTimes.reduce((a, b) => a + b) / _reactionTimes.length 
         : 0.0;
         
-    print('--- DSST Test Results ---');
-    print('Total Trials: $_totalTrials');
-    print('Correct Answers: $_correctAnswers');
-    print('Wrong Answers: $_wrongAnswers');
-    print('Accuracy: ${((_correctAnswers / _totalTrials) * 100).toStringAsFixed(1)}%');
-    print('Average Reaction Time: ${avgReactionTime.toStringAsFixed(2)} seconds');
-    print('-------------------------');
+    ExamState.dsstCorrect = _correctAnswers;
+    ExamState.dsstWrong = _wrongAnswers;
+    ExamState.dsstAvgTime = avgReactionTime;
 
-    showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('ทดสอบเสร็จสิ้น', style: TextStyle(fontWeight: FontWeight.bold)),
-          content: Text(
-            'ตอบถูก: $_correctAnswers\n'
-            'ตอบผิด: $_wrongAnswers\n'
-            'เวลาเฉลี่ย: ${avgReactionTime.toStringAsFixed(2)} วินาที/ข้อ',
-            style: const TextStyle(fontSize: 18),
+    if (ExamState.latestRecallItems != null) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VisualPalPickPage(
+            gridItems: ExamState.latestRecallItems!,
+            roundIndex: 3, // Since it was the 4th level logically
+            isRecallStage: true,
           ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                Navigator.of(context).pop();
-                Navigator.of(context).pop(); // Exit the dsst page
-              },
-              child: const Text('ตกลง', style: TextStyle(fontSize: 18)),
-            ),
-          ],
-        );
-      }
-    );
+        ),
+      );
+    } else {
+      // Fallback if accessed out of order
+      Navigator.pop(context);
+    }
   }
 
   @override

@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'visual_pal_remember_page.dart';
+import 'track_a_page.dart';
+import 'exam_state.dart';
 
 class VisualPalPickPage extends StatefulWidget {
   final Map<int, Map<String, dynamic>> gridItems;
   final int roundIndex;
+  final bool isRecallStage;
 
   const VisualPalPickPage({
     super.key,
     required this.gridItems,
     required this.roundIndex,
+    this.isRecallStage = false,
   });
 
   @override
@@ -30,74 +34,70 @@ class _VisualPalPickPageState extends State<VisualPalPickPage> {
   void _onCellTapped(int index) {
     if (_currentIndex >= _itemsToFind.length) return;
 
-    if (index == _itemsToFind[_currentIndex].key) {
-      setState(() {
-        _currentIndex++;
-      });
-      
-      if (_currentIndex >= _itemsToFind.length) {
-        _onLevelComplete();
-      }
-    } else {
-      setState(() {
-        _wrongAttempts++;
-      });
+    if (index != _itemsToFind[_currentIndex].key) {
+      _wrongAttempts++;
+    }
+
+    setState(() {
+      _currentIndex++;
+    });
+    
+    if (_currentIndex >= _itemsToFind.length) {
+      _onLevelComplete();
     }
   }
 
   void _onLevelComplete() {
     print('Level ${widget.roundIndex + 1} completed! Errors: $_wrongAttempts');
 
-    if (_wrongAttempts == 0) {
-      if (widget.roundIndex + 1 < numberOfIconsPerRounds.length) {
-        // Progress to next round
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => VisualPalRememberPage(
-              roundIndex: widget.roundIndex + 1,
-            ),
-          ),
-        );
-      } else {
-        // Finished all levels
-        print('All levels completed successfully!');
-        showDialog(
-          context: context,
-          barrierDismissible: false,
-          builder: (context) => AlertDialog(
-            title: const Text('สำเร็จ!'),
-            content: const Text('คุณผ่านการทดสอบทั้งหมดแล้ว'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                  Navigator.pop(context); // Go back out to previous screen/menu
-                },
-                child: const Text('ตกลง'),
-              ),
-            ],
-          ),
-        );
-      }
-    } else {
-      // Made mistakes, block progression 
-      print('User made mistakes. Cannot progress to the next level.');
+    if (widget.isRecallStage) {
+      ExamState.memoryRecallWrongs = _wrongAttempts;
+      ExamState.printScores();
+      Navigator.pop(context);
+      Navigator.popUntil(context, (route) => route.isFirst);
+      /*
       showDialog(
         context: context,
         barrierDismissible: false,
         builder: (context) => AlertDialog(
-          title: const Text('จบการทดสอบ'),
-          content: Text('คุณตอบผิดไป $_wrongAttempts ครั้ง\nไม่สามารถไปด่านต่อไปได้'),
+          title: const Text('เสร็จสิ้นการทดสอบทั้งหมด!'),
+          content: const Text('ดูคะแนนรวมใน Console'),
           actions: [
             TextButton(
               onPressed: () {
                 Navigator.pop(context);
-                Navigator.pop(context); // Exit the test
+                Navigator.popUntil(context, (route) => route.isFirst);
               },
               child: const Text('ตกลง'),
             ),
           ],
+        ),
+
+      );
+       */
+      return;
+    }
+
+    ExamState.visualPalTotalWrongs += _wrongAttempts;
+
+    if (_wrongAttempts == 0 && widget.roundIndex + 1 < numberOfIconsPerRounds.length) {
+      // Progress to next round
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => VisualPalRememberPage(
+            roundIndex: widget.roundIndex + 1,
+          ),
+        ),
+      );
+    } else {
+      // Finished all learning levels, OR the user made a mistake (aborting further difficulty)
+      // Save the current grid items so we can test them on it during the Recall stage later!
+      ExamState.latestRecallItems = widget.gridItems;
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const TrackAPage(),
         ),
       );
     }

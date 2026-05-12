@@ -221,7 +221,7 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
     );
     _fallController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 12),
     )..repeat();
 
     var random = Random();

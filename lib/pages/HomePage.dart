@@ -7,6 +7,8 @@ import 'package:shimmer/shimmer.dart';
 import 'package:motion_kit/theme/app_tokens.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
 import 'package:motion_kit/l10n/app_localizations.dart';
+import 'package:motion_kit/exam/visual_pal_remember_page.dart';
+import 'package:motion_kit/exam/exam_state.dart';
 import 'GetStarted.dart';
 import 'ShopPage.dart';
 import 'package:flutter/material.dart';
@@ -54,6 +56,21 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _showAwarenessPopup() async {
     final prefs = await SharedPreferences.getInstance();
+    
+    // Check if popup was already shown today
+    final now = DateTime.now();
+    final todayStr = '${now.year}-${now.month}-${now.day}';
+    final lastShownDate = prefs.getString('last_exam_popup_date');
+
+    /*
+    if (lastShownDate == todayStr) {
+      return; // Already shown today
+    }
+
+     */
+    
+    await prefs.setString('last_exam_popup_date', todayStr);
+
     final int idx = prefs.getInt('awareness_popup_index') ?? 0;
     await prefs.setInt('awareness_popup_index', (idx + 1) % 2);
     if (!mounted) return;
@@ -62,35 +79,40 @@ class _HomePageState extends State<HomePage> {
       _showPopup(
         emoji: '🧠',
         tag: 'สุขภาพสมอง',
-        title: 'วันนี้คุณ\nบริหารสมองหรือยัง?',
+        title: 'วันนี้คุณ\nทดสอบสมองหรือยัง?',
         bodyParts: const [
-          _BodyPart('เล่นเกมฝึกสมองหรือเรียนรู้สิ่งใหม่ๆ เพียง ', false),
-          _BodyPart('วันละ 15 นาที ', true),
-          _BodyPart('ช่วยสร้างโครงข่ายประสาทให้แข็งแรง', false),
+          _BodyPart('ทำแบบทดสอบประจำวันเพียง ', false),
+          _BodyPart('ใช้เวลาไม่นาน ', true),
+          _BodyPart('เพื่อติดตามและประเมินสุขภาพสมองของคุณอย่างสม่ำเสมอ', false),
         ],
-        bodyExtra:
-            'เหมือนออกกำลังกายที่ทำให้ร่างกายแข็งแรง\nสมองก็ต้องการสิ่งนั้นเช่นกัน',
-        ctaText: 'เริ่มฝึกสมองเลย',
-        onCta: () => Navigator.push(
-          context,
-          MaterialPageRoute(builder: (_) => const Getstarted()),
-        ),
+        bodyExtra: 'ความสม่ำเสมอคือกุญแจสำคัญ',
+        ctaText: 'เริ่มทดสอบเลย',
+        onCta: () {
+          ExamState.reset();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const VisualPalRememberPage(roundIndex: 0)),
+          );
+        },
       );
     } else {
       _showPopup(
-        emoji: '🔍',
-        tag: 'รู้ทันสัญญาณ',
-        title: 'ขี้ลืมแบบไหน...\nที่ควรใส่ใจ?',
+        emoji: '📝',
+        tag: 'การทดสอบประจำวัน',
+        title: 'ถึงเวลา\nเช็คความจำแล้ว!',
         bodyParts: const [
-          _BodyPart('ลืมของวางแล้วหาไม่เจอ ปกติมาก! แต่ถ้า ', false),
-          _BodyPart('ลืมเรื่องที่เพิ่งเกิดขึ้น ', true),
-          _BodyPart(
-              'หรือสับสนทิศทางในที่คุ้นเคย นั่นคือสัญญาณที่ควรใส่ใจ', false),
+          _BodyPart('มาทำการทดสอบของเรา ', true),
+          _BodyPart('เพื่อประเมินความสามารถในการจดจำและการรับรู้ของคุณ', false),
         ],
-        bodyExtra:
-            'ปรึกษาผู้เชี่ยวชาญตั้งแต่เนิ่นๆ\nช่วยชะลออาการได้มากที่สุด',
-        ctaText: 'เช็กสัญญาณเตือน',
-        onCta: () {},
+        bodyExtra: 'ทำได้ทุกที่ ทุกเวลา',
+        ctaText: 'เข้าสู่การทดสอบ',
+        onCta: () {
+          ExamState.reset();
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (_) => const VisualPalRememberPage(roundIndex: 0)),
+          );
+        },
       );
     }
   }
