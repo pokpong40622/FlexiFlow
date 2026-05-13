@@ -6,12 +6,14 @@ class ScorePage extends StatefulWidget {
   final int score;
   final int timeSpent;
   final int highScore;
+  final String? aiFeedback;
 
   const ScorePage({
     super.key,
     required this.score,
     required this.timeSpent,
     required this.highScore,
+    this.aiFeedback,
   });
 
   @override
@@ -125,7 +127,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
 
                         const SizedBox(height: 4),
 
-                        // Score Row - Centering the score
+                        // Score Row
                         FittedBox(
                           fit: BoxFit.scaleDown,
                           child: Row(
@@ -133,29 +135,24 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
                             crossAxisAlignment: CrossAxisAlignment.baseline,
                             textBaseline: TextBaseline.alphabetic,
                             children: [
-                              // This SizedBox helps offset the "points" text
-                              // to keep the number exactly in the center of the screen
-                              const SizedBox(width: 60),
                               Text(
                                 '${_scoreAnimation.value}',
                                 style: GoogleFonts.montserrat(
                                   fontSize: 110,
                                   fontWeight: FontWeight.w800,
                                   color: const Color(0xFF005DAE),
+                                  height: 1.0,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              SizedBox(
-                                width: 60, // Match the offset width
-                                child: Opacity(
-                                  opacity: _opacityAnimation.value,
-                                  child: Text(
-                                    l10n.scorePointsWord,
-                                    style: GoogleFonts.montserrat(
-                                      fontSize: 16,
-                                      fontWeight: FontWeight.w700,
-                                      color: Colors.black,
-                                    ),
+                              const SizedBox(width: 16),
+                              Opacity(
+                                opacity: _opacityAnimation.value,
+                                child: Text(
+                                  l10n.scorePointsWord,
+                                  style: GoogleFonts.montserrat(
+                                    fontSize: 22,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black87,
                                   ),
                                 ),
                               ),
@@ -178,24 +175,76 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
 
                         const SizedBox(height: 24),
 
-                        // High Score - Positioned just above the button
-                        Padding(
-                          padding: const EdgeInsets.only(right: 20),
-                          child: Align(
-                            alignment: Alignment.centerRight,
-                            child: Text(
-                              l10n.scoreHighScore('${widget.highScore}'),
-                              style: GoogleFonts.montserrat(
-                                fontSize: 20,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.black,
+                        // High Score
+                        Opacity(
+                          opacity: _opacityAnimation.value,
+                          child: Text(
+                            l10n.scoreHighScore('${widget.highScore}'),
+                            textAlign: TextAlign.center,
+                            style: GoogleFonts.montserrat(
+                              fontSize: 20,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.black87,
+                            ),
+                          ),
+                        ),
+
+                        const SizedBox(height: 24),
+
+                        // AI Insights Section
+                        Opacity(
+                          opacity: _opacityAnimation.value,
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 20),
+                            child: Container(
+                              padding: const EdgeInsets.all(16),
+                              decoration: BoxDecoration(
+                                color: const Color(0xFFF0F8FF),
+                                borderRadius: BorderRadius.circular(16),
+                                border: Border.all(color: const Color(0xFF0096FF).withOpacity(0.3)),
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: const Color(0xFF0096FF).withOpacity(0.05),
+                                    blurRadius: 10,
+                                    offset: const Offset(0, 4),
+                                  )
+                                ],
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.auto_awesome, color: Color(0xFF0096FF), size: 20),
+                                      const SizedBox(width: 8),
+                                      Text(
+                                        "AI Analysis",
+                                        style: GoogleFonts.montserrat(
+                                          fontSize: 16,
+                                          fontWeight: FontWeight.w700,
+                                          color: const Color(0xFF005DAE),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                  const SizedBox(height: 8),
+                                  Text(
+                                    widget.aiFeedback ?? _generateFallbackFeedback(),
+                                    style: GoogleFonts.montserrat(
+                                      fontSize: 14,
+                                      fontWeight: FontWeight.w500,
+                                      color: Colors.black87,
+                                      height: 1.5,
+                                    ),
+                                  ),
+                                ],
                               ),
                             ),
                           ),
                         ),
 
                         const SizedBox(
-                          height: 8,
+                          height: 16,
                         ),
                         // Back Button - Wide with minimal side padding
                         Padding(
@@ -235,6 +284,21 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
         ),
       ),
     );
+  }
+
+  String _generateFallbackFeedback() {
+    if (widget.score > widget.highScore && widget.highScore > 0) {
+      return "Incredible! You just set a new personal record. Your cognitive speed and memory recall are showing significant improvement.";
+    } else if (widget.score > 80) {
+      if (widget.timeSpent < 30) {
+        return "Excellent performance! Both your accuracy and speed are top-notch today. Keep up the great work.";
+      }
+      return "Great accuracy! To challenge yourself further, try to make your decisions a bit faster next time without losing precision.";
+    } else if (widget.score > 50) {
+      return "Good job! You're making solid progress. Focus on recognizing patterns to boost your score and shave off a few seconds.";
+    } else {
+      return "A solid effort! Consistency is the key to training your brain. Regular practice will noticeably improve your recall speed.";
+    }
   }
 }
 

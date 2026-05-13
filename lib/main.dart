@@ -107,7 +107,8 @@ class MyApp extends StatelessWidget {
                     );
                   },
                   // home: const VisualPalRememberPage(roundIndex: 0),
-                  home: SawasdeeWanPage(score: 76),
+                  // home: SawasdeeWanPage(score: 76),
+                  home: WidgetTree(),
                 );
               },
             );

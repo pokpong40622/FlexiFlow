@@ -9,8 +9,13 @@ import 'package:share_plus/share_plus.dart';
 
 class SawasdeeWanPage extends StatefulWidget {
   final int score;
+  final bool isShareUnlocked;
 
-  const SawasdeeWanPage({super.key, this.score = 100});
+  const SawasdeeWanPage({
+    super.key,
+    this.score = 100,
+    this.isShareUnlocked = true,
+  });
 
   @override
   State<SawasdeeWanPage> createState() => _SawasdeeWanPageState();
@@ -202,9 +207,9 @@ class _SawasdeeWanPageState extends State<SawasdeeWanPage> {
                   Expanded(
                     flex: 2,
                     child: ElevatedButton(
-                      onPressed: _isSharing ? null : _shareImage,
+                      onPressed: (widget.isShareUnlocked && !_isSharing) ? _shareImage : null,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: const Color(0xFFC75416),
+                        backgroundColor: widget.isShareUnlocked ? const Color(0xFFC75416) : Colors.grey.shade400,
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(12),
                         ),
@@ -216,13 +221,22 @@ class _SawasdeeWanPageState extends State<SawasdeeWanPage> {
                               width: 28,
                               child: CircularProgressIndicator(color: Colors.white),
                             )
-                          : Text(
-                              'ส่งให้เพื่อน',
-                              style: GoogleFonts.kanit(
-                                fontSize: sw * 0.065,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                              ),
+                          : Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                if (!widget.isShareUnlocked) ...[
+                                  const Icon(Icons.lock_rounded, color: Colors.white, size: 24),
+                                  const SizedBox(width: 8),
+                                ],
+                                Text(
+                                  'ส่งให้เพื่อน',
+                                  style: GoogleFonts.kanit(
+                                    fontSize: sw * 0.065,
+                                    fontWeight: FontWeight.bold,
+                                    color: Colors.white,
+                                  ),
+                                ),
+                              ],
                             ),
                     ),
                   ),

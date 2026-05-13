@@ -3,6 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:motion_kit/fake_var.dart';
 import 'package:motion_kit/l10n/app_localizations.dart';
 import 'package:motion_kit/theme/wcag_utils.dart';
+import 'package:motion_kit/pages/SawasdeeWanPage.dart';
 
 class MissionPage extends StatefulWidget {
   final VoidCallback? onNavigateToTraining;
@@ -225,7 +226,7 @@ class _MissionPageState extends State<MissionPage> {
     missions.sort((a, b) =>
         _statusPriority(a.status).compareTo(_statusPriority(b.status)));
 
-    return missions
+    final widgetList = missions
         .map((m) => _buildMissionItem(
               context,
               missionId: m.title,
@@ -238,6 +239,125 @@ class _MissionPageState extends State<MissionPage> {
               requiredLevel: m.requiredLevel,
             ))
         .toList();
+
+    if (selectedButtonIndex == 0) {
+      int completedCount = missions.where((m) => m.status == MissionStatus.claimed || m.status == MissionStatus.claimable).length;
+      widgetList.add(_buildSawasdeeCard(context, completedCount >= 2));
+    }
+
+    return widgetList;
+  }
+
+  Widget _buildSawasdeeCard(BuildContext context, bool isUnlocked) {
+    final sw = MediaQuery.of(context).size.width;
+    final sh = MediaQuery.of(context).size.height;
+
+    return Padding(
+      padding: EdgeInsets.only(
+        left: sw * 0.05,
+        right: sw * 0.05,
+        top: sh * 0.02,
+        bottom: sh * 0.04,
+      ),
+      child: Material(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(14),
+        elevation: isUnlocked ? 4 : 1.5,
+        shadowColor: Colors.black.withOpacity(0.15),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (context) => SawasdeeWanPage(
+                  score: Globals.brainScore,
+                  isShareUnlocked: isUnlocked,
+                ),
+              ),
+            );
+          },
+          child: Container(
+            height: sw * 0.45,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(14),
+            ),
+            clipBehavior: Clip.hardEdge,
+            child: Stack(
+              fit: StackFit.expand,
+              children: [
+                // Background Image
+                Image.asset(
+                  'assets/sawasdee/default/monday.jpg',
+                  fit: BoxFit.cover,
+                ),
+                // Overlay
+                Container(
+                  color: isUnlocked
+                      ? Colors.black.withOpacity(0.15)
+                      : Colors.white.withOpacity(0.75),
+                ),
+                // Foreground content
+                if (!isUnlocked)
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.lock_rounded,
+                        size: sw * 0.12,
+                        color: const Color(0xFF333333),
+                      ),
+                      SizedBox(height: sh * 0.01),
+                      Text(
+                        'แตะเพื่อดูตัวอย่าง\nปลดล็อคการแชร์หลังทำเควสรายวันเสร็จ (2 เควส)',
+                        textAlign: TextAlign.center,
+                        style: GoogleFonts.kanit(
+                          fontSize: sw * 0.042,
+                          fontWeight: FontWeight.w800,
+                          color: const Color(0xFF111111),
+                          height: 1.2,
+                        ),
+                      ),
+                    ],
+                  )
+                else
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                        decoration: BoxDecoration(
+                          color: Colors.white.withOpacity(0.9),
+                          borderRadius: BorderRadius.circular(20),
+                        ),
+                        child: Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            const Icon(
+                              Icons.auto_awesome,
+                              color: Color(0xFFC75416),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              'แตะเพื่อรับภาพ “สวัสดีวันจันทร์”',
+                              textAlign: TextAlign.center,
+                              style: GoogleFonts.kanit(
+                                fontSize: sw * 0.04,
+                                fontWeight: FontWeight.w800,
+                                color: const Color(0xFFC75416),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
   }
 
   int _statusPriority(MissionStatus status) {

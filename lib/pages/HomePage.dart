@@ -62,21 +62,25 @@ class _HomePageState extends State<HomePage> {
     final todayStr = '${now.year}-${now.month}-${now.day}';
     final lastShownDate = prefs.getString('last_exam_popup_date');
 
-    /*
     if (lastShownDate == todayStr) {
       return; // Already shown today
     }
-
-     */
     
-    await prefs.setString('last_exam_popup_date', todayStr);
+    final nextPopupTimeStr = prefs.getString('next_exam_popup_time');
+    if (nextPopupTimeStr != null) {
+      final nextTime = DateTime.tryParse(nextPopupTimeStr);
+      if (nextTime != null && now.isBefore(nextTime)) {
+        return;
+      }
+    }
 
     final int idx = prefs.getInt('awareness_popup_index') ?? 0;
     await prefs.setInt('awareness_popup_index', (idx + 1) % 2);
     if (!mounted) return;
 
+    bool? accepted;
     if (idx == 0) {
-      _showPopup(
+      accepted = await _showPopup(
         emoji: '🧠',
         tag: 'สุขภาพสมอง',
         title: 'วันนี้คุณ\nทดสอบสมองหรือยัง?',
@@ -87,16 +91,9 @@ class _HomePageState extends State<HomePage> {
         ],
         bodyExtra: 'ความสม่ำเสมอคือกุญแจสำคัญ',
         ctaText: 'เริ่มทดสอบเลย',
-        onCta: () {
-          ExamState.reset();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const VisualPalRememberPage(roundIndex: 0)),
-          );
-        },
       );
     } else {
-      _showPopup(
+      accepted = await _showPopup(
         emoji: '📝',
         tag: 'การทดสอบประจำวัน',
         title: 'ถึงเวลา\nเช็คความจำแล้ว!',
@@ -106,30 +103,35 @@ class _HomePageState extends State<HomePage> {
         ],
         bodyExtra: 'ทำได้ทุกที่ ทุกเวลา',
         ctaText: 'เข้าสู่การทดสอบ',
-        onCta: () {
-          ExamState.reset();
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (_) => const VisualPalRememberPage(roundIndex: 0)),
-          );
-        },
       );
+    }
+
+    if (accepted == true) {
+      await prefs.setString('last_exam_popup_date', todayStr);
+      if (!mounted) return;
+      ExamState.reset();
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (_) => const VisualPalRememberPage(roundIndex: 0)),
+      );
+    } else {
+      final nextTime = DateTime.now().add(const Duration(minutes: 15));
+      await prefs.setString('next_exam_popup_time', nextTime.toIso8601String());
     }
   }
 
-  void _showPopup({
+  Future<bool?> _showPopup({
     required String emoji,
     required String tag,
     required String title,
     required List<_BodyPart> bodyParts,
     required String bodyExtra,
     required String ctaText,
-    required VoidCallback onCta,
   }) {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
 
-    showDialog(
+    return showDialog<bool>(
       context: context,
       barrierDismissible: false,
       barrierColor: Colors.black.withOpacity(0.55),
@@ -263,8 +265,7 @@ class _HomePageState extends State<HomePage> {
                     // CTA button
                     GestureDetector(
                       onTap: () {
-                        Navigator.pop(ctx);
-                        onCta();
+                        Navigator.pop(ctx, true);
                       },
                       child: Container(
                         width: double.infinity,
