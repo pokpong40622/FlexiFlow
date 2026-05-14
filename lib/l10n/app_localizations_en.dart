@@ -455,6 +455,9 @@ class AppLocalizationsEn extends AppLocalizations {
   String get shopItemUnlockWander => 'Unlock Wander';
 
   @override
+  String get shopItemUnlockSawasdeeLandscape => 'Unlock Sawasdee Landscape';
+
+  @override
   String get shopItemSushiroCoupon60 => 'Sushiro Coupon 60B';
 
   @override

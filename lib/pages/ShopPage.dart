@@ -49,6 +49,7 @@ class _ShopPageState extends State<ShopPage> {
       imagePath: 'assets/Newgamepic.png',
       items: [
         ShopItem(id: 'unlockWander', name: l10n.shopItemUnlockWander, price: '250', imagePath: 'assets/WanderLogo.png'),
+        ShopItem(id: 'unlockSawasdeeLandscape', name: l10n.shopItemUnlockSawasdeeLandscape, price: '300', imagePath: 'assets/sawasdee/landscape/monday.jpg'),
         ShopItem(id: 'sushiroCoupon60', name: l10n.shopItemSushiroCoupon60, price: ((60 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/Sushiro.png'),
         ShopItem(id: 'mkRestaurant150', name: l10n.shopItemMkRestaurant150, price: ((150 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MK.jpg'),
         ShopItem(id: 'momo20Off', name: l10n.shopItemMomo20Off, price: ((140 / aiaPPD) * coinPD).ceil().toString(), imagePath: 'assets/voucher/MOMO.png'),
@@ -361,7 +362,8 @@ class _ShopPageState extends State<ShopPage> {
                   crossAxisSpacing: 16,
                   children: [
                     for (var item in availableCards[_selectedCardIndex].items)
-                      if (!(item.id == 'unlockWander' && Globals.unlockedSumItUp))
+                      if (!((item.id == 'unlockWander' && Globals.unlockedSumItUp) ||
+                          (item.id == 'unlockSawasdeeLandscape' && Globals.hasLandscapeSawasdee)))
                         _buildShopItems(
                           itemId: item.id,
                           ItemPic: item.imagePath,
@@ -996,6 +998,9 @@ class _ShopPageState extends State<ShopPage> {
                             Globals.coins -= int.parse(itemPrice); // Deduct coins
                             if (itemId == 'unlockWander') {
                               Globals.unlockedSumItUp = true;
+                            } else if (itemId == 'unlockSawasdeeLandscape') {
+                              Globals.hasLandscapeSawasdee = true;
+                              Globals.useLandscapeSawasdee = true;
                             }
                             Globals.save();
                           });

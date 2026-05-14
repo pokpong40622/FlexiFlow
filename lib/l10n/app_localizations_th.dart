@@ -452,6 +452,9 @@ class AppLocalizationsTh extends AppLocalizations {
   String get shopItemUnlockWander => 'ปลดล็อก Wander';
 
   @override
+  String get shopItemUnlockSawasdeeLandscape => 'ปลดล็อกภาพสวัสดีวันแบบแนวนอน';
+
+  @override
   String get shopItemSushiroCoupon60 => 'คูปอง Sushiro 60 บาท';
 
   @override

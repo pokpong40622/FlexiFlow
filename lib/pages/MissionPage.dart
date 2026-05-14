@@ -248,6 +248,34 @@ class _MissionPageState extends State<MissionPage> {
     return widgetList;
   }
 
+  int get currentDay => DateTime.now().weekday;
+
+  String get _dayName {
+    switch (currentDay) {
+      case DateTime.monday: return 'จันทร์';
+      case DateTime.tuesday: return 'อังคาร';
+      case DateTime.wednesday: return 'พุธ';
+      case DateTime.thursday: return 'พฤหัสบดี';
+      case DateTime.friday: return 'ศุกร์';
+      case DateTime.saturday: return 'เสาร์';
+      case DateTime.sunday: return 'อาทิตย์';
+      default: return 'จันทร์';
+    }
+  }
+
+  String get _dayImage {
+    switch (currentDay) {
+      case DateTime.monday: return 'monday.jpg';
+      case DateTime.tuesday: return 'tuesday.jpg';
+      case DateTime.wednesday: return 'wednesday.jpg';
+      case DateTime.thursday: return 'thursday.jpg';
+      case DateTime.friday: return 'friday.jpg';
+      case DateTime.saturday: return 'saturday.jpg';
+      case DateTime.sunday: return 'sunday.jpg';
+      default: return 'monday.jpg';
+    }
+  }
+
   Widget _buildSawasdeeCard(BuildContext context, bool isUnlocked) {
     final sw = MediaQuery.of(context).size.width;
     final sh = MediaQuery.of(context).size.height;
@@ -288,7 +316,7 @@ class _MissionPageState extends State<MissionPage> {
               children: [
                 // Background Image
                 Image.asset(
-                  'assets/sawasdee/default/monday.jpg',
+                  'assets/sawasdee/${Globals.useLandscapeSawasdee ? 'landscape' : 'default'}/$_dayImage',
                   fit: BoxFit.cover,
                 ),
                 // Overlay
@@ -339,7 +367,7 @@ class _MissionPageState extends State<MissionPage> {
                             ),
                             const SizedBox(width: 8),
                             Text(
-                              'แตะเพื่อรับภาพ “สวัสดีวันจันทร์”',
+                              'แตะเพื่อรับภาพ “สวัสดีวัน$_dayName”',
                               textAlign: TextAlign.center,
                               style: GoogleFonts.kanit(
                                 fontSize: sw * 0.04,

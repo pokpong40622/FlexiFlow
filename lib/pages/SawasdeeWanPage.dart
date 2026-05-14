@@ -6,6 +6,7 @@ import 'package:flutter/rendering.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:motion_kit/fake_var.dart';
 
 class SawasdeeWanPage extends StatefulWidget {
   final int score;
@@ -24,6 +25,47 @@ class SawasdeeWanPage extends StatefulWidget {
 class _SawasdeeWanPageState extends State<SawasdeeWanPage> {
   final GlobalKey _globalKey = GlobalKey();
   bool _isSharing = false;
+
+  int get currentDay => DateTime.now().weekday;
+
+  String get _dayName {
+    switch (currentDay) {
+      case DateTime.monday: return 'จันทร์';
+      case DateTime.tuesday: return 'อังคาร';
+      case DateTime.wednesday: return 'พุธ';
+      case DateTime.thursday: return 'พฤหัสบดี';
+      case DateTime.friday: return 'ศุกร์';
+      case DateTime.saturday: return 'เสาร์';
+      case DateTime.sunday: return 'อาทิตย์';
+      default: return 'จันทร์';
+    }
+  }
+
+  String get _dayImage {
+    switch (currentDay) {
+      case DateTime.monday: return 'monday.jpg';
+      case DateTime.tuesday: return 'tuesday.jpg';
+      case DateTime.wednesday: return 'wednesday.jpg';
+      case DateTime.thursday: return 'thursday.jpg';
+      case DateTime.friday: return 'friday.jpg';
+      case DateTime.saturday: return 'saturday.jpg';
+      case DateTime.sunday: return 'sunday.jpg';
+      default: return 'monday.jpg';
+    }
+  }
+
+  String get _dailyQuote {
+    switch (currentDay) {
+      case DateTime.monday: return 'เริ่มต้นด้วยรอยยิ้ม เบิกบานใจ';
+      case DateTime.tuesday: return 'สดใสซาบซ่า รับวันใหม่';
+      case DateTime.wednesday: return 'สุขกายสบายใจ แข็งแรงร่าเริง';
+      case DateTime.thursday: return 'คิดหวังสิ่งใด สมปรารถนา';
+      case DateTime.friday: return 'สุขสันต์วันศุกร์ พ้นทุกข์พ้นภัย';
+      case DateTime.saturday: return 'พักผ่อนเต็มที่ มีแต่ความสุข';
+      case DateTime.sunday: return 'สุขสันต์วันหยุด สบายใจตลอดวัน';
+      default: return 'เริ่มต้นด้วยรอยยิ้ม';
+    }
+  }
 
   Future<void> _shareImage() async {
     if (_isSharing) return;
@@ -45,7 +87,7 @@ class _SawasdeeWanPageState extends State<SawasdeeWanPage> {
         await imagePath.writeAsBytes(pngBytes);
 
         await Share.shareXFiles([XFile(imagePath.path)],
-            text: 'สวัสดีวันจันทร์ จาก FlexiFlow!');
+            text: 'สวัสดีวัน$_dayName จาก FlexiFlow!');
       }
     } catch (e) {
       debugPrint('Error sharing image: $e');
@@ -80,7 +122,7 @@ class _SawasdeeWanPageState extends State<SawasdeeWanPage> {
                           ClipPath(
                             clipper: BottomCurveClipper(),
                             child: Image.asset(
-                              'assets/sawasdee/default/monday.jpg',
+                                'assets/sawasdee/${Globals.useLandscapeSawasdee ? 'landscape' : 'default'}/$_dayImage',
                               width: sw,
                               height: sh * 0.55,
                               fit: BoxFit.cover,
@@ -90,22 +132,39 @@ class _SawasdeeWanPageState extends State<SawasdeeWanPage> {
                             top: sh * 0.1,
                             left: 0,
                             right: 0,
-                            child: Center(
-                              child: Text(
-                                'สวัสดีวันจันทร์',
-                                style: GoogleFonts.kanit(
-                                  fontSize: sw * 0.12,
-                                  fontWeight: FontWeight.w800,
-                                  color: Colors.white,
-                                  shadows: [
-                                    Shadow(
-                                      offset: const Offset(1, 2),
-                                      blurRadius: 4.0,
-                                      color: Colors.black.withOpacity(0.3),
-                                    ),
-                                  ],
+                            child: Column(
+                              children: [
+                                Text(
+                                  'สวัสดีวัน$_dayName',
+                                  style: GoogleFonts.kanit(
+                                    fontSize: sw * 0.12,
+                                    fontWeight: FontWeight.w800,
+                                    color: Colors.white,
+                                    shadows: [
+                                      Shadow(
+                                        offset: const Offset(1, 2),
+                                        blurRadius: 4.0,
+                                        color: Colors.black.withOpacity(0.3),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
+                                Text(
+                                  _dailyQuote,
+                                  style: GoogleFonts.kanit(
+                                    fontSize: sw * 0.05,
+                                    fontWeight: FontWeight.w600,
+                                    color: Colors.white,
+                                    shadows: [
+                                      Shadow(
+                                        offset: const Offset(1, 2),
+                                        blurRadius: 4.0,
+                                        color: Colors.black.withOpacity(0.3),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                              ],
                             ),
                           ),
                         ],
@@ -174,6 +233,51 @@ class _SawasdeeWanPageState extends State<SawasdeeWanPage> {
                 ),
               ),
             ),
+
+            if (Globals.hasLandscapeSawasdee)
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Text(
+                      'รูปแบบภาพ:',
+                      style: GoogleFonts.kanit(
+                        fontSize: sw * 0.045,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(width: 16),
+                    ChoiceChip(
+                      label: Text('คลาสสิก', style: GoogleFonts.kanit()),
+                      selected: !Globals.useLandscapeSawasdee,
+                      selectedColor: const Color(0xFFC75416).withOpacity(0.2),
+                      onSelected: (val) {
+                        if (val) {
+                          setState(() {
+                            Globals.useLandscapeSawasdee = false;
+                            Globals.save();
+                          });
+                        }
+                      },
+                    ),
+                    const SizedBox(width: 8),
+                    ChoiceChip(
+                      label: Text('ทิวทัศน์', style: GoogleFonts.kanit()),
+                      selected: Globals.useLandscapeSawasdee,
+                      selectedColor: const Color(0xFFC75416).withOpacity(0.2),
+                      onSelected: (val) {
+                        if (val) {
+                          setState(() {
+                            Globals.useLandscapeSawasdee = true;
+                            Globals.save();
+                          });
+                        }
+                      },
+                    ),
+                  ],
+                ),
+              ),
 
             // Buttons Section (Not inside RepaintBoundary)
             Padding(

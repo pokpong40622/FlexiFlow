@@ -92,6 +92,7 @@ flutter:
     - assets/hand/individual/
     - assets/sawasdee/
     - assets/sawasdee/default/
+    - assets/sawasdee/landscape/
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

@@ -177,6 +177,8 @@ class Globals {
   }
 
   static bool unlockedSumItUp = false;
+  static bool hasLandscapeSawasdee = false;
+  static bool useLandscapeSawasdee = false;
   static bool isThaiIdVerified = false;
 
   static int coins = 680;
@@ -285,6 +287,8 @@ class Globals {
     );
     await prefs.setInt('totalStepsTD', totalStepsTD);
     await prefs.setBool('unlockedSumItUp', unlockedSumItUp);
+    await prefs.setBool('hasLandscapeSawasdee', hasLandscapeSawasdee);
+    await prefs.setBool('useLandscapeSawasdee', useLandscapeSawasdee);
     await prefs.setBool('isThaiIdVerified', isThaiIdVerified);
     await prefs.setInt('coins', coins);
     await prefs.setInt('exp', exp);
@@ -301,6 +305,8 @@ class Globals {
 
   static Future<void> load() async {
     final prefs = await SharedPreferences.getInstance();
+    hasLandscapeSawasdee = prefs.getBool('hasLandscapeSawasdee') ?? false;
+    useLandscapeSawasdee = prefs.getBool('useLandscapeSawasdee') ?? false;
     wcagModeNotifier.value = prefs.getBool(_wcagModeEnabledKey) ?? false;
     final storedTextScale = prefs.getDouble(_textScaleFactorKey) ??
         (prefs.getInt(_textScaleFactorKey)?.toDouble()) ??
@@ -351,6 +357,8 @@ class Globals {
     totalStepsTD = 3246;
     isThaiIdVerified = false;
     unlockedSumItUp = false;
+    hasLandscapeSawasdee = false;
+    useLandscapeSawasdee = false;
     coins = 680;
     exp = 750;
     claimedMissions = {};

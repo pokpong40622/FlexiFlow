@@ -950,6 +950,12 @@ abstract class AppLocalizations {
   /// **'Unlock Wander'**
   String get shopItemUnlockWander;
 
+  /// No description provided for @shopItemUnlockSawasdeeLandscape.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlock Sawasdee Landscape'**
+  String get shopItemUnlockSawasdeeLandscape;
+
   /// No description provided for @shopItemSushiroCoupon60.
   ///
   /// In en, this message translates to:
