@@ -218,7 +218,7 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
                                       const Icon(Icons.auto_awesome, color: Color(0xFF0096FF), size: 20),
                                       const SizedBox(width: 8),
                                       Text(
-                                        "AI Analysis",
+                                        "การวิเคราะห์ด้วย AI",
                                         style: GoogleFonts.montserrat(
                                           fontSize: 16,
                                           fontWeight: FontWeight.w700,
@@ -288,16 +288,16 @@ class _ScorePageState extends State<ScorePage> with SingleTickerProviderStateMix
 
   String _generateFallbackFeedback() {
     if (widget.score > widget.highScore && widget.highScore > 0) {
-      return "Incredible! You just set a new personal record. Your cognitive speed and memory recall are showing significant improvement.";
+      return "ยอดเยี่ยมมาก! คุณเพิ่งทำสถิติใหม่ ความเร็วในการประมวลผลและความจำของคุณดีขึ้นอย่างเห็นได้ชัด";
     } else if (widget.score > 80) {
       if (widget.timeSpent < 30) {
-        return "Excellent performance! Both your accuracy and speed are top-notch today. Keep up the great work.";
+        return "ทำได้ดีมาก! ทั้งความแม่นยำและความเร็วของคุณอยู่ในระดับท็อปวันนี้ ทำต่อไปนะ";
       }
-      return "Great accuracy! To challenge yourself further, try to make your decisions a bit faster next time without losing precision.";
+      return "ความแม่นยำดีมาก! เพื่อท้าทายตัวเองเพิ่มเติม ลองพยายามตัดสินใจให้เร็วขึ้นอีกนิดในครั้งหน้าโดยไม่ลดความแม่นยำลง";
     } else if (widget.score > 50) {
-      return "Good job! You're making solid progress. Focus on recognizing patterns to boost your score and shave off a few seconds.";
+      return "ทำได้ดี! คุณกำลังก้าวหน้าอย่างมั่นคง มุ่งเน้นไปที่การจดจำรูปแบบเพื่อเพิ่มคะแนนและลดเวลาลงสองสามวินาที";
     } else {
-      return "A solid effort! Consistency is the key to training your brain. Regular practice will noticeably improve your recall speed.";
+      return "พยายามได้ดี! ความสม่ำเสมอคือกุญแจสำคัญในการฝึกสมองของคุณ การฝึกฝนเป็นประจำจะช่วยปรับปรุงความเร็วในการจดจำของคุณได้อย่างชัดเจน";
     }
   }
 }

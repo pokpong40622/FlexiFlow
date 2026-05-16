@@ -690,9 +690,13 @@ class _PerfectMatchPlayingState extends State<PerfectMatchPlaying>
                       ),
                       child: Padding(
                         padding: const EdgeInsets.all(12.0),
-                        child: Image.asset(
-                          _getIndividualHandImage(leftScreenGesture),
-                          fit: BoxFit.contain,
+                        child: Transform(
+                          alignment: Alignment.center,
+                          transform: Matrix4.rotationY(pi),
+                          child: Image.asset(
+                            _getIndividualHandImage(leftScreenGesture),
+                            fit: BoxFit.contain,
+                          ),
                         ),
                       ),
                     ),
